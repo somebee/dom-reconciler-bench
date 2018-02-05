@@ -34,6 +34,7 @@ state:step = do |times|
 	return
 
 state:run = do
+	state:fastest = null
 	var bm = state:bench = Benchmark.Suite.new("benchmark")
 
 	for app,i in apps
@@ -50,6 +51,7 @@ state:run = do
 
 	bm.on 'complete' do
 		state:fastest = bm.filter('fastest')[0]
+		state:bench = null
 		Imba.commit
 
 	bm.run(async: true, queued: false)
@@ -66,11 +68,10 @@ tag Stepper < button
 Imba.mount <div[state].root ->
 	<header#header>
 		<input type="number" model.number='count'>
-		<span> "todos "
+		<span.flex> "todos"
 		<button :tap='reset'> "reset"
 		<Stepper> "step"
-		<span.flex>
-		<button :tap='run'> "Run benchmark"
+		<button.primary :tap='run' disabled=(state:bench)> "Run benchmark"
 
 	<section.apps> for app in apps
 		<div[app].app css:color=app:color>

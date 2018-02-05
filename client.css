@@ -8,11 +8,15 @@ body {
   background: #e8e8e8;
 }
 
+:focus {
+  outline: none !important;
+}
+
 div {
   box-sizing: border-box;
 }
 
-.benchmark {
+.root {
   padding: 20px;
 }
 
@@ -24,19 +28,25 @@ div {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 10px;
-  -background: black;
-  padding-right: 0px;
-  padding-bottom: 20px;
+  padding: 10px 5px 20px;
   border-bottom: 1px solid #cccccc;
 }
 
+#header span {
+  color: #ccc;
+}
+
 button,input {
-  height: 30px;
+  height: 32px;
   border: 1px solid;
   box-sizing: border-box;
-  margin-right: 10px;
+  margin: 0px 5px;
   border-radius: 2px;
+  font-size: 13px;
+}
+
+button {
+  -margin-right: 10px;
 }
 
 button {
@@ -46,15 +56,40 @@ button {
     border: 1px solid #5c8ea9;
     background: #6f9bb2;
     color: #ffffff;
-    line-height: 13px;
-    padding: 0 10px;
+    font-size: 13px;
+    line-height: 1em;
+    padding: 0 12px;
+    text-transform: uppercase;
+
+    border: 1px solid #c7c7c7;
+    background: #e8e8e8;
+    color: #505050;
 }
 
-input {
-  width: 40px;
+button.primary {
+  border: 1px solid #5c8ea9;
+  background: #6f9bb2;
+  color: #ffffff;
+}
+
+input[type=number]{
+  width: 50px;
   border: 1px solid #6f9bb2;
-  padding: 0px 6px;
+  -padding: 0px 6px;
+  padding-left: 6px;
   line-height: 28px;
+}
+
+button[disabled] {
+  opacity: 0.5;
+}
+
+button:hover {
+  background: #e4e4e4;
+}
+
+button.primary:hover {
+  background: #6aa6c5;
 }
 
 .apps {

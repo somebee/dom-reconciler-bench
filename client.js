@@ -451,6 +451,7 @@ state.step = function(times) {
 };
 
 state.run = function() {
+	state.fastest = null;
 	var bm = state.bench = new Benchmark.Suite("benchmark");
 	
 	for (let i = 0, len = apps.length, app; i < len; i++) {
@@ -470,6 +471,7 @@ state.run = function() {
 	
 	bm.on('complete',function() {
 		state.fastest = bm.filter('fastest')[0];
+		state.bench = null;
 		return Imba.commit();
 	});
 	
@@ -494,15 +496,14 @@ Imba.mount(_T.$('div',this).flag('root').setData(state).setTemplate(function() {
 	return Imba.static([
 		($.a=$.a || _T.$('header',this).setId('header')).setContent([
 			($.b=$.b || _T.$('input',this).setType("number").set('model','count',{number:1})).end(),
-			($.c=$.c || _T.$('span',this).setText("todos ")).end(),
+			($.c=$.c || _T.$('span',this).flag('flex').setText("todos")).end(),
 			($.d=$.d || _T.$('button',this).on('tap','reset',0).setText("reset")).end(),
 			($.e=$.e || Stepper.build(this).setText("step")).end(),
-			($.f=$.f || _T.$('span',this).flag('flex')).end(),
-			($.g=$.g || _T.$('button',this).on('tap','run',0).setText("Run benchmark")).end()
+			($.f=$.f || _T.$('button',this).flag('primary').on('tap','run',0).setText("Run benchmark")).setDisabled((state.bench)).end()
 		],2).end(),
 		
-		($.h=$.h || _T.$('section',this).flag('apps')).setContent((function() {
-			var t0, $1 = ($.i = $.i || []);
+		($.g=$.g || _T.$('section',this).flag('apps')).setContent((function() {
+			var t0, $1 = ($.h = $.h || []);
 			for (let i = 0, len = $1.taglen = apps.length, app; i < len; i++) {
 				app = apps[i];
 				(t0 = $1[i]=$1[i] || _T.$('div',self).flag('app')).css('color',app.color).setData(app).setContent([
