@@ -29,7 +29,7 @@ state:reset = do
 state:step = do |times|
 	for app in apps
 		let i = 0
-		while ++i < times
+		while i++ < times
 			app:api.step
 	return
 
@@ -54,12 +54,21 @@ state:run = do
 
 	bm.run(async: true, queued: false)
 	
+tag Stepper < button
+	def ontouchstart t
+		@interval = setInterval(&,10) do
+			state.step(1)
+	
+	def ontouchend t
+		clearInterval(@interval)
+		
+	
 Imba.mount <div[state].root ->
 	<header#header>
 		<input type="number" model.number='count'>
 		<span> "todos "
 		<button :tap='reset'> "reset"
-		<button :tap=['step',13]> "step"
+		<Stepper> "step"
 		<span.flex>
 		<button :tap='run'> "Run benchmark"
 

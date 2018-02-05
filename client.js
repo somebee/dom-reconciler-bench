@@ -443,7 +443,7 @@ state.step = function(times) {
 	for (let j = 0, len = apps.length, app; j < len; j++) {
 		app = apps[j];
 		let i = 0;
-		while (++i < times){
+		while (i++ < times){
 			app.api.step();
 		};
 	};
@@ -476,6 +476,19 @@ state.run = function() {
 	return bm.run({async: true,queued: false});
 };
 
+var Stepper = _T.defineTag('Stepper', 'button', function(tag){
+	tag.prototype.ontouchstart = function (t){
+		return this._interval = setInterval(function() {
+			return state.step(1);
+		},10);
+	};
+	
+	tag.prototype.ontouchend = function (t){
+		return clearInterval(this._interval);
+	};
+});
+
+
 Imba.mount(_T.$('div',this).flag('root').setData(state).setTemplate(function() {
 	var $ = this.$, self = this;
 	return Imba.static([
@@ -483,7 +496,7 @@ Imba.mount(_T.$('div',this).flag('root').setData(state).setTemplate(function() {
 			($.b=$.b || _T.$('input',this).setType("number").set('model','count',{number:1})).end(),
 			($.c=$.c || _T.$('span',this).setText("todos ")).end(),
 			($.d=$.d || _T.$('button',this).on('tap','reset',0).setText("reset")).end(),
-			($.e=$.e || _T.$('button',this).on('tap',['step',13],0).setText("step")).end(),
+			($.e=$.e || Stepper.build(this).setText("step")).end(),
 			($.f=$.f || _T.$('span',this).flag('flex')).end(),
 			($.g=$.g || _T.$('button',this).on('tap','run',0).setText("Run benchmark")).end()
 		],2).end(),
