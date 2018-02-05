@@ -405,27 +405,13 @@ Imba.Pointer.prototype.y = function (){
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
 var Imba = __webpack_require__(3), _T = Imba.TAGS;
 
-var store = {
-	nextId: 0,
+var api = API;
+
+var store = api.store = {
 	counter: 0,
 	todos: [],
 	allDone: false,
-	newTodo: "",
-	
-	addTodo: function(title) {
-		return this.todos.push({id: this.nextId++,title: title,completed: false});
-	},
-	
-	removeTodo: function(item) {
-		return this.todos.splice(this.todos.indexOf(item),1);
-	},
-	
-	toggleAll: function(state) {
-		for (let i = 0, items = iter$(this.todos), len = items.length; i < len; i++) {
-			items[i].completed = state;
-		};
-		return;
-	}
+	newTodo: ""
 };
 
 var Todo = _T.defineTag('Todo', 'li', function(tag){
@@ -451,7 +437,7 @@ var Todo = _T.defineTag('Todo', 'li', function(tag){
 	};
 	
 	tag.prototype.drop = function (){
-		return store.removeTodo(this.data());
+		return api.removeTodo(this.data());
 	};
 	
 	tag.prototype.submit = function (){
@@ -477,23 +463,18 @@ var App = _T.defineTag('App', function(tag){
 	
 	tag.prototype.addItem = function (){
 		if (this.data().newTodo) {
-			this.data().addTodo(this.data().newTodo);
+			api.addTodo(this.data().newTodo);
 			return this.data().newTodo = "";
 		};
 	};
 	
 	tag.prototype.toggleAll = function (){
-		let value = this.data().allDone = !this.data().allDone;
-		let res = [];
-		for (let i = 0, items = iter$(store.todos), len = items.length; i < len; i++) {
-			res.push((items[i].completed = value));
-		};
-		return res;
+		return api.toggleAll(this.data().allDone = !this.data().allDone);
 	};
 	
 	// remove all completed todos
 	tag.prototype.clearCompleted = function (){
-		this.data().todos = this.data().todos.filter(function(item) { return !item.completed; });
+		api.clearCompleted();
 		return this.data().allDone = false;
 	};
 	
@@ -518,13 +499,13 @@ var App = _T.defineTag('App', function(tag){
 		
 		return this.setChildren([
 			($.A=$.A || _T.$('header',this).flag('header')).setContent([
-				($.B=$.B || _T.$('h1',self)).setText("" + (self.data().counter)).end(),
+				($.B=$.B || _T.$('h1',self)).setText("" + (self._data.counter)).end(),
 				($.C=$.C || _T.$('input',self).flag('new-todo').setType('text').setPlaceholder('What to do?').setAutofocus(true).set('model','newTodo',{trim:1}).on('keyup.enter','addItem',0)).end()
 			],2).end(),
 			
 			(all.length > 0) ? (
 				($.D=$.D || _T.$('section',self).flag('main')).setContent([
-					($.E=$.E || _T.$('input',self).flag('toggle-all').on('tap','toggleAll',0).setType('checkbox')).setChecked(self.data().allDone).end(),
+					($.E=$.E || _T.$('input',self).flag('toggle-all').on('tap','toggleAll',0).setType('checkbox')).setChecked(self._data.allDone).end(),
 					($.F=$.F || _T.$('ul',self).flag('todo-list')).setContent((function() {
 						var $1 = ($.G = $.G || []);
 						for (let i = 0, ary = iter$(items), len = $1.taglen = ary.length; i < len; i++) {
@@ -556,16 +537,13 @@ var App = _T.defineTag('App', function(tag){
 
 
 // create an instance of the app (with id app)
-API.store = store;
-
 var app = App.build(this).setId('app').flag('todoapp').setData(store).end();
 
-API.render = function (){
+api.render = function (){
 	return app.render();
 };
 
 Imba.mount(app);
-API.READY = true;
 
 
 

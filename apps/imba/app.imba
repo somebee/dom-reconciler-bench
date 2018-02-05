@@ -1,21 +1,11 @@
 
-var store =
-	nextId: 0
+var api = API
+
+var store = api:store =
 	counter: 0
 	todos: []
 	allDone: no
 	newTodo: ""
-	
-	addTodo: do |title|
-		this:todos.push(id: this:nextId++, title: title, completed: false)
-		
-	removeTodo: do |item|
-		this:todos.splice(this:todos.indexOf(item),1)
-	
-	toggleAll: do |state|
-		for item in this:todos
-			item:completed = state
-		return
 		
 tag Todo < li
 	
@@ -34,7 +24,7 @@ tag Todo < li
 		setTimeout(&,10) do @input.focus
 
 	def drop
-		store.removeTodo(data)
+		api.removeTodo(data)
 
 	def submit
 		unflag('editing')
@@ -54,17 +44,15 @@ tag App
 
 	def addItem
 		if data:newTodo
-			data.addTodo(data:newTodo)
+			api.addTodo(data:newTodo)
 			data:newTodo = ""
 
 	def toggleAll
-		let value = data:allDone = !data:allDone
-		for todo in store:todos
-			todo:completed = value
+		api.toggleAll(data:allDone = !data:allDone)
 
 	# remove all completed todos
 	def clearCompleted
-		data:todos = data:todos.filter do |item| !item:completed
+		api.clearCompleted
 		data:allDone = no
 
 	def render
@@ -85,7 +73,7 @@ tag App
 
 		<self>
 			<header.header>
-				<h1> "{data:counter}"
+				<h1> "{@data:counter}"
 				<input.new-todo
 					type='text'
 					placeholder='What to do?'
@@ -95,7 +83,7 @@ tag App
 
 			if all:length > 0
 				<section.main>
-					<input.toggle-all :tap='toggleAll' type='checkbox' checked=data:allDone>
+					<input.toggle-all :tap='toggleAll' type='checkbox' checked=@data:allDone>
 					<ul.todo-list> for todo in items
 						<Todo[todo]>
 
@@ -113,15 +101,12 @@ tag App
 
 
 # create an instance of the app (with id app)
-API:store = store
-
 var app = <App[store]#app.todoapp>
 
-def API.render
+def api.render
 	app.render
 
 Imba.mount(app)
-API:READY = true
 
 	
 
