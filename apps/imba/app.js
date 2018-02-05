@@ -456,11 +456,6 @@ var Todo = _T.defineTag('Todo', 'li', function(tag){
 });
 
 var App = _T.defineTag('App', function(tag){
-	
-	tag.prototype.hash = function (){
-		return this._hash;
-	};
-	
 	tag.prototype.addItem = function (){
 		if (this.data().newTodo) {
 			api.addTodo(this.data().newTodo);
@@ -478,9 +473,15 @@ var App = _T.defineTag('App', function(tag){
 		return this.data().allDone = false;
 	};
 	
+	tag.prototype.mount = function (){
+		var self = this;
+		return window.addEventListener('hashchange',function() {
+			return self._route = window.location.hash;
+		});
+	};
+	
 	tag.prototype.render = function (){
 		var self = this, $ = self.$;
-		this._hash = ''; // document:location:hash
 		var all = this.data().todos;
 		var items = all;
 		var done = [];
@@ -491,9 +492,9 @@ var App = _T.defineTag('App', function(tag){
 			todo.completed ? done.push(todo) : active.push(todo);
 		};
 		
-		if (this._hash == '#/completed') {
+		if (this._route == '#/completed') {
 			items = done;
-		} else if (this._hash == '#/active') {
+		} else if (this._route == '#/active') {
 			items = active;
 		};
 		
@@ -544,6 +545,7 @@ api.render = function (){
 };
 
 Imba.mount(app);
+api.reset(6);
 
 
 

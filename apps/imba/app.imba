@@ -38,10 +38,6 @@ tag Todo < li
 		@input.blur
 
 tag App
-
-	def hash
-		@hash
-
 	def addItem
 		if data:newTodo
 			api.addTodo(data:newTodo)
@@ -54,9 +50,12 @@ tag App
 	def clearCompleted
 		api.clearCompleted
 		data:allDone = no
+		
+	def mount
+		window.addEventListener('hashchange') do
+			@route = window:location:hash
 
 	def render
-		@hash = '' # document:location:hash
 		var all    = data:todos
 		var items  = all
 		var done   = []
@@ -65,10 +64,10 @@ tag App
 		for todo in all
 			todo:completed ? done.push(todo) : active.push(todo)
 
-		if @hash == '#/completed'
+		if @route == '#/completed'
 			items = done
 
-		elif @hash == '#/active'
+		elif @route == '#/active'
 			items = active
 
 		<self>
@@ -107,6 +106,7 @@ def api.render
 	app.render
 
 Imba.mount(app)
+api.reset(6)
 
 	
 

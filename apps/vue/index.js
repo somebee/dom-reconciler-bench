@@ -1,3 +1,4 @@
+var api = API;
 
 // visibility filters
 var filters = {
@@ -16,25 +17,21 @@ var filters = {
   }
 }
 
-var api = API;
-
-var data = {
-  todos: [],
-  newTodo: '',
-  editedTodo: null,
-  visibility: 'all'
-}
-
 // app Vue instance
 var app = new Vue({
 
-  created: function() {
-    this.nextId = 0;
-    this.counter = 0;
+  // app initial state
+  data: {
+    todos: [],
+    newTodo: '',
+    editedTodo: null,
+    visibility: 'all'
   },
 
-  // app initial state
-  data: data,
+  created: function() {
+    // we dont want to track the counter
+    this.counter = 0;
+  },
 
   // computed properties
   // http://vuejs.org/guide/computed.html
@@ -129,12 +126,11 @@ onHashChange()
 
 
 // integrate with the api
-API.store = app;
 
 app.$mount('.todoapp')
-
 // Make watcher synchronous so that it actually renders after each change
 // The benchmark only changes a single item in each iteration
 app._watcher.sync = true;
-API.READY = true;
+api.store = app;
+api.reset(6);
 

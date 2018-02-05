@@ -106,11 +106,3 @@ API = {
 
 // bind the stepper to api
 API.step = API.step.bind(API);
-
-// clear the whole localStorage on load
-localStorage.clear();
-
-API.ready = function(){
-	// called after TodoMVC has been loaded
-	// Could be useful for overriding stuff
-}

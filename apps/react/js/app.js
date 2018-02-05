@@ -177,3 +177,4 @@ var component = ReactDOM.render(
 
 API.render = function(){ component.forceUpdate(); }
 API.READY = true;
+API.reset(6);
