@@ -480,13 +480,18 @@ state.run = function() {
 
 var Stepper = _T.defineTag('Stepper', 'button', function(tag){
 	tag.prototype.ontouchstart = function (t){
-		return this._interval = setInterval(function() {
-			return state.step(1);
-		},10);
+		for (let i = 0, len = apps.length; i < len; i++) {
+			apps[i].api.startObserver();
+		};
+		return this._interval = setInterval(function() { return state.step(1); },1000 / 60);
 	};
 	
 	tag.prototype.ontouchend = function (t){
-		return clearInterval(this._interval);
+		clearInterval(this._interval);
+		for (let i = 0, len = apps.length; i < len; i++) {
+			apps[i].api.stopObserver();
+		};
+		return Imba.commit();
 	};
 });
 
@@ -510,23 +515,29 @@ Imba.mount(_T.$('div',this).flag('root').setData(state).setTemplate(function() {
 					(t0.$.a=t0.$.a || _T.$('header',self)).setContent(app.name + " " + String(app.bm || ''),3).end(), // ? String(app:bm) : @status
 					(t0.$.b=t0.$.b || AppFrame.build(self).css('minHeight','340px')).setSrc(("apps/" + (app.path))).setData(app).end(),
 					(t0.$.c=t0.$.c || _T.$('footer',self)).setContent([
+						(app.api && app.api.mutations) ? (
+							(t0.$.d=t0.$.d || _T.$('div',self).flag('muts')).setContent([
+								(t0.$.e=t0.$.e || _T.$('span',self).flag('value')).setContent(app.api.mutations,3).end(),
+								(t0.$.f=t0.$.f || _T.$('i',self).setText("muts")).end()
+							],2).end()
+						) : void(0),
 						(app.bm && self.data().fastest) ? Imba.static([
-							(t0.$.d=t0.$.d || _T.$('div',self).flag('ops')).setContent([
-								(t0.$.e=t0.$.e || _T.$('span',self).flag('value')).setContent(Math.round(app.bm.hz),3).end(),
-								(t0.$.f=t0.$.f || _T.$('i',self).setText("ops/sec")).end()
+							(t0.$.g=t0.$.g || _T.$('div',self).flag('ops')).setContent([
+								(t0.$.h=t0.$.h || _T.$('span',self).flag('value')).setContent(Math.round(app.bm.hz),3).end(),
+								(t0.$.i=t0.$.i || _T.$('i',self).setText("ops/sec")).end()
 							],2).end(),
 							(app.bm == self.data().fastest) ? (
-								(t0.$.g=t0.$.g || _T.$('div',self).flag('small').flag('compare')).setContent((t0.$.h=t0.$.h || _T.$('span',self).setText("baseline")).end(),2).end()
+								(t0.$.j=t0.$.j || _T.$('div',self).flag('small').flag('compare')).setContent((t0.$.k=t0.$.k || _T.$('span',self).setText("baseline")).end(),2).end()
 							) : ((app.bm.hz < self.data().fastest.hz) ? (
-								(t0.$.i=t0.$.i || _T.$('div',self).flag('small').flag('compare').flag('slower')).setContent([
-									(t0.$.j=t0.$.j || _T.$('span',self).flag('x').flag('s')).setContent((self.data().fastest.hz / app.bm.hz).toFixed(2) + 'x',3).end(),
-									(t0.$.k=t0.$.k || _T.$('i',self).setText("slower")).end()
+								(t0.$.l=t0.$.l || _T.$('div',self).flag('small').flag('compare').flag('slower')).setContent([
+									(t0.$.m=t0.$.m || _T.$('span',self).flag('x').flag('s')).setContent((self.data().fastest.hz / app.bm.hz).toFixed(2) + 'x',3).end(),
+									(t0.$.n=t0.$.n || _T.$('i',self).setText("slower")).end()
 								],2).end()
 							) : void(0))
 						],2) : void(0),
-						(t0.$.l=t0.$.l || _T.$('div',self).flag('small').flag('size')).setContent([
-							(t0.$.m=t0.$.m || _T.$('i',self).setText('library')).end(),
-							(t0.$.n=t0.$.n || _T.$('span',self).flag('value')).setContent(app.libSize,3).end()
+						(t0.$.o=t0.$.o || _T.$('div',self).flag('small').flag('size')).setContent([
+							(t0.$.p=t0.$.p || _T.$('i',self).setText('library')).end(),
+							(t0.$.q=t0.$.q || _T.$('span',self).flag('value')).setContent(app.libSize,3).end()
 						],2).end()
 					],1).end()
 				],2).end();

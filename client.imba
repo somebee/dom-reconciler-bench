@@ -58,11 +58,13 @@ state:run = do
 	
 tag Stepper < button
 	def ontouchstart t
-		@interval = setInterval(&,10) do
-			state.step(1)
+		app:api.startObserver for app in apps
+		@interval = setInterval(&,1000 / 60) do state.step(1)
 	
 	def ontouchend t
 		clearInterval(@interval)
+		app:api.stopObserver for app in apps
+		Imba.commit
 		
 	
 Imba.mount <div[state].root ->
@@ -78,6 +80,10 @@ Imba.mount <div[state].root ->
 			<header> app:name + " " + String(app:bm or '') # ? String(app:bm) : @status
 			<AppFrame[app] src="apps/{app:path}" css:minHeight='340px'>
 			<footer>
+				if app:api and app:api:mutations
+					<div.muts>
+						<span.value> app:api:mutations
+						<i> "muts"
 				if app:bm and data:fastest
 					<div.ops>
 						<span.value> Math.round(app:bm:hz)

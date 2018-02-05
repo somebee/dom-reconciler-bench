@@ -5,6 +5,9 @@ API = {
 		todos: []
 	},
 	nextId: 0,
+	mutations: 0,
+
+	observer: null,
 
 	// synchronous render
 	// should bring the view in sync with models++
@@ -57,6 +60,7 @@ API = {
 
 	reset: function(todoCount){
 		// reset
+		this.mutations = 0;
 		this.store.counter = 0;
 		this.clearAllTodos();
 
@@ -68,6 +72,23 @@ API = {
 
 		this.forceUpdate();
 		this.store.counter = 0;
+	},
+
+	startObserver: function(){
+		this.mutations = 0;
+		this.observer = this.observer || new MutationObserver(function(muts){
+			API.mutations = API.mutations + muts.length;
+		});
+		this.observer.observe(document.body,{
+			attributes: true,
+			childList: true,
+			characterData: true,
+			subtree: true
+		});
+	},
+
+	stopObserver: function(){
+		this.observer.disconnect();
 	},
 
 	// step - do a single iteration
@@ -82,11 +103,13 @@ API = {
 
 		if (actionNr == 0) {
 			// remove the first todo
-			this.removeTodo(todos[0]);
+			// this.removeTodo(this.removedTodo = todos[0]);
 
 		} else if (actionNr == 1) {
 			// add a new todo
-			this.addTodo("Added " + cycleNr);
+			// todos.push(this.removedTodo);
+			this.removedTodo = null;
+			// this.addTodo("Added " + cycleNr);
 		} else if (actionNr == 2) {
 			// Rename a todo
 			var todo = todos[(cycleNr + actionNr) % count]
