@@ -1,0 +1,143 @@
+html,body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Lucida Grande', 'Trebuchet MS', 'Bitstream Vera Sans', Verdana, Helvetica, sans-serif;
+  background: #e8e8e8;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+.benchmark {
+  padding: 20px;
+}
+
+.flex {
+  flex: 1 1 auto;
+}
+
+#header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  -background: black;
+  padding-right: 0px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #cccccc;
+}
+
+button,input {
+  height: 30px;
+  border: 1px solid;
+  box-sizing: border-box;
+  margin-right: 10px;
+  border-radius: 2px;
+}
+
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #5c8ea9;
+    background: #6f9bb2;
+    color: #ffffff;
+    line-height: 13px;
+    padding: 0 10px;
+}
+
+input {
+  width: 40px;
+  border: 1px solid #6f9bb2;
+  padding: 0px 6px;
+  line-height: 28px;
+}
+
+.apps {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background: #e8e8e8;
+  padding-top: 10px;
+}
+
+.app {
+	width:50%;
+	position: relative;
+	display: block;
+  flex: 1 1 auto;
+  background: currentColor;
+  margin: 10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.app header {
+  position: relative;
+  height: 30px;
+  color: #202837;
+  color: white;
+  line-height: 30px;
+  padding: 0px 10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.app footer {
+  background: #e8e8e8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  padding: 8px 0px;
+}
+
+.app span,.app i {
+  padding: 0 0.5ex;
+}
+
+.app i {
+  font-style: normal;
+  font-weight: normal;
+}
+
+.app .small {
+  font-size: 18px;
+  padding: 4px;
+  color: #8c8c8c;
+}
+
+.app .slower {
+  color: #ff4747;
+}
+
+.app iframe {
+  border: 4px solid #e8e8e8;
+  border-top: none;
+  border: none;
+  border: 4px solid currentColor;
+  border-top: 0px;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  width: 100%;
+  box-sizing: border-box;
+  height: 460px;
+  background: #e8e8e8;
+}
+
+.running .app:not(.running) {
+  opacity: 0.4;
+}
+
+.app.running {
+  border-color: currentColor;
+}
