@@ -311,6 +311,7 @@ h1 {
 	margin: 0;
 	padding: 0;
 	display: block;
+	z-index: 2;
 	transform: translate3d(0px,0px,0px);
 	backface-visibility: hidden;
 }
