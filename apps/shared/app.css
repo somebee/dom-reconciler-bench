@@ -200,7 +200,7 @@ label[for='toggle-all'] {
 .todo-list li label {
 	white-space: pre;
 	word-break: break-word;
-	padding: 15px 60px 15px 15px;
+	padding: 15px 50px 15px 5px;
 	margin-left: 45px;
 	display: block;
 	line-height: 1.2;
