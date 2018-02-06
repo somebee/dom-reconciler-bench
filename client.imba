@@ -2,10 +2,9 @@ extern Benchmark
 
 var apps = [
 	{name: 'imba@1.3.0', path: "imba/index.html", color: '#709CB2', libSize: '54kb'}
-	# {name: 'imba@1.3.0-keys', path: "imba-keys/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '87kb'}
 	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
-	{name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
+	# {name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
 ]
 
 # custom iframe that waits for example to load and
