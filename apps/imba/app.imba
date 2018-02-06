@@ -79,22 +79,21 @@ tag App
 					autofocus=true
 					model.trim='newTodo'
 					:keyup.enter='addItem'>
-
+			
 			if all:length > 0
 				<section.main>
 					<input.toggle-all :tap='toggleAll' type='checkbox' checked=@data:allDone>
-					<ul.todo-list> for todo in items
-						<Todo[todo]>
-
-			if all:length > 0
+					<ul.todo-list>
+						for todo in items
+							<Todo[todo]@{todo:id}>
 				<footer.footer>
 					<span.todo-count>
 						<strong> "{active:length} "
 						<span> active:length == 1 ? 'item left' : 'items left'
 					<ul.filters>
-						<li> <a .selected=(items == all)    href='#/'> 'All'
-						<li> <a .selected=(items == active) href='#/active'> 'Active'
-						<li> <a .selected=(items == done)   href='#/completed'> 'Completed'
+						<li> <a .selected=(items == all)    href='#/'> "All"
+						<li> <a .selected=(items == active) href='#/active'> "Active"
+						<li> <a .selected=(items == done)   href='#/completed'> "Completed"
 					if done:length > 0
 						<button.clear-completed :tap='clearCompleted'> 'Clear completed'
 
