@@ -203,12 +203,12 @@ class TodoApp extends React.Component {
 		if (todos.length) {
 			main = (
 				React.createElement("section", {className: "main"}, 
-					React.createElement("input", {
-						className: "toggle-all", 
-						type: "checkbox", 
-						onChange: this.toggleAll, 
-						checked: activeTodoCount === 0}
-					), 
+					// React.createElement("input", {
+					// 	className: "toggle-all", 
+					// 	type: "checkbox", 
+					// 	onChange: this.toggleAll, 
+					// 	checked: activeTodoCount === 0}
+					// ), 
 					React.createElement("ul", {className: "todo-list"}, 
 						todoItems
 					)

@@ -2,6 +2,7 @@ extern Benchmark
 
 var apps = [
 	{name: 'imba@1.3.0', path: "imba/index.html", color: '#709CB2', libSize: '54kb'}
+	# {name: 'imba@1.3.0-keys', path: "imba-keys/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '87kb'}
 	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
 	{name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
@@ -17,14 +18,15 @@ tag AppFrame < iframe
 
 var state = {
 	count: 6
-	apps: apps
 	current: null
 	fastest: null
+	ins: 1
+	rem: 1
 }
 
 state:reset = do
 	for app in apps
-		app:api.reset(state:count)
+		app:api.reset(state:count,state)
 
 state:step = do |times|
 	for app in apps
@@ -38,7 +40,7 @@ state:run = do
 	var bm = state:bench = Benchmark.Suite.new("benchmark")
 
 	for app,i in apps
-		app:api.reset(state:count)
+		app:api.reset(state:count,state)
 		bm.add(app:name, app:api:step)
 		app:bm = bm[i]
 
@@ -60,24 +62,38 @@ tag Stepper < button
 	def ontouchstart t
 		app:api.startObserver for app in apps
 		@interval = setInterval(&,1000 / 60) do state.step(1)
+		state.step(1)
 	
 	def ontouchend t
 		clearInterval(@interval)
 		app:api.stopObserver for app in apps
 		Imba.commit
 		
+	def ontouchcancel t
+		ontouchend(t)
+		
 	
 Imba.mount <div[state].root ->
 	<header#header>
 		<input type="number" model.number='count'>
 		<span.flex> "todos"
+		# <select model.number='ins'>
+		# 	<option value=0> 'none'
+		# 	<option value=1> 'random'
+		# 	<option value=2> 'push'
+		# 	<option value=3> 'unshift'
+		
+		# <select model.number='rem'>
+		# 	<option value=1> 'random'
+		# 	<option value=2> 'pop'
+		# 	<option value=3> 'shift'
 		<button :tap='reset'> "reset"
 		<Stepper> "step"
 		<button.primary :tap='run' disabled=(state:bench)> "Run benchmark"
 
 	<section.apps> for app in apps
 		<div[app].app css:color=app:color>
-			<header> app:name + " " + String(app:bm or '') # ? String(app:bm) : @status
+			<header> String(app:bm or app:name) # ? String(app:bm) : @status
 			<AppFrame[app] src="apps/{app:path}" css:minHeight='340px'>
 			<footer>
 				if app:api and app:api:mutations

@@ -1,12 +1,43 @@
 
+var titles = [
+	"Buy milk",
+	"Shave the Yak",
+	"Big Rewrite",
+	"Debug errors",
+	"Procrastinate",
+	"Argue about indentation",
+	"Indent using spaces",
+	"Handle exceptions",
+	"Refactor",
+	"Re-refactor",
+	"Publish to NPM",
+	"git reset head --hard",
+	"Write tests",
+	"Forget tests",
+	"Convert to tabs",
+	"Use camelCase",
+	"Read twitter",
+	"Buy Rubberduck",
+	"Go back to Sublime",
+	"Disbelieve benchmark",
+	"Hold step button",
+	"Listen to Heavyweight",
+	"Commit changes",
+	"Rebase with master",
+	"Count to 10",
+	"Mutate state"
+]
+
 API = {
 	store: {
 		counter: 0,
 		todos: []
 	},
+	pool: [],
 	nextId: 0,
+	seed: 1,
 	mutations: 0,
-
+	name: document.location.href.match(/apps\/(\w+)/)[1],
 	observer: null,
 
 	// synchronous render
@@ -58,16 +89,15 @@ API = {
 		return;
 	},
 
-	reset: function(todoCount){
-		// reset
+	reset: function(count){
 		this.mutations = 0;
-		this.store.counter = 0;
+		this.seed = 1;
 		this.clearAllTodos();
 
 		var i = 0;
 
-		while(i++ < todoCount){
-			this.addTodo("Todo " + i);
+		while(i++ < count){
+			this.addTodo(titles[i % titles.length]);
 		}
 
 		this.forceUpdate();
@@ -76,8 +106,9 @@ API = {
 
 	startObserver: function(){
 		this.mutations = 0;
-		this.observer = this.observer || new MutationObserver(function(muts){
+		this.observer = new MutationObserver(function(muts){
 			API.mutations = API.mutations + muts.length;
+			if(this.debug) console.log(API.name,muts);
 		});
 		this.observer.observe(document.body,{
 			attributes: true,
@@ -88,42 +119,52 @@ API = {
 	},
 
 	stopObserver: function(){
+		this.observer.takeRecords();
 		this.observer.disconnect();
+		this.observer = null;
+	},
+
+	// predictable random number from seed
+	random: function(max,min) {
+		this.seed = (this.seed * 9301 + 49297) % 233280;
+		return Math.round(min + (this.seed / 233280) * (max - min));
 	},
 
 	// step - do a single iteration
 	step: function(){
+		var step  = this.store.counter++;
 		var todos = this.store.todos;
-		var count = todos.length;
+		var index = this.random(0,todos.length - 1);
+		var todo  = todos[index];
 
-		var stepNr = this.store.counter++;
-		var actionNr = stepNr % 5;
-		var cycleNr = Math.floor(stepNr / 5);
-		// we alternate between 5 different actions
+		switch (step % 4) {
 
-		if (actionNr == 0) {
-			// remove the first todo
-			// this.removeTodo(this.removedTodo = todos[0]);
+			case 0:
+				this.pool.push(this.removeTodo(todo));
+				break;
 
-		} else if (actionNr == 1) {
-			// add a new todo
-			// todos.push(this.removedTodo);
-			this.removedTodo = null;
-			// this.addTodo("Added " + cycleNr);
-		} else if (actionNr == 2) {
-			// Rename a todo
-			var todo = todos[(cycleNr + actionNr) % count]
-			todo.title = "Renamed " + cycleNr;
-		} else if (actionNr == 3) {
-			// Toggle completion of a todo
-			var todo = todos[(cycleNr + actionNr) % count]
-			todo.completed = !todo.completed;
-		} else if (actionNr == 4) {
-			// Do nothing
+			case 1:
+				todos.splice(index,0,this.pool.pop());
+				break;
+
+			case 2:
+				todo.title = titles[(step + index) % titles.length];
+				break;
+
+			case 3:
+				todo.completed = !todo.completed;
+				break;
 		}
 
 		// Force the application to render
 		this.forceUpdate();
+	},
+
+	warmup: function(count){
+		var i = 0;
+		count = count || 1000;
+		this.reset(12);
+		while(++i < count){ this.step(); }
 	}
 }
 

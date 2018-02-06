@@ -82,7 +82,6 @@ tag App
 			
 			if all:length > 0
 				<section.main>
-					<input.toggle-all :tap='toggleAll' type='checkbox' checked=@data:allDone>
 					<ul.todo-list>
 						for todo in items
 							<Todo[todo]@{todo:id}>

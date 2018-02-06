@@ -72,7 +72,7 @@ Imba is the namespace for all runtime related utilities
 @namespace
 */
 
-var Imba = {VERSION: '1.3.0-beta.2'};
+var Imba = {VERSION: '1.3.0-beta.3'};
 
 /*
 
@@ -407,6 +407,7 @@ var Imba = __webpack_require__(3), _T = Imba.TAGS;
 
 var apps = [
 	{name: 'imba@1.3.0',path: "imba/index.html",color: '#709CB2',libSize: '54kb'},
+	// {name: 'imba@1.3.0-keys', path: "imba-keys/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13',path: "vue/index.html",color: '#4fc08d',libSize: '87kb'},
 	{name: 'react@16.prod',path: "react/index.html",color: 'rgb(15, 203, 255)',libSize: '101kb'},
 	{name: 'react@16.dev',path: "react/index.dev.html",color: 'rgb(15, 203, 255)'}
@@ -426,15 +427,16 @@ var AppFrame = _T.defineTag('AppFrame', 'iframe', function(tag){
 
 var state = {
 	count: 6,
-	apps: apps,
 	current: null,
-	fastest: null
+	fastest: null,
+	ins: 1,
+	rem: 1
 };
 
 state.reset = function() {
 	let res = [];
 	for (let i = 0, len = apps.length; i < len; i++) {
-		res.push(apps[i].api.reset(state.count));
+		res.push(apps[i].api.reset(state.count,state));
 	};
 	return res;
 };
@@ -456,7 +458,7 @@ state.run = function() {
 	
 	for (let i = 0, len = apps.length, app; i < len; i++) {
 		app = apps[i];
-		app.api.reset(state.count);
+		app.api.reset(state.count,state);
 		bm.add(app.name,app.api.step);
 		app.bm = bm[i];
 	};
@@ -483,7 +485,8 @@ var Stepper = _T.defineTag('Stepper', 'button', function(tag){
 		for (let i = 0, len = apps.length; i < len; i++) {
 			apps[i].api.startObserver();
 		};
-		return this._interval = setInterval(function() { return state.step(1); },1000 / 60);
+		this._interval = setInterval(function() { return state.step(1); },1000 / 60);
+		return state.step(1);
 	};
 	
 	tag.prototype.ontouchend = function (t){
@@ -492,6 +495,10 @@ var Stepper = _T.defineTag('Stepper', 'button', function(tag){
 			apps[i].api.stopObserver();
 		};
 		return Imba.commit();
+	};
+	
+	tag.prototype.ontouchcancel = function (t){
+		return this.ontouchend(t);
 	};
 });
 
@@ -502,17 +509,27 @@ Imba.mount(_T.$('div',this).flag('root').setData(state).setTemplate(function() {
 		($.a=$.a || _T.$('header',this).setId('header')).setContent([
 			($.b=$.b || _T.$('input',this).setType("number").set('model','count',{number:1})).end(),
 			($.c=$.c || _T.$('span',this).flag('flex').setText("todos")).end(),
+			// <select model.number='ins'>
+			// 	<option value=0> 'none'
+			// 	<option value=1> 'random'
+			// 	<option value=2> 'push'
+			// 	<option value=3> 'unshift'
+			
+			// <select model.number='rem'>
+			// 	<option value=1> 'random'
+			// 	<option value=2> 'pop'
+			// 	<option value=3> 'shift'
 			($.d=$.d || _T.$('button',this).on('tap','reset',0).setText("reset")).end(),
 			($.e=$.e || Stepper.build(this).setText("step")).end(),
 			($.f=$.f || _T.$('button',this).flag('primary').on('tap','run',0).setText("Run benchmark")).setDisabled((state.bench)).end()
 		],2).end(),
 		
 		($.g=$.g || _T.$('section',this).flag('apps')).setContent((function() {
-			var t0, $1 = ($.h = $.h || []);
-			for (let i = 0, len = $1.taglen = apps.length, app; i < len; i++) {
+			var t0, $$ = ($.h = $.h || []);
+			for (let i = 0, len = $$.taglen = apps.length, app; i < len; i++) {
 				app = apps[i];
-				(t0 = $1[i]=$1[i] || _T.$('div',self).flag('app')).css('color',app.color).setData(app).setContent([
-					(t0.$.a=t0.$.a || _T.$('header',self)).setContent(app.name + " " + String(app.bm || ''),3).end(), // ? String(app:bm) : @status
+				(t0 = $$[i]=$$[i] || _T.$('div',self).flag('app')).css('color',app.color).setData(app).setContent([
+					(t0.$.a=t0.$.a || _T.$('header',self)).setContent(String(app.bm || app.name),3).end(), // ? String(app:bm) : @status
 					(t0.$.b=t0.$.b || AppFrame.build(self).css('minHeight','340px')).setSrc(("apps/" + (app.path))).setData(app).end(),
 					(t0.$.c=t0.$.c || _T.$('footer',self)).setContent([
 						(app.api && app.api.mutations) ? (
@@ -541,7 +558,7 @@ Imba.mount(_T.$('div',this).flag('root').setData(state).setTemplate(function() {
 						],2).end()
 					],1).end()
 				],2).end();
-			};return $1;
+			};return $$;
 		})(),4).end()
 	],1);
 }).end());
@@ -2233,6 +2250,41 @@ Imba.Tags.prototype.$ = function (typ,owner){
 	return this.findTagType(typ).build(owner);
 };
 
+Imba.Tags.prototype.$set = function (cache,slot){
+	return cache[slot] = new TagSet(cache,slot);
+};
+
+function TagSet(parent,slot){
+	this.i$ = 0;
+	this.s$ = slot;
+	this.c$ = parent;
+};
+
+TagSet.prototype.$ = function (key,node){
+	this.i$++;
+	node.k$ = key;
+	return this[key] = node;
+};
+
+TagSet.prototype.$iter = function (){
+	var item = [];
+	item.static = 5;
+	item.cache = this;
+	return item;
+};
+
+TagSet.prototype.$prune = function (items){
+	let par = this.c$;
+	let slot = this.s$;
+	let clone = new TagSet(par,slot);
+	for (let i = 0, ary = iter$(items), len = ary.length, item; i < len; i++) {
+		item = ary[i];
+		clone[item.k$] = item;
+	};
+	clone.i$ = items.length;
+	return par[slot] = clone;
+};
+
 
 Imba.SINGLETONS = {};
 Imba.TAGS = new Imba.Tags();
@@ -3905,6 +3957,7 @@ var Imba = __webpack_require__(0);
 // 2 - static shape and static children
 // 3 - single item
 // 4 - optimized array - only length will change
+// 5 - optimized collection
 
 function removeNested(root,node,caret){
 	// if node/nodes isa String
@@ -4120,6 +4173,69 @@ function reconcileCollection(root,new$,old,caret){
 	};
 };
 
+// TYPE 5 - we know that we are dealing with a single array of
+// keyed tags - and root has no other children
+function reconcileLoop(root,new$,old,caret){
+	var nl = new$.length;
+	var ol = old.length;
+	var cl = new$.cache.i$; // cache-length
+	var i = 0,d = nl - ol;
+	
+	// find the first index that is different
+	while (i < ol && i < nl && new$[i] === old[i]){
+		i++;
+	};
+	
+	// conditionally prune cache
+	if (cl > 1000 && (cl - nl) > 500) {
+		new$.cache.$prune(new$);
+	};
+	
+	if (d > 0 && i == ol) {
+		// added at end
+		while (i < nl){
+			root.appendChild(new$[i++]);
+		};
+		return;
+	} else if (d > 0) {
+		let i1 = nl;
+		while (i1 > i && new$[i1 - 1] === old[i1 - 1 - d]){
+			i1--;
+		};
+		
+		if (d == (i1 - i)) {
+			// console.log "added in chunk",i,i1
+			let before = old[i]._dom;
+			while (i < i1){
+				root.insertBefore(new$[i++],before);
+			};
+			return;
+		};
+	} else if (d < 0 && i == nl) {
+		// removed at end
+		while (i < ol){
+			root.removeChild(old[i++]);
+		};
+		return;
+	} else if (d < 0) {
+		let i1 = ol;
+		while (i1 > i && new$[i1 - 1 + d] === old[i1 - 1]){
+			i1--;
+		};
+		
+		if (d == (i - i1)) {
+			while (i < i1){
+				root.removeChild(old[i++]);
+			};
+			return;
+		};
+	} else if (i == nl) {
+		return;
+	};
+	
+	return reconcileCollectionChanges(root,new$,old,caret);
+};
+
 // expects a flat non-sparse array of nodes in both new and old, always
 function reconcileIndexedArray(root,array,old,caret){
 	var newLen = array.taglen;
@@ -4171,10 +4287,11 @@ function reconcileNested(root,new$,old,caret){
 		};
 	} else if (new$ instanceof Array) {
 		if (old instanceof Array) {
-			if (new$.static || old.static) {
+			let typ = new$.static;
+			if (typ || old.static) {
 				// if the static is not nested - we could get a hint from compiler
 				// and just skip it
-				if (new$.static == old.static) {
+				if (typ == old.static) {
 					for (let i = 0, items = iter$(new$), len = items.length; i < len; i++) {
 						// this is where we could do the triple equal directly
 						caret = reconcileNested(root,items[i],old[i],caret);
@@ -4260,7 +4377,9 @@ Imba.TAGS.extendTag('element', function(tag){
 				this.empty();
 				this.appendChild(new$);
 			} else if (new$ instanceof Array) {
-				if (old instanceof Array) {
+				if (new$.static == 5 && old && old.static == 5) {
+					reconcileLoop(this,new$,old,null);
+				} else if (old instanceof Array) {
 					reconcileNested(this,new$,old,null);
 				} else {
 					this.empty();
@@ -4272,6 +4391,8 @@ Imba.TAGS.extendTag('element', function(tag){
 			};
 		} else if (typ == 4) {
 			reconcileIndexedArray(this,new$,old,null);
+		} else if (typ == 5) {
+			reconcileLoop(this,new$,old,null);
 		} else if ((new$ instanceof Array) && (old instanceof Array)) {
 			reconcileNested(this,new$,old,null);
 		} else {

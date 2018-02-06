@@ -122,6 +122,7 @@ button.primary:hover {
   border-top-right-radius: 3px;
   font-size: 12px;
   font-weight: bold;
+  overflow: hidden;
 }
 
 .app footer {

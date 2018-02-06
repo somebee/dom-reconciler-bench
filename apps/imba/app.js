@@ -505,11 +505,10 @@ var App = _T.defineTag('App', function(tag){
 			],2).end(),
 			
 			(all.length > 0) ? Imba.static([
-				($.D=$.D || _T.$('section',self).flag('main')).setContent([
-					($.E=$.E || _T.$('input',self).flag('toggle-all').on('tap','toggleAll',0).setType('checkbox')).setChecked(self._data.allDone).end(),
-					($.F=$.F || _T.$('ul',self).flag('todo-list')).setContent(
+				($.D=$.D || _T.$('section',self).flag('main')).setContent(
+					($.E=$.E || _T.$('ul',self).flag('todo-list')).setContent(
 						(function() {
-							var $$ = ($.G || _T.$set($,'G')), id_;
+							var $$ = ($.F || _T.$set($,'F')), id_;
 							let res = $$.$iter();
 							for (let i = 0, ary = iter$(items), len = ary.length, todo; i < len; i++) {
 								todo = ary[i];
@@ -518,19 +517,19 @@ var App = _T.defineTag('App', function(tag){
 							return res;
 						})()
 					,5).end()
-				],2).end(),
-				($.H=$.H || _T.$('footer',self).flag('footer')).setContent([
-					($.I=$.I || _T.$('span',self).flag('todo-count')).setContent([
-						($.J=$.J || _T.$('strong',self)).setText("" + (active.length) + " ").end(),
-						($.K=$.K || _T.$('span',self)).setContent([(active.length == 1) ? 'item left' : 'items left'],1).end()
+				,2).end(),
+				($.G=$.G || _T.$('footer',self).flag('footer')).setContent([
+					($.H=$.H || _T.$('span',self).flag('todo-count')).setContent([
+						($.I=$.I || _T.$('strong',self)).setText("" + (active.length) + " ").end(),
+						($.J=$.J || _T.$('span',self)).setContent([(active.length == 1) ? 'item left' : 'items left'],1).end()
 					],2).end(),
-					($.L=$.L || _T.$('ul',self).flag('filters')).setContent([
-						($.M=$.M || _T.$('li',self)).setContent(($.N=$.N || _T.$('a',self).setHref('#/').setText("All")).flag('selected',(items == all)).end(),2).end(),
-						($.O=$.O || _T.$('li',self)).setContent(($.P=$.P || _T.$('a',self).setHref('#/active').setText("Active")).flag('selected',(items == active)).end(),2).end(),
-						($.Q=$.Q || _T.$('li',self)).setContent(($.R=$.R || _T.$('a',self).setHref('#/completed').setText("Completed")).flag('selected',(items == done)).end(),2).end()
+					($.K=$.K || _T.$('ul',self).flag('filters')).setContent([
+						($.L=$.L || _T.$('li',self)).setContent(($.M=$.M || _T.$('a',self).setHref('#/').setText("All")).flag('selected',(items == all)).end(),2).end(),
+						($.N=$.N || _T.$('li',self)).setContent(($.O=$.O || _T.$('a',self).setHref('#/active').setText("Active")).flag('selected',(items == active)).end(),2).end(),
+						($.P=$.P || _T.$('li',self)).setContent(($.Q=$.Q || _T.$('a',self).setHref('#/completed').setText("Completed")).flag('selected',(items == done)).end(),2).end()
 					],2).end(),
 					(done.length > 0) ? (
-						($.S=$.S || _T.$('button',self).flag('clear-completed').on('tap','clearCompleted',0).setText('Clear completed')).end()
+						($.R=$.R || _T.$('button',self).flag('clear-completed').on('tap','clearCompleted',0).setText('Clear completed')).end()
 					) : void(0)
 				],1).end()
 			],2) : void(0)
