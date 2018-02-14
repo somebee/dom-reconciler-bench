@@ -2,6 +2,7 @@ extern Benchmark
 
 var apps = [
 	{name: 'imba@1.3.0', path: "imba/index.html", color: '#709CB2', libSize: '54kb'}
+	# {name: 'imba@dev', path: "imba-dev/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '87kb'}
 	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
 	# {name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
@@ -70,9 +71,48 @@ tag Stepper < button
 		
 	def ontouchcancel t
 		ontouchend(t)
-		
 	
-Imba.mount <div[state].root ->
+tag App
+	
+	def run
+		state:fastest = null
+		var bm = state:bench = Benchmark.Suite.new("benchmark")
+
+		for app,i in apps
+			app:api.reset(state:count,state)
+			bm.add(app:name, app:api:step)
+			app:bm = bm[i]
+
+		var nr = 0
+		state:current = apps[nr]
+
+		bm.on 'cycle' do |e|
+			state:current = apps[++nr]
+			Imba.commit
+
+		bm.on 'complete' do
+			state:fastest = bm.filter('fastest')[0]
+			state:bench = null
+			Imba.commit
+			
+		bm.run(async: true, queued: false)
+		self
+
+	
+	def step times
+		for app in apps
+			app:api.step
+			# let i = 0
+			# while i++ < times
+			#	app:api.step
+		self
+	
+	def reset
+		for app in apps
+			app:api.reset(state:count,state)
+		self
+	
+Imba.mount <App[state].root ->
 	<header#header>
 		<input type="number" model.number='count'>
 		<span.flex> "todos"
@@ -86,9 +126,9 @@ Imba.mount <div[state].root ->
 		# 	<option value=1> 'random'
 		# 	<option value=2> 'pop'
 		# 	<option value=3> 'shift'
-		<button :tap='reset'> "reset"
+		<button :tap.reset> "reset"
 		<Stepper> "step"
-		<button.primary :tap='run' disabled=(state:bench)> "Run benchmark"
+		<button.primary :tap.run disabled=(state:bench)> "Run benchmark"
 
 	<section.apps> for app in apps
 		<div[app].app css:color=app:color>

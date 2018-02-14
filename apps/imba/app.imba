@@ -13,10 +13,10 @@ tag Todo < li
 		# var todo = @data
 		<self .completed=(@data:completed) >
 			<div.view>
-				<label :dblclick='edit'> "{@data:title}"
+				<label :dblclick='edit'> "" + @data:title
 				<input.toggle type='checkbox' model='completed'>
 				<button.destroy :tap='drop'>
-			<input@input.edit type='text' :keydown.enter='submit' :keydown.esc='cancel'>
+			<input@input.edit type='text' :keydown.enter.submit :keydown.esc.cancel>
 
 	def edit
 		flag('editing')
@@ -43,13 +43,8 @@ tag App
 			api.addTodo(data:newTodo)
 			data:newTodo = ""
 
-	def toggleAll
-		api.toggleAll(data:allDone = !data:allDone)
-
-	# remove all completed todos
 	def clearCompleted
 		api.clearCompleted
-		data:allDone = no
 		
 	def mount
 		window.addEventListener('hashchange') do
@@ -80,21 +75,20 @@ tag App
 					model.trim='newTodo'
 					:keyup.enter='addItem'>
 			
-			if all:length > 0
-				<section.main>
-					<ul.todo-list>
-						for todo in items
-							<Todo[todo]@{todo:id}>
-				<footer.footer>
-					<span.todo-count>
-						<strong> "{active:length} "
-						<span> active:length == 1 ? 'item left' : 'items left'
-					<ul.filters>
-						<li> <a .selected=(items == all)    href='#/'> "All"
-						<li> <a .selected=(items == active) href='#/active'> "Active"
-						<li> <a .selected=(items == done)   href='#/completed'> "Completed"
-					if done:length > 0
-						<button.clear-completed :tap='clearCompleted'> 'Clear completed'
+			<section.main>
+				<ul.todo-list>
+					for todo in items
+						<Todo[todo]@{todo:id}>
+
+			<footer.footer>
+				<span.todo-count>
+					<strong> "{active:length} "
+					<span> active:length == 1 ? 'item left' : 'items left'
+				<ul.filters>
+					<li> <a .selected=(items == all)    href='#/'> "All"
+					<li> <a .selected=(items == active) href='#/active'> "Active"
+					<li> <a .selected=(items == done)   href='#/completed'> "Completed"
+				<button.clear-completed :tap='clearCompleted'> 'Clear completed'
 
 
 # create an instance of the app (with id app)
