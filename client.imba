@@ -1,7 +1,7 @@
 extern Benchmark
 
 var apps = [
-	{name: 'imba@1.3.0', path: "imba/index.html", color: '#709CB2', libSize: '54kb'}
+	{name: 'imba@1.3.0', path: "imba/index.html", color: '#709CB2', libSize: '57kb'}
 	# {name: 'imba@dev', path: "imba-dev/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '87kb'}
 	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
@@ -114,7 +114,7 @@ tag App
 	
 Imba.mount <App[state].root ->
 	<header#header>
-		<input type="number" model.number='count'>
+		<input[state:count] type="number">
 		<span.flex> "todos"
 		# <select model.number='ins'>
 		# 	<option value=0> 'none'

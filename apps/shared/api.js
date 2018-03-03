@@ -93,6 +93,7 @@ API = {
 		this.mutations = 0;
 		this.seed = 1;
 		this.clearAllTodos();
+		this.store.counter = 0;
 
 		var i = 0;
 
@@ -101,7 +102,6 @@ API = {
 		}
 
 		this.forceUpdate();
-		this.store.counter = 0;
 	},
 
 	startObserver: function(){
@@ -137,7 +137,7 @@ API = {
 		var index = this.random(0,todos.length - 1);
 		var todo  = todos[index];
 
-		switch (step % 4) {
+		switch (step % 5) {
 
 			case 0:
 				this.pool.push(this.removeTodo(todo));
@@ -153,6 +153,10 @@ API = {
 
 			case 3:
 				todo.completed = !todo.completed;
+				break;
+
+			case 4:
+				// change nothing but the counter
 				break;
 		}
 

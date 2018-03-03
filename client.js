@@ -72,7 +72,7 @@ Imba is the namespace for all runtime related utilities
 @namespace
 */
 
-var Imba = {VERSION: '1.3.0-beta.7'};
+var Imba = {VERSION: '1.3.2'};
 
 /*
 
@@ -406,7 +406,7 @@ var Imba = __webpack_require__(3), _2 = Imba.createTagList, _1 = Imba.createElem
 // externs;
 
 var apps = [
-	{name: 'imba@1.3.0',path: "imba/index.html",color: '#709CB2',libSize: '54kb'},
+	{name: 'imba@1.3.0',path: "imba/index.html",color: '#709CB2',libSize: '57kb'},
 	// {name: 'imba@dev', path: "imba-dev/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13',path: "vue/index.html",color: '#4fc08d',libSize: '87kb'},
 	{name: 'react@16.prod',path: "react/index.html",color: 'rgb(15, 203, 255)',libSize: '101kb'}
@@ -556,7 +556,7 @@ Imba.mount((t0 = (t0=_1(App)).flag('root')).setData(state).setTemplate(function(
 	var $ = this.$, self = this, t0;
 	return Imba.static([
 		($[0] || _1('header',$,0,t0).setId('header').setContent([
-			_1('input',$,1,0).setType("number").set('model','count',{number:1}),
+			_1('input',$,1,0).setType("number"),
 			_1('span',$,2,0).flag('flex').setText("todos"),
 			// <select model.number='ins'>
 			// 	<option value=0> 'none'
@@ -568,11 +568,11 @@ Imba.mount((t0 = (t0=_1(App)).flag('root')).setData(state).setTemplate(function(
 			// 	<option value=1> 'random'
 			// 	<option value=2> 'pop'
 			// 	<option value=3> 'shift'
-			_1('button',$,3,0).on$(0,['tap','reset']).setText("reset"),
+			_1('button',$,3,0).on$(0,['tap','reset'],self).setText("reset"),
 			_1(Stepper,$,4,0).setText("step"),
-			_1('button',$,5,0).flag('primary').on$(0,['tap','run']).setText("Run benchmark")
+			_1('button',$,5,0).flag('primary').on$(0,['tap','run'],self).setText("Run benchmark")
 		],2)).end((
-			$[1].end(),
+			$[1].bindData(state,'count').end(),
 			$[4].end(),
 			$[5].setDisabled((state.bench)).end()
 		,true)),
@@ -586,7 +586,7 @@ Imba.mount((t0 = (t0=_1(App)).flag('root')).setData(state).setTemplate(function(
 					_1(AppFrame,t0.$,'B',t0).css('minHeight','340px'),
 					_1('footer',t0.$,'C',t0)
 				],2)).setData(app).css('color',app.color).end((
-					t0.$.A.setContent(String(app.bm || app.name),3).end(),
+					t0.$.A.setContent(String(app.bm || app.name),3),
 					t0.$.B.setData(app).setSrc(("apps/" + (app.path))).end(),
 					t0.$.C.setContent([
 						(app.api && app.api.mutations) ? (
@@ -594,7 +594,7 @@ Imba.mount((t0 = (t0=_1(App)).flag('root')).setData(state).setTemplate(function(
 								_1('span',t0.$,'E','D').flag('value'),
 								_1('i',t0.$,'F','D').setText("muts")
 							],2)).end((
-								t0.$.E.setContent(app.api.mutations,3).end()
+								t0.$.E.setContent(app.api.mutations,3)
 							,true))
 						) : void(0),
 						(app.bm && self.data().fastest) ? Imba.static([
@@ -602,16 +602,16 @@ Imba.mount((t0 = (t0=_1(App)).flag('root')).setData(state).setTemplate(function(
 								_1('span',t0.$,'H','G').flag('value'),
 								_1('i',t0.$,'I','G').setText("ops/sec")
 							],2)).end((
-								t0.$.H.setContent(Math.round(app.bm.hz),3).end()
+								t0.$.H.setContent(Math.round(app.bm.hz),3)
 							,true)),
 							(app.bm == self.data().fastest) ? (
-								(t0.$.J || _1('div',t0.$,'J','C').flag('small').flag('compare').setContent(t0.$.K || _1('span',t0.$,'K','J').setText("baseline"),2)).end()
+								(t0.$.J || _1('div',t0.$,'J','C').flag('small').flag('compare').setContent(t0.$.K || _1('span',t0.$,'K','J').setText("baseline"),2))
 							) : ((app.bm.hz < self.data().fastest.hz) ? (
 								(t0.$.L || _1('div',t0.$,'L','C').flag('small').flag('compare').flag('slower').setContent([
 									_1('span',t0.$,'M','L').flag('x').flag('s'),
 									_1('i',t0.$,'N','L').setText("slower")
 								],2)).end((
-									t0.$.M.setContent((self.data().fastest.hz / app.bm.hz).toFixed(2) + 'x',3).end()
+									t0.$.M.setContent((self.data().fastest.hz / app.bm.hz).toFixed(2) + 'x',3)
 								,true))
 							) : void(0))
 						],1,1) : void(0),
@@ -619,12 +619,12 @@ Imba.mount((t0 = (t0=_1(App)).flag('root')).setData(state).setTemplate(function(
 							_1('i',t0.$,'P','O').setText('library'),
 							_1('span',t0.$,'Q','O').flag('value')
 						],2)).end((
-							t0.$.Q.setContent(app.libSize,3).end()
+							t0.$.Q.setContent(app.libSize,3)
 						,true))
-					],1).end()
+					],1)
 				,true));
 			};return $0;
-		})($[7] || _2($,7,$[6])),4).end()
+		})($[7] || _2($,7,$[6])),4)
 	],2,1);
 }).end());
 
@@ -1080,13 +1080,13 @@ Imba.Scheduler.prototype.onevent = function (event){
 var Imba = __webpack_require__(0);
 
 __webpack_require__(7);
+__webpack_require__(8);
 
 Imba.TagManager = new Imba.TagManagerClass();
 
-__webpack_require__(8);
 __webpack_require__(9);
-__webpack_require__(1);
 __webpack_require__(10);
+__webpack_require__(1);
 __webpack_require__(11);
 __webpack_require__(12);
 
@@ -1117,7 +1117,11 @@ Imba.TagManagerClass.prototype.mounted = function (){
 };
 
 Imba.TagManagerClass.prototype.insert = function (node,parent){
-	return this._inserts++;
+	this._inserts++;
+	if (node && node.mount) {
+		this._hasMountables = true;
+	};
+	return;
 };
 
 Imba.TagManagerClass.prototype.remove = function (node,parent){
@@ -1209,6 +1213,261 @@ Imba.TagManagerClass.prototype.tryUnmount = function (){
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
 var Imba = __webpack_require__(0);
+__webpack_require__(1);
+
+var native$ = [
+	'keydown','keyup','keypress',
+	'textInput','input','change','submit',
+	'focusin','focusout','focus','blur',
+	'contextmenu','selectstart','dblclick',
+	'mousewheel','wheel','scroll',
+	'beforecopy','copy','beforepaste','paste','beforecut','cut',
+	'dragstart','drag','dragend','dragenter','dragover','dragleave','dragexit','drop',
+	'mouseup','mousedown','mouseenter','mouseleave','mouseout','mouseover','mousemove'
+];
+
+/*
+
+Manager for listening to and delegating events in Imba. A single instance
+is always created by Imba (as `Imba.Events`), which handles and delegates all
+events at the very root of the document. Imba does not capture all events
+by default, so if you want to make sure exotic or custom DOMEvents are delegated
+in Imba you will need to register them in `Imba.Events.register(myCustomEventName)`
+
+@iname manager
+
+*/
+
+Imba.EventManager = function EventManager(node,pars){
+	var self = this;
+	if(!pars||pars.constructor !== Object) pars = {};
+	var events = pars.events !== undefined ? pars.events : [];
+	self._shimFocusEvents = true && window.netscape && node.onfocusin === undefined;
+	self.setRoot(node);
+	self.setListeners([]);
+	self.setDelegators({});
+	self.setDelegator(function(e) {
+		self.delegate(e);
+		return true;
+	});
+	
+	for (let i = 0, items = iter$(events), len = items.length; i < len; i++) {
+		self.register(items[i]);
+	};
+	
+	return self;
+};
+
+Imba.EventManager.prototype.root = function(v){ return this._root; }
+Imba.EventManager.prototype.setRoot = function(v){ this._root = v; return this; };
+Imba.EventManager.prototype.count = function(v){ return this._count; }
+Imba.EventManager.prototype.setCount = function(v){ this._count = v; return this; };
+Imba.EventManager.prototype.__enabled = {'default': false,watch: 'enabledDidSet',name: 'enabled'};
+Imba.EventManager.prototype.enabled = function(v){ return this._enabled; }
+Imba.EventManager.prototype.setEnabled = function(v){
+	var a = this.enabled();
+	if(v != a) { this._enabled = v; }
+	if(v != a) { this.enabledDidSet && this.enabledDidSet(v,a,this.__enabled) }
+	return this;
+}
+Imba.EventManager.prototype._enabled = false;
+Imba.EventManager.prototype.listeners = function(v){ return this._listeners; }
+Imba.EventManager.prototype.setListeners = function(v){ this._listeners = v; return this; };
+Imba.EventManager.prototype.delegators = function(v){ return this._delegators; }
+Imba.EventManager.prototype.setDelegators = function(v){ this._delegators = v; return this; };
+Imba.EventManager.prototype.delegator = function(v){ return this._delegator; }
+Imba.EventManager.prototype.setDelegator = function(v){ this._delegator = v; return this; };
+
+var initialBind = [];
+
+Imba.EventManager.prototype.enabledDidSet = function (bool){
+	bool ? this.onenable() : this.ondisable();
+	return this;
+};
+
+Imba.EventManager.bind = function (name){
+	if (Imba.Events) {
+		return Imba.Events.autoregister(name);
+	} else if (initialBind.indexOf(name) == -1 && native$.indexOf(name) >= 0) {
+		return initialBind.push(name);
+	};
+};
+
+Imba.EventManager.activate = function (){
+	var Imba_;
+	if (Imba.Events) { return Imba.Events };
+	if (false) {};
+	
+	Imba.POINTER || (Imba.POINTER = new Imba.Pointer());
+	Imba.Events = new Imba.EventManager(Imba.document(),{events: []});
+	
+	var hasTouchEvents = window && window.ontouchstart !== undefined;
+	
+	if (hasTouchEvents) {
+		Imba.Events.listen('touchstart',function(e) {
+			return Imba.Touch.ontouchstart(e);
+		});
+		
+		Imba.Events.listen('touchmove',function(e) {
+			return Imba.Touch.ontouchmove(e);
+		});
+		
+		Imba.Events.listen('touchend',function(e) {
+			return Imba.Touch.ontouchend(e);
+		});
+		
+		Imba.Events.listen('touchcancel',function(e) {
+			return Imba.Touch.ontouchcancel(e);
+		});
+	};
+	
+	Imba.Events.register('click',function(e) {
+		// Only for main mousebutton, no?
+		if ((e.timeStamp - Imba.Touch.LastTimestamp) > Imba.Touch.TapTimeout) {
+			e._imbaSimulatedTap = true;
+			var tap = new Imba.Event(e);
+			tap.setType('tap');
+			tap.process();
+			if (tap._responder) {
+				return e.preventDefault();
+			};
+		};
+		// delegate the real click event
+		return Imba.Events.delegate(e);
+	});
+	
+	Imba.Events.listen('mousedown',function(e) {
+		if ((e.timeStamp - Imba.Touch.LastTimestamp) > Imba.Touch.TapTimeout) {
+			if (Imba.POINTER) { return Imba.POINTER.update(e).process() };
+		};
+	});
+	
+	Imba.Events.listen('mouseup',function(e) {
+		if ((e.timeStamp - Imba.Touch.LastTimestamp) > Imba.Touch.TapTimeout) {
+			if (Imba.POINTER) { return Imba.POINTER.update(e).process() };
+		};
+	});
+	
+	Imba.Events.register(['mousedown','mouseup']);
+	Imba.Events.register(initialBind);
+	Imba.Events.setEnabled(true);
+	return Imba.Events;
+};
+
+
+/*
+
+	Tell the current EventManager to intercept and handle event of a certain name.
+	By default, Imba.Events will register interceptors for: *keydown*, *keyup*, 
+	*keypress*, *textInput*, *input*, *change*, *submit*, *focusin*, *focusout*, 
+	*blur*, *contextmenu*, *dblclick*, *mousewheel*, *wheel*
+
+	*/
+
+Imba.EventManager.prototype.register = function (name,handler){
+	if(handler === undefined) handler = true;
+	if (name instanceof Array) {
+		for (let i = 0, items = iter$(name), len = items.length; i < len; i++) {
+			this.register(items[i],handler);
+		};
+		return this;
+	};
+	
+	if (this.delegators()[name]) { return this };
+	
+	// console.log("register for event {name}")
+	var fn = this.delegators()[name] = (handler instanceof Function) ? handler : this.delegator();
+	if (this.enabled()) { return this.root().addEventListener(name,fn,true) };
+};
+
+Imba.EventManager.prototype.autoregister = function (name){
+	if (native$.indexOf(name) == -1) { return this };
+	return this.register(name);
+};
+
+Imba.EventManager.prototype.listen = function (name,handler,capture){
+	if(capture === undefined) capture = true;
+	this.listeners().push([name,handler,capture]);
+	if (this.enabled()) { this.root().addEventListener(name,handler,capture) };
+	return this;
+};
+
+Imba.EventManager.prototype.delegate = function (e){
+	var event = Imba.Event.wrap(e);
+	event.process();
+	if (this._shimFocusEvents) {
+		if (e.type == 'focus') {
+			Imba.Event.wrap(e).setType('focusin').process();
+		} else if (e.type == 'blur') {
+			Imba.Event.wrap(e).setType('focusout').process();
+		};
+	};
+	return this;
+};
+
+/*
+
+	Create a new Imba.Event
+
+	*/
+
+Imba.EventManager.prototype.create = function (type,target,pars){
+	if(!pars||pars.constructor !== Object) pars = {};
+	var data = pars.data !== undefined ? pars.data : null;
+	var source = pars.source !== undefined ? pars.source : null;
+	var event = Imba.Event.wrap({type: type,target: target});
+	if (data) { (event.setData(data),data) };
+	if (source) { (event.setSource(source),source) };
+	return event;
+};
+
+/*
+
+	Trigger / process an Imba.Event.
+
+	*/
+
+Imba.EventManager.prototype.trigger = function (){
+	return this.create.apply(this,arguments).process();
+};
+
+Imba.EventManager.prototype.onenable = function (){
+	for (let o = this.delegators(), handler, i = 0, keys = Object.keys(o), l = keys.length, name; i < l; i++){
+		name = keys[i];handler = o[name];this.root().addEventListener(name,handler,true);
+	};
+	
+	for (let i = 0, items = iter$(this.listeners()), len = items.length, item; i < len; i++) {
+		item = items[i];
+		this.root().addEventListener(item[0],item[1],item[2]);
+	};
+	
+	window.addEventListener('hashchange',Imba.commit);
+	window.addEventListener('popstate',Imba.commit);
+	return this;
+};
+
+Imba.EventManager.prototype.ondisable = function (){
+	for (let o = this.delegators(), handler, i = 0, keys = Object.keys(o), l = keys.length, name; i < l; i++){
+		name = keys[i];handler = o[name];this.root().removeEventListener(name,handler,true);
+	};
+	
+	for (let i = 0, items = iter$(this.listeners()), len = items.length, item; i < len; i++) {
+		item = items[i];
+		this.root().removeEventListener(item[0],item[1],item[2]);
+	};
+	
+	window.removeEventListener('hashchange',Imba.commit);
+	window.removeEventListener('popstate',Imba.commit);
+	return this;
+};
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
+var Imba = __webpack_require__(0);
 
 Imba.CSSKeyMap = {};
 
@@ -1264,6 +1523,8 @@ Imba.createTextNode = function (node){
 	return Imba.document().createTextNode(node);
 };
 
+
+
 /*
 This is the baseclass that all tags in imba inherit from.
 @iname node
@@ -1301,6 +1562,10 @@ Imba.Tag.dom = function (){
 	return this._protoDom || (this._protoDom = this.buildNode());
 };
 
+Imba.Tag.end = function (){
+	return this.commit(0);
+};
+
 /*
 	Called when a tag type is being subclassed.
 	*/
@@ -1330,48 +1595,23 @@ Imba.Tag.inherit = function (child){
 	*/
 
 Imba.Tag.prototype.optimizeTagStructure = function (){
-	var base = Imba.Tag.prototype;
-	var hasSetup = this.setup != base.setup;
-	var hasCommit = this.commit != base.commit;
-	var hasRender = this.render != base.render;
-	var hasMount = this.mount;
-	
+	if (false) {};
 	var ctor = this.constructor;
+	let keys = Object.keys(this);
 	
-	if (hasCommit || hasRender || hasMount || hasSetup) {
+	if (keys.indexOf('mount') >= 0) {
+		if (ctor._classes && ctor._classes.indexOf('__mount') == -1) {
+			ctor._classes.push('__mount');
+		};
 		
-		this.end = function() {
-			if (this.mount && !(this.FLAGS & Imba.TAG_MOUNTED)) {
-				// just activate 
-				Imba.TagManager.mount(this);
-			};
-			
-			if (!(this.FLAGS & Imba.TAG_SETUP)) {
-				this.FLAGS |= Imba.TAG_SETUP;
-				this.setup();
-			};
-			
-			this.commit();
-			
-			return this;
+		if (ctor._protoDom) {
+			ctor._protoDom.classList.add('__mount');
 		};
 	};
 	
-	if (true) {
-		if (hasMount) {
-			if (ctor._classes && ctor._classes.indexOf('__mount') == -1) {
-				ctor._classes.push('__mount');
-			};
-			
-			if (ctor._protoDom) {
-				ctor._protoDom.classList.add('__mount');
-			};
-		};
-		
-		for (let i = 0, items = ['mousemove','mouseenter','mouseleave','mouseover','mouseout','selectstart'], len = items.length, item; i < len; i++) {
-			item = items[i];
-			if (this[("on" + item)]) { Imba.Events.register(item) };
-		};
+	for (let i = 0, items = iter$(keys), len = items.length, key; i < len; i++) {
+		key = items[i];
+		if ((/^on/).test(key)) { Imba.EventManager.bind(key.slice(2)) };
 	};
 	return this;
 };
@@ -1389,7 +1629,7 @@ Imba.Tag.prototype.dom = function (){
 
 Imba.Tag.prototype.setDom = function (dom){
 	dom._tag = this;
-	this._dom = dom;
+	this._dom = this._slot_ = dom;
 	return this;
 };
 
@@ -1433,6 +1673,11 @@ Imba.Tag.prototype.data = function (){
 	return this._data;
 };
 
+
+Imba.Tag.prototype.bindData = function (target,path,args){
+	return this.setData(args ? target[path].apply(target,args) : target[path]);
+};
+
 /*
 	Set inner html of node
 	*/
@@ -1452,7 +1697,7 @@ Imba.Tag.prototype.html = function (){
 	return this._dom.innerHTML;
 };
 
-Imba.Tag.prototype.on$ = function (slot,handler){
+Imba.Tag.prototype.on$ = function (slot,handler,context){
 	let handlers = this._on_ || (this._on_ = []);
 	let prev = handlers[slot];
 	// self-bound handlers
@@ -1466,7 +1711,12 @@ Imba.Tag.prototype.on$ = function (slot,handler){
 	};
 	
 	handlers[slot] = handler;
-	if (prev) { handler.state = prev.state };
+	if (prev) {
+		handler.state = prev.state;
+	} else {
+		handler.state = {context: context};
+		if (true) { Imba.EventManager.bind(handler[0]) };
+	};
 	return this;
 };
 
@@ -1593,11 +1843,9 @@ Imba.Tag.prototype.setChildren = function (nodes,type){
 
 Imba.Tag.prototype.setTemplate = function (template){
 	if (!this._template) {
-		// override the basic
 		if (this.render == Imba.Tag.prototype.render) {
 			this.render = this.renderTemplate; // do setChildren(renderTemplate)
 		};
-		this.optimizeTagStructure();
 	};
 	
 	this.template = this._template = template;
@@ -1628,7 +1876,7 @@ Imba.Tag.prototype.renderTemplate = function (){
 
 Imba.Tag.prototype.removeChild = function (child){
 	var par = this.dom();
-	var el = child._dom || child;
+	var el = child._slot_ || child;
 	if (el && el.parentNode == par) {
 		par.removeChild(el);
 		Imba.TagManager.remove(el._tag || el,this);
@@ -1645,7 +1893,7 @@ Imba.Tag.prototype.removeAllChildren = function (){
 		while (this._dom.firstChild){
 			this._dom.removeChild(this._dom.firstChild);
 		};
-		Imba.TagManager.remove(null,this); // should register each child?
+		Imba.TagManager.remove(null,this);
 	};
 	this._tree_ = this._text_ = null;
 	return this;
@@ -1662,7 +1910,7 @@ Imba.Tag.prototype.appendChild = function (node){
 	if ((typeof node=='string'||node instanceof String)) {
 		this.dom().appendChild(Imba.document().createTextNode(node));
 	} else if (node) {
-		this.dom().appendChild(node._dom || node);
+		this.dom().appendChild(node._slot_ || node);
 		Imba.TagManager.insert(node._tag || node,this);
 		// FIXME ensure these are not called for text nodes
 	};
@@ -1680,13 +1928,38 @@ Imba.Tag.prototype.insertBefore = function (node,rel){
 	};
 	
 	if (node && rel) {
-		this.dom().insertBefore((node._dom || node),(rel._dom || rel));
+		this.dom().insertBefore((node._slot_ || node),(rel._slot_ || rel));
 		Imba.TagManager.insert(node._tag || node,this);
 		// FIXME ensure these are not called for text nodes
 	};
 	return this;
 };
 
+Imba.Tag.prototype.detachFromParent = function (){
+	if (this._slot_ == this._dom) {
+		this._slot_ = (this._dom._placeholder_ || (this._dom._placeholder_ = Imba.document().createComment("node")));
+		this._slot_._tag || (this._slot_._tag = this);
+		
+		if (this._dom.parentNode) {
+			Imba.TagManager.remove(this);
+			this._dom.parentNode.replaceChild(this._slot_,this._dom);
+		};
+	};
+	return this;
+};
+
+Imba.Tag.prototype.attachToParent = function (){
+	if (this._slot_ != this._dom) {
+		let prev = this._slot_;
+		this._slot_ = this._dom;
+		if (prev && prev.parentNode) {
+			Imba.TagManager.insert(this);
+			prev.parentNode.replaceChild(this._dom,prev);
+		};
+	};
+	
+	return this;
+};
 
 /*
 	Remove node from the dom tree
@@ -1807,7 +2080,11 @@ Imba.Tag.prototype.setup = function (){
 	*/
 
 Imba.Tag.prototype.commit = function (){
-	this.render();
+	if (this.beforeRender() !== false) this.render();
+	return this;
+};
+
+Imba.Tag.prototype.beforeRender = function (){
 	return this;
 };
 
@@ -1820,7 +2097,7 @@ Imba.Tag.prototype.commit = function (){
 	*/
 
 Imba.Tag.prototype.tick = function (){
-	this.render();
+	if (this.beforeRender() !== false) this.render();
 	return this;
 };
 
@@ -1837,6 +2114,9 @@ Imba.Tag.prototype.tick = function (){
 	*/
 
 Imba.Tag.prototype.end = function (){
+	this.setup();
+	this.commit(0);
+	this.end = Imba.Tag.end;
 	return this;
 };
 
@@ -2166,26 +2446,29 @@ Imba.SVGTag.namespaceURI = function (){
 
 Imba.SVGTag.buildNode = function (){
 	var dom = Imba.document().createElementNS(this.namespaceURI(),this._nodeType);
-	var cls = this._classes.join(" ");
-	if (cls) { dom.className.baseVal = cls };
+	if (this._classes) {
+		var cls = this._classes.join(" ");
+		if (cls) { dom.className.baseVal = cls };
+	};
 	return dom;
 };
 
 Imba.SVGTag.inherit = function (child){
 	child._protoDom = null;
-	if (Imba.indexOf(child._name,Imba.SVG_TAGS) >= 0) {
+	
+	if (Imba.indexOf(child._name,Imba.SVG_TAGS) >= 0 || this == Imba.SVGTag) {
 		child._nodeType = child._name;
 		return child._classes = [];
 	} else {
 		child._nodeType = this._nodeType;
 		var className = "_" + child._name.replace(/_/g,'-');
-		return child._classes = this._classes.concat(className);
+		return child._classes = (this._classes || []).concat(className);
 	};
 };
 
 Imba.HTML_TAGS = "a abbr address area article aside audio b base bdi bdo big blockquote body br button canvas caption cite code col colgroup data datalist dd del details dfn div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hr html i iframe img input ins kbd keygen label legend li link main map mark menu menuitem meta meter nav noscript object ol optgroup option output p param pre progress q rp rt ruby s samp script section select small source span strong style sub summary sup table tbody td textarea tfoot th thead time title tr track u ul var video wbr".split(" ");
 Imba.HTML_TAGS_UNSAFE = "article aside header section".split(" ");
-Imba.SVG_TAGS = "circle defs ellipse g line linearGradient mask path pattern polygon polyline radialGradient rect stop svg text tspan".split(" ");
+Imba.SVG_TAGS = "circle defs ellipse g line linearGradient mask path pattern polygon polyline radialGradient rect stop svg text tspan image".split(" ");
 
 Imba.HTML_ATTRS = {
 	a: "href target hreflang media download rel type",
@@ -2442,6 +2725,13 @@ Imba.createTagList = function (ctx,ref,pref){
 	return node;
 };
 
+Imba.createTagLoopResult = function (ctx,ref,pref){
+	var node = [];
+	node._type = 5;
+	node.cache = {i$: 0};
+	return node;
+};
+
 // use array instead?
 function TagCache(owner){
 	this._tag = owner;
@@ -2467,21 +2757,8 @@ function TagMap(cache,ref,par){
 TagMap.prototype.$iter = function (){
 	var item = [];
 	item._type = 5;
-	item.static = 5;
 	item.cache = this;
 	return item;
-};
-
-TagMap.prototype.$iter2 = function (){
-	let next = this.next$;
-	this.next$ = this.curr$;
-	next.length = 0;
-	return this.curr$ = next;
-	// var item = []
-	// item.@type = 5
-	// item:static = 5
-	// item:cache = self
-	// return item
 };
 
 TagMap.prototype.$prune = function (items){
@@ -2637,15 +2914,13 @@ Imba.Tag;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
 var Imba = __webpack_require__(0);
 
-// predefine all supported html tags
 Imba.defineTag('fragment', 'element', function(tag){
-	
 	tag.createNode = function (){
 		return Imba.document().createDocumentFragment();
 	};
@@ -2657,7 +2932,6 @@ Imba.extendTag('html', function(tag){
 	};
 });
 
-
 Imba.extendTag('canvas', function(tag){
 	tag.prototype.context = function (type){
 		if(type === undefined) type = '2d';
@@ -2665,115 +2939,84 @@ Imba.extendTag('canvas', function(tag){
 	};
 });
 
-function DataValue(node,path,mods){
-	var self = this;
-	self._node = node;
-	self._path = path;
-	self._mods = mods || {};
-	self._setter = Imba.toSetter(self._path);
-	let valueFn = node.value;
-	node.value = function() { return self.mod(valueFn.call(this)); };
+function DataProxy(node,path,args){
+	this._node = node;
+	this._path = path;
+	this._args = args;
+	if (this._args) { this._setter = Imba.toSetter(this._path) };
 };
 
-DataValue.prototype.context = function (){
-	if (this._context) { return this._context };
-	// caching can lead to weird behaviour
-	let el = this._node;
-	while (el){
-		if (el.data()) {
-			this._context = el;
-			break;
-		};
-		el = el._owner_;
+DataProxy.bind = function (receiver,data,path,args){
+	let proxy = receiver._data || (receiver._data = new this(receiver,path,args));
+	proxy.bind(data,path,args);
+	return receiver;
+};
+
+DataProxy.prototype.bind = function (data,key,args){
+	if (data != this._data) {
+		this._data = data;
 	};
-	return this._context;
+	return this;
 };
 
-DataValue.prototype.data = function (){
-	var ctx = this.context();
-	return ctx ? ctx.data() : null;
+DataProxy.prototype.getFormValue = function (){
+	return this._setter ? this._data[this._path]() : this._data[this._path];
 };
 
-DataValue.prototype.lazy = function (){
-	return this._mods.lazy;
+DataProxy.prototype.setFormValue = function (value){
+	return this._setter ? this._data[this._setter](value) : ((this._data[this._path] = value));
 };
 
-DataValue.prototype.get = function (){
-	let data = this.data();
-	if (!data) { return null };
-	let val = data[this._path];
-	return ((val instanceof Function) && data[this._setter]) ? data[this._path]() : val;
-};
 
-DataValue.prototype.set = function (value){
-	let data = this.data();
-	if (!data) { return };
-	
-	let prev = data[this._path];
-	if (prev instanceof Function) {
-		if (data[this._setter] instanceof Function) {
-			data[this._setter](value);
-			return this;
-		};
-	};
-	return data[this._path] = value;
-};
-
-DataValue.prototype.isArray = function (val){
-	if(val === undefined) val = this.get();
+var isArray = function(val) {
 	return val && val.splice && val.sort;
 };
 
-DataValue.prototype.mod = function (value){
-	var self = this;
-	if (value instanceof Array) {
-		return value.map(function(_0) { return self.mod(_0); });
+var isSimilarArray = function(a,b) {
+	let l = a.length,i = 0;
+	if (l != b.length) { return false };
+	while (i++ < l){
+		if (a[i] != b[i]) { return false };
 	};
-	if (self._mods.trim && (typeof value=='string'||value instanceof String)) {
-		value = value.trim();
-	};
-	if (self._mods.number) {
-		value = parseFloat(value);
-	};
-	return value;
+	return true;
 };
 
 Imba.extendTag('input', function(tag){
-	tag.prototype.model = function (){
-		return this._model;
-	};
+	tag.prototype.lazy = function(v){ return this._lazy; }
+	tag.prototype.setLazy = function(v){ this._lazy = v; return this; };
 	
-	tag.prototype.setModel = function (value,mods){
-		this._model || (this._model = new DataValue(this,value,mods));
+	tag.prototype.bindData = function (target,path,args){
+		DataProxy.bind(this,target,path,args);
 		return this;
 	};
 	
 	tag.prototype.setValue = function (value){
-		this.dom().value = this._value = value;
+		if (this._localValue == undefined) {
+			this.dom().value = this._value = value;
+		};
 		return this;
 	};
 	
 	tag.prototype.oninput = function (e){
 		let val = this._dom.value;
-		this._localValue = (this._initialValue != val) ? val : undefined;
-		return (this.model() && !this.model().lazy()) ? this.model().set(this.value()) : e.silence();
+		this._localValue = val;
+		return (this._data && !(this.lazy())) ? this._data.setFormValue(this.value(),this) : e.silence();
 	};
 	
 	tag.prototype.onchange = function (e){
 		this._modelValue = this._localValue = undefined;
-		if (!(this.model())) { return e.silence() };
+		if (!(this.data())) { return e.silence() };
 		
 		if (this.type() == 'radio' || this.type() == 'checkbox') {
 			let checked = this._dom.checked;
-			let mval = this.model().get();
+			let mval = this._data.getFormValue(this);
 			let dval = (this._value != undefined) ? this._value : this.value();
-			// console.log "change",type,checked,dval
 			
 			if (this.type() == 'radio') {
-				return this.model().set(dval,true);
+				return this._data.setFormValue(dval,this);
 			} else if (this.dom().value == 'on') {
-				return this.model().set(!!checked,true);
-			} else if (this.model().isArray()) {
+				return this._data.setFormValue(!!checked,this);
+			} else if (isArray(mval)) {
 				let idx = mval.indexOf(dval);
 				if (checked && idx == -1) {
 					return mval.push(dval);
@@ -2781,23 +3024,30 @@ Imba.extendTag('input', function(tag){
 					return mval.splice(idx,1);
 				};
 			} else {
-				return this.model().set(dval);
+				return this._data.setFormValue(dval,this);
 			};
 		} else {
-			return this.model().set(this.value());
+			return this._data.setFormValue(this.value());
 		};
+	};
+	
+	tag.prototype.onblur = function (e){
+		return this._localValue = undefined;
 	};
 	
 	// overriding end directly for performance
 	tag.prototype.end = function (){
-		if (!this._model || this._localValue !== undefined) { return this };
-		let mval = this._model.get();
+		if (this._localValue !== undefined || !this._data) {
+			return this;
+		};
+		
+		let mval = this._data.getFormValue(this);
 		if (mval == this._modelValue) { return this };
-		if (!this.model().isArray()) { this._modelValue = mval };
+		if (!isArray(mval)) { this._modelValue = mval };
 		
 		if (this.type() == 'radio' || this.type() == 'checkbox') {
 			let dval = this._value;
-			let checked = this.model().isArray() ? (
+			let checked = isArray(mval) ? (
 				mval.indexOf(dval) >= 0
 			) : ((this.dom().value == 'on') ? (
 				!!mval
@@ -2808,19 +3058,17 @@ Imba.extendTag('input', function(tag){
 			this._dom.checked = checked;
 		} else {
 			this._dom.value = mval;
-			this._initialValue = this._dom.value;
 		};
 		return this;
 	};
 });
 
 Imba.extendTag('textarea', function(tag){
-	tag.prototype.model = function (){
-		return this._model;
-	};
+	tag.prototype.lazy = function(v){ return this._lazy; }
+	tag.prototype.setLazy = function(v){ this._lazy = v; return this; };
 	
-	tag.prototype.setModel = function (value,mods){
-		this._model || (this._model = new DataValue(this,value,mods));
+	tag.prototype.bindData = function (target,path,args){
+		DataProxy.bind(this,target,path,args);
 		return this;
 	};
 	
@@ -2831,21 +3079,25 @@ Imba.extendTag('textarea', function(tag){
 	
 	tag.prototype.oninput = function (e){
 		let val = this._dom.value;
-		this._localValue = (this._initialValue != val) ? val : undefined;
-		return (this.model() && !this.model().lazy()) ? this.model().set(this.value()) : e.silence();
+		this._localValue = val;
+		return (this._data && !(this.lazy())) ? this._data.setFormValue(this.value(),this) : e.silence();
 	};
 	
 	tag.prototype.onchange = function (e){
 		this._localValue = undefined;
-		return this.model() ? this.model().set(this.value()) : e.silence();
+		return this._data ? this._data.setFormValue(this.value(),this) : e.silence();
+	};
+	
+	tag.prototype.onblur = function (e){
+		return this._localValue = undefined;
 	};
 	
 	tag.prototype.render = function (){
-		if (this._localValue != undefined || !(this.model())) { return };
-		if (this.model()) {
-			this._dom.value = this.model().get();
+		if (this._localValue != undefined || !this._data) { return };
+		if (this._data) {
+			let dval = this._data.getFormValue(this);
+			this._dom.value = (dval != undefined) ? dval : '';
 		};
-		this._initialValue = this._dom.value;
 		return this;
 	};
 });
@@ -2864,30 +3116,46 @@ Imba.extendTag('option', function(tag){
 });
 
 Imba.extendTag('select', function(tag){
-	tag.prototype.model = function (){
-		return this._model;
-	};
-	
-	tag.prototype.setModel = function (value,mods){
-		this._model || (this._model = new DataValue(this,value,mods));
+	tag.prototype.bindData = function (target,path,args){
+		DataProxy.bind(this,target,path,args);
 		return this;
 	};
 	
-	tag.prototype.setValue = function (value){
-		if (value != this._value) {
-			this._value = value;
-			if (typeof value == 'object') {
-				for (let i = 0, items = iter$(this.dom().options), len = items.length, opt; i < len; i++) {
-					opt = items[i];
-					let oval = (opt._tag ? opt._tag.value() : opt.value);
-					if (value == oval) {
-						this.dom().selectedIndex = i;
-						break;
-					};
-				};
-			} else {
-				this.dom().value = value;
+	tag.prototype.setValue = function (value,syncing){
+		let prev = this._value;
+		this._value = value;
+		if (!syncing) { this.syncValue(value) };
+		return this;
+	};
+	
+	tag.prototype.syncValue = function (value){
+		let prev = this._syncValue;
+		// check if value has changed
+		if (this.multiple() && (value instanceof Array)) {
+			if ((prev instanceof Array) && isSimilarArray(prev,value)) {
+				return this;
 			};
+			// create a copy for syncValue
+			value = value.slice();
+		};
+		
+		this._syncValue = value;
+		// support array for multiple?
+		if (typeof value == 'object') {
+			let mult = this.multiple() && (value instanceof Array);
+			
+			for (let i = 0, items = iter$(this.dom().options), len = items.length, opt; i < len; i++) {
+				opt = items[i];
+				let oval = (opt._tag ? opt._tag.value() : opt.value);
+				if (mult) {
+					opt.selected = value.indexOf(oval) >= 0;
+				} else if (value == oval) {
+					this.dom().selectedIndex = i;
+					break;
+				};
+			};
+		} else {
+			this.dom().value = value;
 		};
 		return this;
 	};
@@ -2907,25 +3175,16 @@ Imba.extendTag('select', function(tag){
 	};
 	
 	tag.prototype.onchange = function (e){
-		return this.model() ? this.model().set(this.value()) : e.silence();
+		return this._data ? this._data.setFormValue(this.value(),this) : e.silence();
 	};
 	
-	tag.prototype.render = function (){
-		if (!(this.model())) { return };
+	tag.prototype.end = function (){
+		if (this._data) {
+			this.setValue(this._data.getFormValue(this),1);
+		};
 		
-		let mval = this.model().get();
-		// sync dom value
-		if (this.multiple()) {
-			for (let i = 0, items = iter$(this.dom().options), len = items.length, option; i < len; i++) {
-				option = items[i];
-				let oval = this.model().mod(option._tag ? option._tag.value() : option.value);
-				let sel = mval.indexOf(oval) >= 0;
-				option.selected = sel;
-			};
-		} else {
-			this.setValue(mval);
-			// what if mval is rich? Would be nice with some mapping
-			// dom:value = mval
+		if (this._value != this._syncValue) {
+			this.syncValue(this._value);
 		};
 		return this;
 	};
@@ -2933,7 +3192,7 @@ Imba.extendTag('select', function(tag){
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
@@ -3502,7 +3761,7 @@ Imba.TouchGesture.prototype.ontouchend = function (e){
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
@@ -3560,8 +3819,9 @@ el.rightModifier = function (e){
 el.middleModifier = function (e){
 	return (e.button() != undefined) ? ((e.button() === 1)) : true;
 };
-el.getHandler = function (str){
-	return this[str];
+
+el.getHandler = function (str,event){
+	if (this[str]) { return this };
 };
 
 /*
@@ -3584,10 +3844,11 @@ Imba.Event = function Event(e){
 Imba.Event.prototype.event = function(v){ return this._event; }
 Imba.Event.prototype.setEvent = function(v){ this._event = v; return this; };
 
-/* reference to the native event */
-
 Imba.Event.prototype.prefix = function(v){ return this._prefix; }
 Imba.Event.prototype.setPrefix = function(v){ this._prefix = v; return this; };
+
+Imba.Event.prototype.source = function(v){ return this._source; }
+Imba.Event.prototype.setSource = function(v){ this._source = v; return this; };
 
 Imba.Event.prototype.data = function(v){ return this._data; }
 Imba.Event.prototype.setData = function(v){ this._data = v; return this; };
@@ -3612,12 +3873,8 @@ Imba.Event.prototype.setType = function (type){
 Imba.Event.prototype.type = function (){
 	return this._type || this.event().type;
 };
-
-Imba.Event.prototype.button = function (){
-	return this.event().button;
-};
-Imba.Event.prototype.keyCode = function (){
-	return this.event().keyCode;
+Imba.Event.prototype.native = function (){
+	return this._event;
 };
 
 Imba.Event.prototype.name = function (){
@@ -3769,14 +4026,33 @@ Imba.Event.prototype.processHandlers = function (node,handlers){
 		if (typeof handler == 'string') {
 			let el = node;
 			let fn = null;
-			while (el && (!fn || !(fn instanceof Function))){
-				if (fn = el.getHandler(handler)) {
-					handler = fn;
-					context = el;
-				} else {
-					el = el.parent();
+			let ctx = state.context;
+			
+			if (ctx) {
+				if (ctx.getHandler instanceof Function) {
+					ctx = ctx.getHandler(handler,this);
+				};
+				
+				if (ctx[handler] instanceof Function) {
+					handler = fn = ctx[handler];
+					context = ctx;
 				};
 			};
+			
+			if (!fn) {
+				console.warn(("event " + this.type() + ": could not find '" + handler + "' in context"),ctx);
+			};
+			
+			// while el and (!fn or !(fn isa Function))
+			// 	if fn = el.getHandler(handler)
+			// 		if fn[handler] isa Function
+			// 			handler = fn[handler]
+			// 			context = fn
+			// 		elif fn isa Function
+			// 			handler = fn
+			// 			context = el
+			// 	else
+			// 		el = el.parent
 		};
 		
 		if (handler instanceof Function) {
@@ -3784,10 +4060,7 @@ Imba.Event.prototype.processHandlers = function (node,handlers){
 			// do we still want to continue the chain?
 			let res = handler.apply(context,params || [this]);
 			
-			// should we take awaits into account?
-			// was bubbling before - has not been modified
 			if (!isMod) {
-				bubble = false; // stop propagation by default
 				this._responder || (this._responder = node);
 			};
 			
@@ -3825,22 +4098,22 @@ Imba.Event.prototype.process = function (){
 		let node = domnode._dom ? domnode : domnode._tag;
 		
 		if (node) {
-			if (node[meth] instanceof Function) {
-				this._responder || (this._responder = node);
-				this._silenced = false;
-				result = args ? node[meth].apply(node,args) : node[meth](this,this.data());
-			};
-			
 			if (handlers = node._on_) {
 				for (let i = 0, items = iter$(handlers), len = items.length, handler; i < len; i++) {
 					handler = items[i];
 					if (!handler) { continue; };
 					let hname = handler[0];
-					if (name == handler[0] && this.bubble()) { // and (hname:length == name:length or hname[name:length] == '.')
+					if (name == handler[0] && this.bubble()) {
 						this.processHandlers(node,handler);
 					};
 				};
 				if (!(this.bubble())) { break; };
+			};
+			
+			if (this.bubble() && (node[meth] instanceof Function)) {
+				this._responder || (this._responder = node);
+				this._silenced = false;
+				result = args ? node[meth].apply(node,args) : node[meth](this,this.data());
 			};
 			
 			if (node.onevent) {
@@ -3879,7 +4152,7 @@ Imba.Event.prototype.processed = function (){
 	*/
 
 Imba.Event.prototype.x = function (){
-	return this.event().x;
+	return this.native().x;
 };
 
 /*
@@ -3888,7 +4161,29 @@ Imba.Event.prototype.x = function (){
 	*/
 
 Imba.Event.prototype.y = function (){
-	return this.event().y;
+	return this.native().y;
+};
+
+Imba.Event.prototype.button = function (){
+	return this.native().button;
+};
+Imba.Event.prototype.keyCode = function (){
+	return this.native().keyCode;
+};
+Imba.Event.prototype.ctrl = function (){
+	return this.native().ctrlKey;
+};
+Imba.Event.prototype.alt = function (){
+	return this.native().altKey;
+};
+Imba.Event.prototype.shift = function (){
+	return this.native().shiftKey;
+};
+Imba.Event.prototype.meta = function (){
+	return this.native().metaKey;
+};
+Imba.Event.prototype.key = function (){
+	return this.native().key;
 };
 
 /*
@@ -3909,248 +4204,6 @@ Imba.Event.prototype.which = function (){
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
-__webpack_require__(1);
-
-/*
-
-Manager for listening to and delegating events in Imba. A single instance
-is always created by Imba (as `Imba.Events`), which handles and delegates all
-events at the very root of the document. Imba does not capture all events
-by default, so if you want to make sure exotic or custom DOMEvents are delegated
-in Imba you will need to register them in `Imba.Events.register(myCustomEventName)`
-
-@iname manager
-
-*/
-
-Imba.EventManager = function EventManager(node,pars){
-	var self = this;
-	if(!pars||pars.constructor !== Object) pars = {};
-	var events = pars.events !== undefined ? pars.events : [];
-	self._shimFocusEvents = true && window.netscape && node.onfocusin === undefined;
-	self.setRoot(node);
-	self.setListeners([]);
-	self.setDelegators({});
-	self.setDelegator(function(e) {
-		self.delegate(e);
-		return true;
-	});
-	
-	for (let i = 0, items = iter$(events), len = items.length; i < len; i++) {
-		self.register(items[i]);
-	};
-	
-	return self;
-};
-
-Imba.EventManager.prototype.root = function(v){ return this._root; }
-Imba.EventManager.prototype.setRoot = function(v){ this._root = v; return this; };
-Imba.EventManager.prototype.count = function(v){ return this._count; }
-Imba.EventManager.prototype.setCount = function(v){ this._count = v; return this; };
-Imba.EventManager.prototype.__enabled = {'default': false,watch: 'enabledDidSet',name: 'enabled'};
-Imba.EventManager.prototype.enabled = function(v){ return this._enabled; }
-Imba.EventManager.prototype.setEnabled = function(v){
-	var a = this.enabled();
-	if(v != a) { this._enabled = v; }
-	if(v != a) { this.enabledDidSet && this.enabledDidSet(v,a,this.__enabled) }
-	return this;
-}
-Imba.EventManager.prototype._enabled = false;
-Imba.EventManager.prototype.listeners = function(v){ return this._listeners; }
-Imba.EventManager.prototype.setListeners = function(v){ this._listeners = v; return this; };
-Imba.EventManager.prototype.delegators = function(v){ return this._delegators; }
-Imba.EventManager.prototype.setDelegators = function(v){ this._delegators = v; return this; };
-Imba.EventManager.prototype.delegator = function(v){ return this._delegator; }
-Imba.EventManager.prototype.setDelegator = function(v){ this._delegator = v; return this; };
-
-Imba.EventManager.prototype.enabledDidSet = function (bool){
-	bool ? this.onenable() : this.ondisable();
-	return this;
-};
-
-Imba.EventManager.activate = function (){
-	var Imba_;
-	if (Imba.Events) { return Imba.Events };
-	
-	if (true) {
-		Imba.POINTER || (Imba.POINTER = new Imba.Pointer());
-		
-		Imba.Events = new Imba.EventManager(Imba.document(),{events: [
-			'keydown','keyup','keypress',
-			'textInput','input','change','submit',
-			'focusin','focusout','focus','blur',
-			'contextmenu','dblclick',
-			'mousewheel','wheel','scroll',
-			'beforecopy','copy',
-			'beforepaste','paste',
-			'beforecut','cut'
-		]});
-		
-		// should listen to dragdrop events by default
-		Imba.Events.register([
-			'dragstart','drag','dragend',
-			'dragenter','dragover','dragleave','dragexit','drop'
-		]);
-		
-		var hasTouchEvents = window && window.ontouchstart !== undefined;
-		
-		if (hasTouchEvents) {
-			Imba.Events.listen('touchstart',function(e) {
-				return Imba.Touch.ontouchstart(e);
-			});
-			
-			Imba.Events.listen('touchmove',function(e) {
-				return Imba.Touch.ontouchmove(e);
-			});
-			
-			Imba.Events.listen('touchend',function(e) {
-				return Imba.Touch.ontouchend(e);
-			});
-			
-			Imba.Events.listen('touchcancel',function(e) {
-				return Imba.Touch.ontouchcancel(e);
-			});
-		};
-		
-		Imba.Events.register('click',function(e) {
-			// Only for main mousebutton, no?
-			if ((e.timeStamp - Imba.Touch.LastTimestamp) > Imba.Touch.TapTimeout) {
-				e._imbaSimulatedTap = true;
-				var tap = new Imba.Event(e);
-				tap.setType('tap');
-				tap.process();
-				if (tap._responder) {
-					return e.preventDefault();
-				};
-			};
-			// delegate the real click event
-			return Imba.Events.delegate(e);
-		});
-		
-		Imba.Events.listen('mousedown',function(e) {
-			if ((e.timeStamp - Imba.Touch.LastTimestamp) > Imba.Touch.TapTimeout) {
-				if (Imba.POINTER) { return Imba.POINTER.update(e).process() };
-			};
-		});
-		
-		Imba.Events.listen('mouseup',function(e) {
-			if ((e.timeStamp - Imba.Touch.LastTimestamp) > Imba.Touch.TapTimeout) {
-				if (Imba.POINTER) { return Imba.POINTER.update(e).process() };
-			};
-		});
-		
-		Imba.Events.register(['mousedown','mouseup']);
-		Imba.Events.setEnabled(true);
-		return Imba.Events;
-	};
-};
-
-
-/*
-
-	Tell the current EventManager to intercept and handle event of a certain name.
-	By default, Imba.Events will register interceptors for: *keydown*, *keyup*, 
-	*keypress*, *textInput*, *input*, *change*, *submit*, *focusin*, *focusout*, 
-	*blur*, *contextmenu*, *dblclick*, *mousewheel*, *wheel*
-
-	*/
-
-Imba.EventManager.prototype.register = function (name,handler){
-	if(handler === undefined) handler = true;
-	if (name instanceof Array) {
-		for (let i = 0, items = iter$(name), len = items.length; i < len; i++) {
-			this.register(items[i],handler);
-		};
-		return this;
-	};
-	
-	if (this.delegators()[name]) { return this };
-	// console.log("register for event {name}")
-	var fn = this.delegators()[name] = (handler instanceof Function) ? handler : this.delegator();
-	if (this.enabled()) { return this.root().addEventListener(name,fn,true) };
-};
-
-Imba.EventManager.prototype.listen = function (name,handler,capture){
-	if(capture === undefined) capture = true;
-	this.listeners().push([name,handler,capture]);
-	if (this.enabled()) { this.root().addEventListener(name,handler,capture) };
-	return this;
-};
-
-Imba.EventManager.prototype.delegate = function (e){
-	var event = Imba.Event.wrap(e);
-	event.process();
-	if (this._shimFocusEvents) {
-		if (e.type == 'focus') {
-			Imba.Event.wrap(e).setType('focusin').process();
-		} else if (e.type == 'blur') {
-			Imba.Event.wrap(e).setType('focusout').process();
-		};
-	};
-	return this;
-};
-
-/*
-
-	Create a new Imba.Event
-
-	*/
-
-Imba.EventManager.prototype.create = function (type,target,pars){
-	if(!pars||pars.constructor !== Object) pars = {};
-	var data = pars.data !== undefined ? pars.data : null;
-	var source = pars.source !== undefined ? pars.source : null;
-	var event = Imba.Event.wrap({type: type,target: target});
-	if (data) { (event.setData(data),data) };
-	if (source) { (event.setSource(source),source) };
-	return event;
-};
-
-/*
-
-	Trigger / process an Imba.Event.
-
-	*/
-
-Imba.EventManager.prototype.trigger = function (){
-	return this.create.apply(this,arguments).process();
-};
-
-Imba.EventManager.prototype.onenable = function (){
-	for (let o = this.delegators(), handler, i = 0, keys = Object.keys(o), l = keys.length, name; i < l; i++){
-		name = keys[i];handler = o[name];this.root().addEventListener(name,handler,true);
-	};
-	
-	for (let i = 0, items = iter$(this.listeners()), len = items.length, item; i < len; i++) {
-		item = items[i];
-		this.root().addEventListener(item[0],item[1],item[2]);
-	};
-	
-	window.addEventListener('hashchange',Imba.commit);
-	return this;
-};
-
-Imba.EventManager.prototype.ondisable = function (){
-	for (let o = this.delegators(), handler, i = 0, keys = Object.keys(o), l = keys.length, name; i < l; i++){
-		name = keys[i];handler = o[name];this.root().removeEventListener(name,handler,true);
-	};
-	
-	for (let i = 0, items = iter$(this.listeners()), len = items.length, item; i < len; i++) {
-		item = items[i];
-		this.root().removeEventListener(item[0],item[1],item[2]);
-	};
-	
-	window.removeEventListener('hashchange',Imba.commit);
-	return this;
-};
-
-
-/***/ }),
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4167,7 +4220,7 @@ function removeNested(root,node,caret){
 		for (let i = 0, items = iter$(node), len = items.length; i < len; i++) {
 			removeNested(root,items[i],caret);
 		};
-	} else if (node && node._dom) {
+	} else if (node && node._slot_) {
 		root.removeChild(node);
 	} else if (node != null) {
 		// what if this is not null?!?!?
@@ -4341,14 +4394,14 @@ function reconcileCollectionChanges(root,new$,old,caret){
 			};
 			
 			var after = new$[idx - 1];
-			insertNestedAfter(root,node,(after && after._dom || after || caret));
+			insertNestedAfter(root,node,(after && after._slot_ || after || caret));
 		};
 		
-		caret = node._dom || (caret && caret.nextSibling || root._dom.firstChild);
+		caret = node._slot_ || (caret && caret.nextSibling || root._dom.firstChild);
 	};
 	
 	// should trust that the last item in new list is the caret
-	return lastNew && lastNew._dom || caret;
+	return lastNew && lastNew._slot_ || caret;
 };
 
 
@@ -4367,7 +4420,7 @@ function reconcileCollection(root,new$,old,caret){
 	};
 	
 	if (i == -1) {
-		return last && last._dom || last || caret;
+		return last && last._slot_ || last || caret;
 	} else {
 		return reconcileCollectionChanges(root,new$,old,caret);
 	};
@@ -4380,6 +4433,8 @@ function reconcileLoop(root,new$,old,caret){
 	var ol = old.length;
 	var cl = new$.cache.i$; // cache-length
 	var i = 0,d = nl - ol;
+	
+	// TODO support caret
 	
 	// find the first index that is different
 	while (i < ol && i < nl && new$[i] === old[i]){
@@ -4404,8 +4459,7 @@ function reconcileLoop(root,new$,old,caret){
 		};
 		
 		if (d == (i1 - i)) {
-			// console.log "added in chunk",i,i1
-			let before = old[i]._dom;
+			let before = old[i]._slot_;
 			while (i < i1){
 				root.insertBefore(new$[i++],before);
 			};
@@ -4446,21 +4500,21 @@ function reconcileIndexedArray(root,array,old,caret){
 	if (prevLen > newLen) {
 		while (prevLen > newLen){
 			var item = array[--prevLen];
-			root.removeChild(item._dom);
+			root.removeChild(item._slot_);
 		};
 	} else if (newLen > prevLen) {
 		// find the item to insert before
-		let prevLast = prevLen ? array[prevLen - 1]._dom : caret;
+		let prevLast = prevLen ? array[prevLen - 1]._slot_ : caret;
 		let before = prevLast ? prevLast.nextSibling : root._dom.firstChild;
 		
 		while (prevLen < newLen){
 			let node = array[prevLen++];
-			before ? root.insertBefore(node._dom,before) : root.appendChild(node._dom);
+			before ? root.insertBefore(node._slot_,before) : root.appendChild(node._slot_);
 		};
 	};
 	
 	array.domlen = newLen;
-	return last ? last._dom : caret;
+	return last ? last._slot_ : caret;
 };
 
 
@@ -4478,8 +4532,8 @@ function reconcileNested(root,new$,old,caret){
 		// we should instead move the actual caret? - trust
 		if (newIsNull) {
 			return caret;
-		} else if (new$._dom) {
-			return new$._dom;
+		} else if (new$._slot_) {
+			return new$._slot_;
 		} else if ((new$ instanceof Array) && new$.taglen != null) {
 			return reconcileIndexedArray(root,new$,old,caret);
 		} else {
@@ -4508,7 +4562,7 @@ function reconcileNested(root,new$,old,caret){
 				return reconcileCollection(root,new$,old,caret);
 			};
 		} else if (!oldIsNull) {
-			if (old._dom) {
+			if (old._slot_) {
 				root.removeChild(old);
 			} else {
 				// old was a string-like object?
@@ -4518,7 +4572,7 @@ function reconcileNested(root,new$,old,caret){
 		
 		return insertNestedAfter(root,new$,caret);
 		// remove old
-	} else if (!newIsNull && new$._dom) {
+	} else if (!newIsNull && new$._slot_) {
 		if (!oldIsNull) { removeNested(root,old,caret) };
 		return insertNestedAfter(root,new$,caret);
 	} else if (newIsNull) {
@@ -4530,7 +4584,7 @@ function reconcileNested(root,new$,old,caret){
 		// if old was array or imbatag we need to remove it and then add
 		if (old instanceof Array) {
 			removeNested(root,old,caret);
-		} else if (old && old._dom) {
+		} else if (old && old._slot_) {
 			root.removeChild(old);
 		} else if (!oldIsNull) {
 			// ...

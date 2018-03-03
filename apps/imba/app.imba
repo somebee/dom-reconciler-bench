@@ -14,7 +14,7 @@ tag Todo < li
 		<self .completed=(@data:completed) >
 			<div.view>
 				<label :dblclick='edit'> "" + @data:title
-				<input.toggle type='checkbox' model='completed'>
+				<input[@data:completed].toggle type='checkbox'>
 				<button.destroy :tap='drop'>
 			<input@input.edit type='text' :keydown.enter.submit :keydown.esc.cancel>
 
@@ -68,19 +68,17 @@ tag App
 		<self>
 			<header.header>
 				<h1> "{@data:counter}"
-				<input.new-todo
+				<input[@data:newTodo].new-todo
 					type='text'
 					placeholder='What to do?'
 					autofocus=true
-					model.trim='newTodo'
 					:keyup.enter='addItem'>
 			
 			<section.main>
 				<ul.todo-list>
 					for todo in items
 						<Todo[todo]@{todo:id}>
-
-			<footer.footer>
+			<footer.footer .hidden=(!all:length)>
 				<span.todo-count>
 					<strong> "{active:length} "
 					<span> active:length == 1 ? 'item left' : 'items left'
@@ -88,7 +86,7 @@ tag App
 					<li> <a .selected=(items == all)    href='#/'> "All"
 					<li> <a .selected=(items == active) href='#/active'> "Active"
 					<li> <a .selected=(items == done)   href='#/completed'> "Completed"
-				<button.clear-completed :tap='clearCompleted'> 'Clear completed'
+				<button.clear-completed .hidden=(!done:length) :tap='clearCompleted'> 'Clear completed'
 
 
 # create an instance of the app (with id app)
