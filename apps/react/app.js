@@ -67,412 +67,396 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/*jshint quotmark:false */
-/*jshint white:false */
-/*jshint trailing:false */
-/*jshint newcap:false */
-/*global React, Router*/
+"use strict";
 
-app.ALL_TODOS = 'all';
-app.ACTIVE_TODOS = 'active';
-app.COMPLETED_TODOS = 'completed';
 
-var TodoItem = __webpack_require__(1).TodoItem;
-var TodoFooter = __webpack_require__(2).TodoFooter;
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ALL_TODOS = 'all';
+var ACTIVE_TODOS = 'active';
+var COMPLETED_TODOS = 'completed';
 
 var ENTER_KEY = 13;
+var ESCAPE_KEY = 27;
 
 var api = API;
 var store = API.store;
 
-class TodoApp extends React.Component {
+var TodoItem = function (_React$Component) {
+	_inherits(TodoItem, _React$Component);
 
-	constructor(props){
-		super(props);
-		this.state = {
-			nowShowing: app.ALL_TODOS,
-			editing: null
-		};
+	function TodoItem(props) {
+		_classCallCheck(this, TodoItem);
+
+		var _this = _possibleConstructorReturn(this, (TodoItem.__proto__ || Object.getPrototypeOf(TodoItem)).call(this, props));
+
+		_this.state = { editText: props.todo.title };
+		return _this;
 	}
 
-	componentDidMount() {
-		var setState = this.setState;
-		var router = Router({
-			'/': setState.bind(this, {nowShowing: app.ALL_TODOS}),
-			'/active': setState.bind(this, {nowShowing: app.ACTIVE_TODOS}),
-			'/completed': setState.bind(this, {nowShowing: app.COMPLETED_TODOS})
-		});
-		router.init('/');
-	}
-
-	handleNewTodoKeyDown(event) {
-		if (event.keyCode !== ENTER_KEY) {
-			return;
-		}
-
-		event.preventDefault();
-
-		var val = this.newField.value.trim();
-
-		if (val) {
-			this.props.api.addTodo(val);
-			this.newField.value = '';
-		}
-	}
-
-	toggleAll(event) {
-		var checked = event.target.checked;
-		this.props.api.toggleAll(checked);
-	}
-
-	toggle(todoToToggle) {
-		todoToToggle.completed = !todoToToggle.completed;
-		// this.props.api.toggle(todoToToggle);
-	}
-
-	destroy(todo) {
-		this.props.api.removeTodo(todo);
-		// this.props.model.destroy(todo);
-	}
-
-	edit(todo) {
-		this.setState({editing: todo.id});
-	}
-
-	save(todoToSave, text) {
-		todoToSave.title = text;
-		// this.props.model.save(todoToSave, text);
-		this.setState({editing: null});
-	}
-
-	cancel() {
-		this.setState({editing: null});
-	}
-
-	clearCompleted() {
-		this.props.api.clearCompleted();
-	}
-
-	render() {
-		var footer;
-		var main;
-		var todos = this.props.api.todos();
-
-		var shownTodos = todos.filter(function (todo) {
-			switch (this.state.nowShowing) {
-			case app.ACTIVE_TODOS:
-				return !todo.completed;
-			case app.COMPLETED_TODOS:
-				return todo.completed;
-			default:
-				return true;
+	_createClass(TodoItem, [{
+		key: 'handleSubmit',
+		value: function handleSubmit(event) {
+			var val = this.state.editText.trim();
+			if (val) {
+				this.props.onSave(val);
+				this.setState({ editText: val });
+			} else {
+				this.props.onDestroy();
 			}
-		}, this);
-
-		var todoItems = shownTodos.map(function (todo,index) {
-			return (
-				React.createElement(TodoItem, {
-					key: todo.id, 
-					todo: todo, 
-					onToggle: this.toggle.bind(this, todo), 
-					onDestroy: this.destroy.bind(this, todo), 
-					onEdit: this.edit.bind(this, todo), 
-					editing: this.state.editing === todo.id, 
-					onSave: this.save.bind(this, todo), 
-					onCancel: this.cancel}
-				)
-			);
-		}, this);
-
-		var activeTodoCount = todos.reduce(function (accum, todo) {
-			return todo.completed ? accum : accum + 1;
-		}, 0);
-
-		var completedCount = todos.length - activeTodoCount;
-
-		if (activeTodoCount || completedCount) {
-			footer =
-				React.createElement(TodoFooter, {
-					count: activeTodoCount, 
-					completedCount: completedCount, 
-					nowShowing: this.state.nowShowing, 
-					onClearCompleted: this.clearCompleted}
-				);
 		}
-
-		if (todos.length) {
-			main = (
-				React.createElement("section", {className: "main"}, 
-					// React.createElement("input", {
-					// 	className: "toggle-all", 
-					// 	type: "checkbox", 
-					// 	onChange: this.toggleAll, 
-					// 	checked: activeTodoCount === 0}
-					// ), 
-					React.createElement("ul", {className: "todo-list"}, 
-						todoItems
-					)
-				)
-			);
+	}, {
+		key: 'handleEdit',
+		value: function handleEdit() {
+			console.log("handleEdit");
+			this.props.onEdit();
+			this.setState({ editText: this.props.todo.title });
 		}
-
-		return (
-			React.createElement("div", null, 
-				React.createElement("header", {className: "header"}, 
-					React.createElement("h1", null, "" + store.counter),
-					React.createElement("input", {
-						ref: (input => this.newField = input ),
-						className: "new-todo", 
-						placeholder: "What to do?", 
-						onKeyDown: this.handleNewTodoKeyDown.bind(this), 
-						autoFocus: true}
-					)
-				), 
-				main, 
-				footer
-			)
-		);
-	}
-};
-
-function render() {
-	
-}
-
-var component = ReactDOM.render(
-	React.createElement(TodoApp, {api: API}),
-	document.getElementsByClassName('todoapp')[0]
-);
-
-API.render = function(){ component.forceUpdate(); }
-API.READY = true;
-API.reset(6);
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/*jshint quotmark: false */
-/*jshint white: false */
-/*jshint trailing: false */
-/*jshint newcap: false */
-/*global React */
-var ESCAPE_KEY = 27;
-var ENTER_KEY = 13;
-
-class TodoItem extends React.Component {
-
-	constructor(props) {
-	    super(props);
-	    this.state = {editText: props.todo.title};
-	  }
-
-	handleSubmit(event) {
-		var val = this.state.editText.trim();
-		if (val) {
-			this.props.onSave(val);
-			this.setState({editText: val});
-		} else {
-			this.props.onDestroy();
+	}, {
+		key: 'handleKeyDown',
+		value: function handleKeyDown(event) {
+			if (event.which === ESCAPE_KEY) {
+				this.setState({ editText: this.props.todo.title });
+				this.props.onCancel(event);
+			} else if (event.which === ENTER_KEY) {
+				this.handleSubmit(event);
+			}
 		}
-	}
-
-	handleEdit() {
-		this.props.onEdit();
-		this.setState({editText: this.props.todo.title});
-	}
-
-	handleKeyDown(event) {
-		if (event.which === ESCAPE_KEY) {
-			this.setState({editText: this.props.todo.title});
-			this.props.onCancel(event);
-		} else if (event.which === ENTER_KEY) {
-			this.handleSubmit(event);
+	}, {
+		key: 'handleChange',
+		value: function handleChange(event) {
+			this.setState({ editText: event.target.value });
 		}
-	}
-
-	handleChange(event) {
-		this.setState({editText: event.target.value});
-	}
-
-	getInitialState() {
-		return {editText: this.props.todo.title};
-	}
-	/**
-	 * Safely manipulate the DOM after updating the state when invoking
-	 * `this.props.onEdit()` in the `handleEdit` method above.
-	 * For more info refer to notes at https://facebook.github.io/react/docs/component-api.html#setstate
-	 * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
-	 */
-	componentDidUpdate(prevProps) {
-		if (!prevProps.editing && this.props.editing) {
-			var node = this.textInput;
-			node.focus();
-			node.setSelectionRange(node.value.length, node.value.length);
+	}, {
+		key: 'getInitialState',
+		value: function getInitialState() {
+			return { editText: this.props.todo.title };
 		}
-	}
+		/**
+   * Safely manipulate the DOM after updating the state when invoking
+   * `this.props.onEdit()` in the `handleEdit` method above.
+   * For more info refer to notes at https://facebook.github.io/react/docs/component-api.html#setstate
+   * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
+   */
 
-	render() {
-		return (
-			React.createElement("li", {className: classNames({
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate(prevProps) {
+			if (!prevProps.editing && this.props.editing) {
+				var node = this.textInput;
+				node.focus();
+				node.setSelectionRange(node.value.length, node.value.length);
+			}
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this2 = this;
+
+			var classes = classNames({
 				completed: this.props.todo.completed,
 				editing: this.props.editing
-			})}, 
-				React.createElement("div", {className: "view"}, 
-					React.createElement("input", {
-						className: "toggle", 
-						type: "checkbox", 
-						checked: this.props.todo.completed, 
-						onChange: this.props.onToggle}
-					), 
-					React.createElement("label", {onDoubleClick: this.handleEdit}, 
+			});
+			return React.createElement(
+				'li',
+				{ className: classes },
+				React.createElement(
+					'div',
+					{ className: 'view' },
+					React.createElement('input', {
+						className: 'toggle',
+						type: 'checkbox',
+						checked: this.props.todo.completed,
+						onChange: this.props.onToggle
+					}),
+					React.createElement(
+						'label',
+						{ onDoubleClick: this.handleEdit.bind(this) },
 						this.props.todo.title
-					), 
-					React.createElement("button", {className: "destroy", onClick: this.props.onDestroy})
-				), 
-				React.createElement("input", {
-					ref: (input => this.textInput = input ), 
-					className: "edit", 
-					value: this.state.editText, 
-					onBlur: this.handleSubmit, 
-					onChange: this.handleChange, 
-					onKeyDown: this.handleKeyDown}
-				)
-			)
-		);
-	}
-}
-/* harmony export (immutable) */ __webpack_exports__["TodoItem"] = TodoItem;
-;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/*jshint quotmark:false */
-/*jshint white:false */
-/*jshint trailing:false */
-/*jshint newcap:false */
-/*global React */
-
-var Utils = __webpack_require__(3).Utils;
-
-class TodoFooter extends React.Component {
-
-	render() {
-		var activeTodoWord = Utils.pluralize(this.props.count, 'item');
-		var clearButton = null;
-
-		if (this.props.completedCount > 0) {
-			clearButton = (
-				React.createElement("button", {
-					className: "clear-completed", 
-					onClick: this.props.onClearCompleted}, 
-					"Clear completed"
-				)
+					),
+					React.createElement('button', { className: 'destroy', onClick: this.props.onDestroy })
+				),
+				React.createElement('input', {
+					ref: function ref(input) {
+						return _this2.textInput = input;
+					},
+					className: "edit",
+					value: this.state.editText,
+					onBlur: this.handleSubmit.bind(this),
+					onChange: this.handleChange.bind(this),
+					onKeyDown: this.handleKeyDown.bind(this)
+				})
 			);
 		}
+	}]);
 
-		// React idiom for shortcutting to `classSet` since it'll be used often
-		// var cx = React.addons.classSet;
-		var nowShowing = this.props.nowShowing;
-		return (
-			React.createElement("footer", {className: "footer"}, 
-				React.createElement("span", {className: "todo-count"}, 
-					React.createElement("strong", null, this.props.count), " ", activeTodoWord, " left"
-				), 
-				React.createElement("ul", {className: "filters"}, 
-					React.createElement("li", null, 
-						React.createElement("a", {
-							href: "#/", 
-							className: classNames({selected: nowShowing === app.ALL_TODOS})}, 
-								"All"
+	return TodoItem;
+}(React.Component);
+
+;
+
+var TodoFooter = function (_React$Component2) {
+	_inherits(TodoFooter, _React$Component2);
+
+	function TodoFooter() {
+		_classCallCheck(this, TodoFooter);
+
+		return _possibleConstructorReturn(this, (TodoFooter.__proto__ || Object.getPrototypeOf(TodoFooter)).apply(this, arguments));
+	}
+
+	_createClass(TodoFooter, [{
+		key: 'render',
+		value: function render() {
+			var activeTodoWord = this.props.count == 1 ? 'item' : 'items';
+			var clearButton = null;
+
+			if (this.props.completedCount > 0) {
+				clearButton = React.createElement(
+					'button',
+					{
+						className: 'clear-completed',
+						onClick: this.props.onClearCompleted },
+					'Clear completed'
+				);
+			}
+
+			var nowShowing = this.props.nowShowing;
+			return React.createElement(
+				'footer',
+				{ className: 'footer' },
+				React.createElement(
+					'span',
+					{ className: 'todo-count' },
+					React.createElement(
+						'strong',
+						null,
+						this.props.count
+					),
+					' ',
+					activeTodoWord,
+					' left'
+				),
+				React.createElement(
+					'ul',
+					{ className: 'filters' },
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'a',
+							{ href: '#/', className: classNames({ selected: nowShowing === ALL_TODOS }) },
+							'All'
 						)
-					), 
-					' ', 
-					React.createElement("li", null, 
-						React.createElement("a", {
-							href: "#/active", 
-							className: classNames({selected: nowShowing === app.ACTIVE_TODOS})}, 
-								"Active"
+					),
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'a',
+							{ href: '#/active', className: classNames({ selected: nowShowing === ACTIVE_TODOS }) },
+							'Active'
 						)
-					), 
-					' ', 
-					React.createElement("li", null, 
-						React.createElement("a", {
-							href: "#/completed", 
-							className: classNames({selected: nowShowing === app.COMPLETED_TODOS})}, 
-								"Completed"
+					),
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'a',
+							{ href: '#/completed', className: classNames({ selected: nowShowing === COMPLETED_TODOS }) },
+							'Completed'
 						)
 					)
-				), 
+				),
 				clearButton
-			)
-		);
+			);
+		}
+	}]);
+
+	return TodoFooter;
+}(React.Component);
+
+var TodoApp = function (_React$Component3) {
+	_inherits(TodoApp, _React$Component3);
+
+	function TodoApp(props) {
+		_classCallCheck(this, TodoApp);
+
+		var _this4 = _possibleConstructorReturn(this, (TodoApp.__proto__ || Object.getPrototypeOf(TodoApp)).call(this, props));
+
+		_this4.state = {
+			nowShowing: ALL_TODOS,
+			editing: null
+		};
+		return _this4;
 	}
-}
-/* harmony export (immutable) */ __webpack_exports__["TodoFooter"] = TodoFooter;
 
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Utils", function() { return Utils; });
-
-var Utils = {
-	uuid: function () {
-		/*jshint bitwise:false */
-		var i, random;
-		var uuid = '';
-
-		for (i = 0; i < 32; i++) {
-			random = Math.random() * 16 | 0;
-			if (i === 8 || i === 12 || i === 16 || i === 20) {
-				uuid += '-';
+	_createClass(TodoApp, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			var setState = this.setState;
+			var router = Router({
+				'/': setState.bind(this, { nowShowing: ALL_TODOS }),
+				'/active': setState.bind(this, { nowShowing: ACTIVE_TODOS }),
+				'/completed': setState.bind(this, { nowShowing: COMPLETED_TODOS })
+			});
+			router.init('/');
+		}
+	}, {
+		key: 'handleNewTodoKeyDown',
+		value: function handleNewTodoKeyDown(event) {
+			if (event.keyCode !== ENTER_KEY) {
+				return;
 			}
-			uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random))
-				.toString(16);
+
+			event.preventDefault();
+
+			var val = this.newField.value.trim();
+
+			if (val) {
+				this.props.api.addTodo(val);
+				this.newField.value = '';
+			}
 		}
-
-		return uuid;
-	},
-
-	pluralize: function (count, word) {
-		return count === 1 ? word : word + 's';
-	},
-
-	store: function (namespace, data) {
-		if (data) {
-			return localStorage.setItem(namespace, JSON.stringify(data));
+	}, {
+		key: 'toggleAll',
+		value: function toggleAll(event) {
+			var checked = event.target.checked;
+			API.toggleAll(checked);
 		}
+	}, {
+		key: 'toggle',
+		value: function toggle(todo) {
+			API.toggleTodo(todo);
+			this.forceUpdate();
+		}
+	}, {
+		key: 'destroy',
+		value: function destroy(todo) {
+			API.removeTodo(todo);
+			this.forceUpdate();
+		}
+	}, {
+		key: 'edit',
+		value: function edit(todo) {
+			this.setState({ editing: todo.id });
+		}
+	}, {
+		key: 'save',
+		value: function save(todoToSave, text) {
+			todoToSave.title = text;
+			this.setState({ editing: null });
+		}
+	}, {
+		key: 'cancel',
+		value: function cancel() {
+			this.setState({ editing: null });
+		}
+	}, {
+		key: 'clearCompleted',
+		value: function clearCompleted() {
+			API.clearCompleted();
+			this.forceUpdate();
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var footer;
+			var main;
+			var todos = this.props.api.todos();
 
-		var store = localStorage.getItem(namespace);
-		return (store && JSON.parse(store)) || [];
-	},
-
-	extend: function () {
-		var newObj = {};
-		for (var i = 0; i < arguments.length; i++) {
-			var obj = arguments[i];
-			for (var key in obj) {
-				if (obj.hasOwnProperty(key)) {
-					newObj[key] = obj[key];
+			var shownTodos = todos.filter(function (todo) {
+				switch (this.state.nowShowing) {
+					case ACTIVE_TODOS:
+						return !todo.completed;
+					case COMPLETED_TODOS:
+						return todo.completed;
+					default:
+						return true;
 				}
+			}, this);
+
+			var todoItems = shownTodos.map(function (todo, index) {
+				return React.createElement(TodoItem, {
+					key: todo.id,
+					todo: todo,
+					onToggle: this.toggle.bind(this, todo),
+					onDestroy: this.destroy.bind(this, todo),
+					onEdit: this.edit.bind(this, todo),
+					editing: this.state.editing === todo.id,
+					onSave: this.save.bind(this, todo),
+					onCancel: this.cancel
+				});
+			}, this);
+
+			var activeTodoCount = todos.reduce(function (accum, todo) {
+				return todo.completed ? accum : accum + 1;
+			}, 0);
+
+			var completedCount = todos.length - activeTodoCount;
+
+			if (activeTodoCount || completedCount) {
+				footer = React.createElement(TodoFooter, {
+					count: activeTodoCount,
+					completedCount: completedCount,
+					nowShowing: this.state.nowShowing,
+					onClearCompleted: this.clearCompleted.bind(this)
+				});
 			}
+
+			if (todos.length) {
+				main = React.createElement(
+					'section',
+					{ className: 'main' },
+					React.createElement(
+						'ul',
+						{ className: 'todo-list' },
+						todoItems
+					)
+				);
+			}
+
+			return React.createElement(
+				'div',
+				null,
+				React.createElement(
+					'header',
+					{ className: 'header' },
+					React.createElement(
+						'h1',
+						null,
+						store.counter
+					),
+					React.createElement('input', {
+						className: "new-todo",
+						placeholder: "What to do?",
+						onKeyDown: this.handleNewTodoKeyDown.bind(this),
+						autoFocus: true
+					})
+				),
+				main,
+				footer
+			);
 		}
-		return newObj;
-	}
+	}]);
+
+	return TodoApp;
+}(React.Component);
+
+;
+
+var component = ReactDOM.render(React.createElement(TodoApp, { api: API }), document.getElementsByClassName('todoapp')[0]);
+
+API.render = function () {
+	component.forceUpdate();
 };
+API.READY = true;
+API.reset(6);
 
 /***/ })
 /******/ ]);

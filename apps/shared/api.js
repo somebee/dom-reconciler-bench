@@ -69,6 +69,10 @@ API = {
 		this.store.todos.splice(this.store.todos.indexOf(todo),1);
 		return todo;
 	},
+
+	toggleTodo: function(todo){
+		todo.completed = !todo.completed;
+	},
 	
 	toggleAll: function(state){
 		this.store.todos.forEach(function(todo){ todo.completed = !!state; });
