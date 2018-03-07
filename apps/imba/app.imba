@@ -80,8 +80,8 @@ tag App
 						<Todo[todo]@{todo:id}>
 			<footer.footer .hidden=(!all:length)>
 				<span.todo-count>
-					<strong> "{active:length} "
-					<span> active:length == 1 ? 'item left' : 'items left'
+					<strong> active:length
+					<span> " item{active:length != 1 ? 's' : ''} left"
 				<ul.filters>
 					<li> <a .selected=(items == all)    href='#/'> "All"
 					<li> <a .selected=(items == active) href='#/active'> "Active"
