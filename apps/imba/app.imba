@@ -11,9 +11,9 @@ tag Todo < li
 	
 	def render
 		# var todo = @data
-		<self .completed=(@data:completed) >
+		<self .completed=(@data:completed)>
 			<div.view>
-				<label :dblclick='edit'> "" + @data:title
+				<label :dblclick='edit'> @data:title
 				<input.toggle type='checkbox' checked=@data:completed :tap.prevent.toggle>
 				<button.destroy :tap='drop'>
 			<input@input.edit type='text' :keydown.enter.submit :keydown.esc.cancel>

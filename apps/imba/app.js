@@ -215,10 +215,10 @@ Imba.attr = function (scope,name,opts){
 	let proto = scope.prototype;
 	
 	if (opts.dom) {
-		proto[getName] = function() { return this._dom[name]; };
+		proto[getName] = function() { return this.dom()[name]; };
 		proto[setName] = function(value) {
 			if (value != this[name]()) {
-				this._dom[name] = value;
+				this.dom()[name] = value;
 			};
 			return this;
 		};
@@ -427,7 +427,7 @@ var Todo = Imba.defineTag('Todo', 'li', function(tag){
 			],2),
 			this._input = this._input||_1('input',this).flag('input').flag('edit').setType('text').on$(0,['keydown','enter','submit'],this).on$(1,['keydown','esc','cancel'],this)
 		],2).synced((
-			$[1].setText("" + this._data.title),
+			$[1].setContent(this._data.title,3),
 			$[2].setChecked(this._data.completed).end(),
 			this._input.end()
 		,true));
@@ -1045,7 +1045,6 @@ Imba.TagManagerClass = function TagManagerClass(){
 	this._mounted = [];
 	this._mountables = 0;
 	this._unmountables = 0;
-	this._hasMountables = false;
 	this;
 };
 
@@ -1074,8 +1073,7 @@ Imba.TagManagerClass.prototype.changes = function (){
 };
 
 Imba.TagManagerClass.prototype.mount = function (node){
-	if (false) {};
-	return this._hasMountables = true;
+	return;
 };
 
 Imba.TagManagerClass.prototype.refresh = function (force){
@@ -1083,7 +1081,7 @@ Imba.TagManagerClass.prototype.refresh = function (force){
 	if (false) {};
 	if (!force && this.changes() == 0) { return };
 	// console.time('resolveMounts')
-	if ((this._inserts && this._mountables && this._mountables > this._mounted.length) || force) {
+	if ((this._inserts && this._mountables > this._mounted.length) || force) {
 		this.tryMount();
 	};
 	
@@ -1301,7 +1299,6 @@ Imba.EventManager.activate = function (){
 	Imba.Events.register(['mousedown','mouseup']);
 	Imba.Events.register(initialBind);
 	Imba.Events.setEnabled(true);
-	
 	return Imba.Events;
 };
 
@@ -2934,25 +2931,17 @@ var isSimilarArray = function(a,b) {
 	return true;
 };
 
-Imba.extendTag('button', function(tag){
-	tag.prototype.__disabled = {dom: true,name: 'disabled'};
-	tag.prototype.disabled = function(v){ return this.dom().disabled; }
-	tag.prototype.setDisabled = function(v){ if (v != this.dom().disabled) { this.dom().disabled = v }; return this; };
-});
-
 Imba.extendTag('input', function(tag){
 	tag.prototype.lazy = function(v){ return this._lazy; }
 	tag.prototype.setLazy = function(v){ this._lazy = v; return this; };
-	tag.prototype.__checked = {dom: true,name: 'checked'};
-	tag.prototype.checked = function(v){ return this.dom().checked; }
-	tag.prototype.setChecked = function(v){ if (v != this.dom().checked) { this.dom().checked = v }; return this; };
-	tag.prototype.__disabled = {dom: true,name: 'disabled'};
-	tag.prototype.disabled = function(v){ return this.dom().disabled; }
-	tag.prototype.setDisabled = function(v){ if (v != this.dom().disabled) { this.dom().disabled = v }; return this; };
 	
 	tag.prototype.bindData = function (target,path,args){
 		DataProxy.bind(this,target,path,args);
 		return this;
+	};
+	
+	tag.prototype.checked = function (){
+		return this._dom.checked;
 	};
 	
 	tag.prototype.setChecked = function (value){
@@ -4587,7 +4576,7 @@ Imba.extendTag('element', function(tag){
 		// 	return self.text = new
 		var old = this._tree_;
 		
-		if (new$ === old && new$ && new$.taglen == undefined) {
+		if (new$ === old && (!(new$) || new$.taglen == undefined)) {
 			return this;
 		};
 		
