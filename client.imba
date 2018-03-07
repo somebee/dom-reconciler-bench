@@ -1,10 +1,10 @@
 extern Benchmark
 
 var apps = [
-	{name: 'imba@1.3.0', path: "imba/index.html", color: '#709CB2', libSize: '57kb'}
+	{name: 'imba@1.3.3', path: "imba/index.html", color: '#709CB2', libSize: '57kb'}
+	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
 	# {name: 'imba@dev', path: "imba-dev/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '87kb'}
-	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
 	# {name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
 ]
 

@@ -215,10 +215,10 @@ Imba.attr = function (scope,name,opts){
 	let proto = scope.prototype;
 	
 	if (opts.dom) {
-		proto[getName] = function() { return this.dom()[name]; };
+		proto[getName] = function() { return this._dom[name]; };
 		proto[setName] = function(value) {
 			if (value != this[name]()) {
-				this.dom()[name] = value;
+				this._dom[name] = value;
 			};
 			return this;
 		};
@@ -422,13 +422,13 @@ var Todo = Imba.defineTag('Todo', 'li', function(tag){
 		return this.$open(0).flagIf('completed',(this._data.completed)).setChildren($.$ = $.$ || [
 			_1('div',$,0,this).flag('view').setContent([
 				_1('label',$,1,0).on$(0,['dblclick','edit'],this),
-				_1('input',$,2,0).flag('toggle').setType('checkbox'),
+				_1('input',$,2,0).flag('toggle').setType('checkbox').on$(0,['tap','prevent','toggle'],this),
 				_1('button',$,3,0).flag('destroy').on$(0,['tap','drop'],this)
 			],2),
 			this._input = this._input||_1('input',this).flag('input').flag('edit').setType('text').on$(0,['keydown','enter','submit'],this).on$(1,['keydown','esc','cancel'],this)
 		],2).synced((
 			$[1].setText("" + this._data.title),
-			$[2].bindData(this._data,'completed').end(),
+			$[2].setChecked(this._data.completed).end(),
 			this._input.end()
 		,true));
 	};
@@ -441,12 +441,21 @@ var Todo = Imba.defineTag('Todo', 'li', function(tag){
 	};
 	
 	tag.prototype.drop = function (){
-		return api.removeTodo(this.data());
+		return API.removeTodo(this.data());
+	};
+	
+	tag.prototype.toggle = function (){
+		return API.toggleTodo(this.data());
 	};
 	
 	tag.prototype.submit = function (){
+		var title;
 		this.unflag('editing');
-		return (this.data().title = this._input.value().trim()) || this.drop();
+		if (title = this._input.value().trim()) {
+			return API.renameTodo(this.data(),title);
+		} else {
+			return this.drop();
+		};
 	};
 	
 	tag.prototype.onfocusout = function (e){
@@ -462,13 +471,13 @@ var Todo = Imba.defineTag('Todo', 'li', function(tag){
 var App = Imba.defineTag('App', function(tag){
 	tag.prototype.addItem = function (){
 		if (this.data().newTodo) {
-			api.addTodo(this.data().newTodo);
+			API.addTodo(this.data().newTodo);
 			return this.data().newTodo = "";
 		};
 	};
 	
 	tag.prototype.clearCompleted = function (){
-		return api.clearCompleted();
+		return API.clearCompleted();
 	};
 	
 	tag.prototype.mount = function (){
@@ -480,15 +489,13 @@ var App = Imba.defineTag('App', function(tag){
 	
 	tag.prototype.render = function (){
 		var $ = this.$;
-		var all = this.data().todos;
+		var all = API.todos();
 		var items = all;
-		var done = [];
-		var active = [];
+		var done = API.completed();
+		var active = API.remaining();
 		
-		for (let i = 0, ary = iter$(all), len = ary.length, todo; i < len; i++) {
-			todo = ary[i];
-			todo.completed ? done.push(todo) : active.push(todo);
-		};
+		// for todo in all
+		// 	todo:completed ? done.push(todo) : active.push(todo)
 		
 		if (this._route == '#/completed') {
 			items = done;
@@ -1052,9 +1059,7 @@ Imba.TagManagerClass.prototype.insert = function (node,parent){
 		if (!(node.FLAGS & Imba.TAG_MOUNTABLE)) {
 			node.FLAGS |= Imba.TAG_MOUNTABLE;
 			this._mountables++;
-			console.log("register mountable");
 		};
-		// @hasMountables = yes
 	};
 	return;
 };
@@ -1099,7 +1104,6 @@ Imba.TagManagerClass.prototype.tryMount = function (){
 	var count = 0;
 	var root = document.body;
 	var items = root.querySelectorAll('.__mount');
-	console.log("tryMount",this._mountables);
 	// what if we end up creating additional mountables by mounting?
 	for (let i = 0, ary = iter$(items), len = ary.length, el; i < len; i++) {
 		el = ary[i];
@@ -2930,12 +2934,31 @@ var isSimilarArray = function(a,b) {
 	return true;
 };
 
+Imba.extendTag('button', function(tag){
+	tag.prototype.__disabled = {dom: true,name: 'disabled'};
+	tag.prototype.disabled = function(v){ return this.dom().disabled; }
+	tag.prototype.setDisabled = function(v){ if (v != this.dom().disabled) { this.dom().disabled = v }; return this; };
+});
+
 Imba.extendTag('input', function(tag){
 	tag.prototype.lazy = function(v){ return this._lazy; }
 	tag.prototype.setLazy = function(v){ this._lazy = v; return this; };
+	tag.prototype.__checked = {dom: true,name: 'checked'};
+	tag.prototype.checked = function(v){ return this.dom().checked; }
+	tag.prototype.setChecked = function(v){ if (v != this.dom().checked) { this.dom().checked = v }; return this; };
+	tag.prototype.__disabled = {dom: true,name: 'disabled'};
+	tag.prototype.disabled = function(v){ return this.dom().disabled; }
+	tag.prototype.setDisabled = function(v){ if (v != this.dom().disabled) { this.dom().disabled = v }; return this; };
 	
 	tag.prototype.bindData = function (target,path,args){
 		DataProxy.bind(this,target,path,args);
+		return this;
+	};
+	
+	tag.prototype.setChecked = function (value){
+		if (!!value != this._dom.checked) {
+			this._dom.checked = !!value;
+		};
 		return this;
 	};
 	

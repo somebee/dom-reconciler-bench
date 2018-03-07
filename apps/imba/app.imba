@@ -14,7 +14,7 @@ tag Todo < li
 		<self .completed=(@data:completed) >
 			<div.view>
 				<label :dblclick='edit'> "" + @data:title
-				<input[@data:completed].toggle type='checkbox'>
+				<input.toggle type='checkbox' checked=@data:completed :tap.prevent.toggle>
 				<button.destroy :tap='drop'>
 			<input@input.edit type='text' :keydown.enter.submit :keydown.esc.cancel>
 
@@ -24,11 +24,17 @@ tag Todo < li
 		setTimeout(&,10) do @input.focus
 
 	def drop
-		api.removeTodo(data)
+		API.removeTodo(data)
+		
+	def toggle
+		API.toggleTodo(data)
 
 	def submit
 		unflag('editing')
-		(data:title = @input.value.trim) || drop
+		if let title = @input.value.trim
+			API.renameTodo(data,title)
+		else
+			drop
 
 	def onfocusout e
 		submit if hasFlag('editing')
@@ -40,24 +46,24 @@ tag Todo < li
 tag App
 	def addItem
 		if data:newTodo
-			api.addTodo(data:newTodo)
+			API.addTodo(data:newTodo)
 			data:newTodo = ""
 
 	def clearCompleted
-		api.clearCompleted
+		API.clearCompleted
 		
 	def mount
 		window.addEventListener('hashchange') do
 			@route = window:location:hash
 
 	def render
-		var all    = data:todos
+		var all    = API.todos
 		var items  = all
-		var done   = []
-		var active = []
+		var done   = API.completed
+		var active = API.remaining
 
-		for todo in all
-			todo:completed ? done.push(todo) : active.push(todo)
+		# for todo in all
+		# 	todo:completed ? done.push(todo) : active.push(todo)
 
 		if @route == '#/completed'
 			items = done

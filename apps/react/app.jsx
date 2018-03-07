@@ -27,7 +27,6 @@ class TodoItem extends React.Component {
 	}
 
 	handleEdit() {
-		console.log("handleEdit");
 		this.props.onEdit();
 		this.setState({editText: this.props.todo.title});
 	}
@@ -179,8 +178,8 @@ class TodoApp extends React.Component {
 		this.setState({editing: todo.id});
 	}
 
-	save(todoToSave, text) {
-		todoToSave.title = text;
+	save(todo, text) {
+		API.renameTodo(todo,text);
 		this.setState({editing: null});
 	}
 
@@ -196,18 +195,27 @@ class TodoApp extends React.Component {
 	render() {
 		var footer;
 		var main;
-		var todos = this.props.api.todos();
+		var api = this.props.api;
+		var todos = api.todos();
+		var active = api.remaining();
+		var shownTodos = todos;
 
-		var shownTodos = todos.filter(function (todo) {
-			switch (this.state.nowShowing) {
-			case ACTIVE_TODOS:
-				return !todo.completed;
-			case COMPLETED_TODOS:
-				return todo.completed;
-			default:
-				return true;
-			}
-		}, this);
+		if(this.state.nowShowing == ACTIVE_TODOS){
+			shownTodos = active;
+		} else if(this.state.nowShowing == COMPLETED_TODOS){
+			shownTodos = api.completed();
+		}
+
+		// var shownTodos = todos.filter(function (todo) {
+		// 	switch (this.state.nowShowing) {
+		// 	case ACTIVE_TODOS:
+		// 		return !todo.completed;
+		// 	case COMPLETED_TODOS:
+		// 		return todo.completed;
+		// 	default:
+		// 		return true;
+		// 	}
+		// }, this);
 
 		var todoItems = shownTodos.map(function (todo,index) {
 			return (<TodoItem
@@ -222,15 +230,15 @@ class TodoApp extends React.Component {
 			/>);
 		}, this);
 
-		var activeTodoCount = todos.reduce(function (accum, todo) {
-			return todo.completed ? accum : accum + 1;
-		}, 0);
+		// var activeTodoCount = todos.reduce(function (accum, todo) {
+		// 	return todo.completed ? accum : accum + 1;
+		// }, 0);
 
-		var completedCount = todos.length - activeTodoCount;
+		var completedCount = todos.length - active.length;
 
-		if (activeTodoCount || completedCount) {
+		if (todos.length) {
 			footer = <TodoFooter
-				count={activeTodoCount}
+				count={active.length}
 				completedCount={completedCount}
 				nowShowing={this.state.nowShowing}
 				onClearCompleted={this.clearCompleted.bind(this)}

@@ -215,10 +215,10 @@ Imba.attr = function (scope,name,opts){
 	let proto = scope.prototype;
 	
 	if (opts.dom) {
-		proto[getName] = function() { return this.dom()[name]; };
+		proto[getName] = function() { return this._dom[name]; };
 		proto[setName] = function(value) {
 			if (value != this[name]()) {
-				this.dom()[name] = value;
+				this._dom[name] = value;
 			};
 			return this;
 		};
@@ -406,10 +406,10 @@ var Imba = __webpack_require__(3), _2 = Imba.createTagList, _1 = Imba.createElem
 // externs;
 
 var apps = [
-	{name: 'imba@1.3.0',path: "imba/index.html",color: '#709CB2',libSize: '57kb'},
+	{name: 'imba@1.3.3',path: "imba/index.html",color: '#709CB2',libSize: '57kb'},
+	{name: 'react@16.prod',path: "react/index.html",color: 'rgb(15, 203, 255)',libSize: '101kb'},
 	// {name: 'imba@dev', path: "imba-dev/index.html", color: '#709CB2', libSize: '54kb'}
-	{name: 'vue@2.5.13',path: "vue/index.html",color: '#4fc08d',libSize: '87kb'},
-	{name: 'react@16.prod',path: "react/index.html",color: 'rgb(15, 203, 255)',libSize: '101kb'}
+	{name: 'vue@2.5.13',path: "vue/index.html",color: '#4fc08d',libSize: '87kb'}
 // {name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
 ];
 
@@ -1137,9 +1137,7 @@ Imba.TagManagerClass.prototype.insert = function (node,parent){
 		if (!(node.FLAGS & Imba.TAG_MOUNTABLE)) {
 			node.FLAGS |= Imba.TAG_MOUNTABLE;
 			this._mountables++;
-			console.log("register mountable");
 		};
-		// @hasMountables = yes
 	};
 	return;
 };
@@ -1184,7 +1182,6 @@ Imba.TagManagerClass.prototype.tryMount = function (){
 	var count = 0;
 	var root = document.body;
 	var items = root.querySelectorAll('.__mount');
-	console.log("tryMount",this._mountables);
 	// what if we end up creating additional mountables by mounting?
 	for (let i = 0, ary = iter$(items), len = ary.length, el; i < len; i++) {
 		el = ary[i];
@@ -3015,12 +3012,31 @@ var isSimilarArray = function(a,b) {
 	return true;
 };
 
+Imba.extendTag('button', function(tag){
+	tag.prototype.__disabled = {dom: true,name: 'disabled'};
+	tag.prototype.disabled = function(v){ return this.dom().disabled; }
+	tag.prototype.setDisabled = function(v){ if (v != this.dom().disabled) { this.dom().disabled = v }; return this; };
+});
+
 Imba.extendTag('input', function(tag){
 	tag.prototype.lazy = function(v){ return this._lazy; }
 	tag.prototype.setLazy = function(v){ this._lazy = v; return this; };
+	tag.prototype.__checked = {dom: true,name: 'checked'};
+	tag.prototype.checked = function(v){ return this.dom().checked; }
+	tag.prototype.setChecked = function(v){ if (v != this.dom().checked) { this.dom().checked = v }; return this; };
+	tag.prototype.__disabled = {dom: true,name: 'disabled'};
+	tag.prototype.disabled = function(v){ return this.dom().disabled; }
+	tag.prototype.setDisabled = function(v){ if (v != this.dom().disabled) { this.dom().disabled = v }; return this; };
 	
 	tag.prototype.bindData = function (target,path,args){
 		DataProxy.bind(this,target,path,args);
+		return this;
+	};
+	
+	tag.prototype.setChecked = function (value){
+		if (!!value != this._dom.checked) {
+			this._dom.checked = !!value;
+		};
 		return this;
 	};
 	

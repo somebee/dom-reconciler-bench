@@ -28,12 +28,30 @@ var titles = [
 	"Mutate state"
 ]
 
+var filters = {
+  all: function (todos) {
+    return todos
+  },
+  active: function (todos) {
+    return todos.filter(function (todo) {
+      return !todo.completed
+    })
+  },
+  completed: function (todos) {
+    return todos.filter(function (todo) {
+      return todo.completed
+    })
+  }
+}
+
+
 API = {
 	store: {
 		counter: 0,
 		todos: []
 	},
 	pool: [],
+	cache: {},
 	nextId: 0,
 	seed: 1,
 	mutations: 0,
@@ -56,6 +74,19 @@ API = {
 		return this.store.todos;
 	},
 
+	remaining: function(){
+		return this.cache.active = this.cache.active || filters.active(this.todos());
+	},
+
+	completed: function(){
+		return this.cache.completed = this.cache.completed || filters.completed(this.todos());
+	},
+
+	dirty: function(){
+		this.cache = {};
+		return this;
+	},
+
 	addTodo: function(title){
 		var todo = {
 			id: this.nextId++,
@@ -65,21 +96,30 @@ API = {
 		this.store.todos.push(todo);
 	},
 
+	renameTodo: function(todo,title) {
+		todo.title = title;
+		return todo;
+	},
+
 	removeTodo: function(todo){
 		this.store.todos.splice(this.store.todos.indexOf(todo),1);
+		this.dirty();
 		return todo;
 	},
 
 	toggleTodo: function(todo){
 		todo.completed = !todo.completed;
+		this.dirty();
 	},
 	
 	toggleAll: function(state){
 		this.store.todos.forEach(function(todo){ todo.completed = !!state; });
+		this.dirty();
 	},
 
 	clearAllTodos: function() {
 		this.store.todos.length = 0;
+		this.dirty();
 	},
 
 	clearCompleted: function(){
@@ -89,7 +129,7 @@ API = {
 		while(i > 0){
 			if(todos[--i].completed){ todos.splice(i,1); }
 		}
-
+		this.dirty();
 		return;
 	},
 
@@ -145,27 +185,33 @@ API = {
 
 			case 0:
 				this.pool.push(this.removeTodo(todo));
+				this.forceUpdate();
 				break;
 
 			case 1:
 				todos.splice(index,0,this.pool.pop());
+				this.dirty();
+				this.forceUpdate();
 				break;
 
 			case 2:
-				todo.title = titles[(step + index) % titles.length];
+				this.renameTodo(todo, titles[(step + index) % titles.length]);
+				// todo.title = titles[(step + index) % titles.length];
+				this.forceUpdate();
 				break;
 
 			case 3:
-				todo.completed = !todo.completed;
+				this.toggleTodo(todo);
+				// todo.completed = !todo.completed;
+				this.forceUpdate();
 				break;
 
 			case 4:
-				// change nothing but the counter
+				// use separate method for vue that actually forces update
+				// without relying on observable (since counter is not observed)
+				this.forceReconcile();
 				break;
 		}
-
-		// Force the application to render
-		this.forceUpdate();
 	},
 
 	warmup: function(count){
