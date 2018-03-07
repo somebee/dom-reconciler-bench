@@ -173,8 +173,21 @@ API = {
 		count = count || 1000;
 		this.reset(12);
 		while(++i < count){ this.step(); }
+	},
+
+	profile: function(times){
+		// console.time(this.name);
+		console.profile(this.name);
+		var t0 = window.performance.now();
+		var k = (times || 100000);
+		for(var i = 0; i < k; i++){
+			this.forceReconcile(true);
+		}
+		var t1 = window.performance.now();
+		console.profileEnd(this.name);
+		console.log(this.name,times,t1 - t0);
 	}
 }
 
-// bind the stepper to api
-API.step = API.step.bind(API);
+API.forceReconcile = API.forceUpdate;
+API.step = API.step.bind(API); // bind the stepper to api

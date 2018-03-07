@@ -132,5 +132,6 @@ app.$mount('.todoapp')
 // The benchmark only changes a single item in each iteration
 app._watcher.sync = true;
 api.store = app;
+api.forceReconcile = function(){ app.$forceUpdate(); }
 api.reset(6);
 

@@ -8,6 +8,9 @@ var apps = [
 	# {name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
 ]
 
+for app in apps
+	window[app:name.toUpperCase.split('@').shift] = app
+
 # custom iframe that waits for example to load and
 # links up a reference to the api
 tag AppFrame < iframe
@@ -97,7 +100,11 @@ tag App
 			
 		bm.run(async: true, queued: false)
 		self
-
+	
+	def profile times = 100000
+		for app in apps
+			app:api.profile(times)
+		self
 	
 	def step times
 		for app in apps
@@ -112,7 +119,7 @@ tag App
 			app:api.reset(state:count,state)
 		self
 	
-Imba.mount <App[state].root ->
+Imba.mount APP = <App[state].root ->
 	<header#header>
 		<input[state:count] type="number">
 		<span.flex> "todos"
@@ -129,6 +136,7 @@ Imba.mount <App[state].root ->
 		<button :tap.reset> "reset"
 		<Stepper> "step"
 		<button.primary :tap.run disabled=(state:bench)> "Run benchmark"
+		# <button :tap.profile(100000)> "Run profile"
 
 	<section.apps> for app in apps
 		<div[app].app css:color=app:color>
