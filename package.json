@@ -1,5 +1,5 @@
 {
-  "name": "todos-vdom-bench",
+  "name": "dom-reconciler-bench",
   "description": "Benchmarking DOM reconciler performance across frameworks and languages",
   "keywords": [
     "imba",
@@ -9,12 +9,12 @@
     "vdom"
   ],
   "author": "Sindre Aarsaether",
-  "bugs": "https://github.com/somebee/todos-vdom-bench/issues",
+  "bugs": "https://github.com/somebee/dom-reconciler-bench/issues",
   "version": "0.2.0",
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/somebee/todos-vdom-bench/raw/master/LICENSE"
+      "url": "http://github.com/somebee/dom-reconciler-bench/raw/master/LICENSE"
     }
   ],
   "engines": {
@@ -28,10 +28,10 @@
   "files": [],
   "directories": {},
   "main": "./index.js",
-  "homepage": "http://somebee.github.io/todos-vdom-bench/index.html",
+  "homepage": "http://somebee.github.io/dom-reconciler-bench/index.html",
   "repository": {
     "type": "git",
-    "url": "git://github.com/somebee/todos-vdom-bench.git"
+    "url": "git://github.com/somebee/dom-reconciler-bench.git"
   },
   "dependencies": {
     "babel-loader": "^7.1.2",
