@@ -1,14 +1,14 @@
-<footer class="footer" v-show="todos.length">
+<footer class="footer">
     <span class="todo-count">
-        <strong>{{ this.remaining }}</strong> {{pluralize this.remaining}} left
+        <strong>{{ @remaining }}</strong> {{pluralize @remaining}} left
     </span>
-    <ul class="filters">
-        <li><a href="#/all" class="{ selected: visibility == 'all' }">All</a></li>
-        <li><a href="#/active" class="{ selected: visibility == 'active' }">Active</a></li>
-        <li><a href="#/completed" class="{ selected: visibility == 'completed' }">Completed</a></li>
+    <ul class="filters" onclick={{@onChangeFilter}}>
+        <li><a href="#/all" class="{{if (eq @activeTab 'all') 'selected'}}">All</a></li>
+        <li><a href="#/active" class="{{if (eq @activeTab 'active') 'selected'}}">Active</a></li>
+        <li><a href="#/completed" class="{{if (eq @activeTab 'completed') 'selected'}}">Completed</a></li>
     </ul>
-    {{#if (gt this.todos.length this.remaining)}}
-    <button class="clear-completed" onclick={{action this.removeCompleted}}>
+    {{#if @hasCompleted}}
+    <button class="clear-completed" onclick={{action @onClearCompleted}}>
         Clear completed
     </button>
     {{/if}}

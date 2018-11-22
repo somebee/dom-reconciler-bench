@@ -12,10 +12,21 @@
     <section class="main">
         <ul class="todo-list">
             {{#each this.filteredTodos key="id" as |todo|}}
-                <TodoItem @todo={{todo}} />
+                <TodoItem 
+                    @todo={{todo}}
+                    @isEdited={{eq this.editedTodo todo}}
+                    @onRemove={{action this.onRemove todo}}
+                    @onEditChange={{action this.maybeFinishEdit todo}}
+                    @onEdit={{action this.onEdit todo}}
+                    @onCheck={{action this.onCheck todo}} />
             {{/each}}
         </ul>
     </section>
     {{/if}}
-    <TodoFooter />
+    <TodoFooter 
+        @activeTab={{this.nowShowing}} 
+        @remaining={{this.remaining}} 
+        @hasCompleted={{gt this.todos.length this.remaining}}
+        @onClearCompleted={{action this.onClearCompleted}}
+        @onChangeFilter={{action this.onChangeFilter}} />
 </section>
