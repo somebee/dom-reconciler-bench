@@ -66,8 +66,9 @@ export default class Glimmer extends Component {
 
   @tracked
   public get remaining() {
+    const todos = this.todos;
     const remaining = api.remaining();
-    return remaining ? remaining.length : this.todos.filter((todo) => !todo.completed).length;
+    return remaining ? remaining.length : todos.filter((todo) => !todo.completed).length;
   }
 
   @tracked
