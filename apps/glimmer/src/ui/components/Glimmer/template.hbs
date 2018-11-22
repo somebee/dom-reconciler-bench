@@ -1,1 +1,21 @@
-<div><h1>Welcome to Glimmer!</h1></div>
+<section class="todoapp">
+    <header class="header">
+    <h1>{{this.counter}}</h1>
+    <input class="new-todo"
+        autofocus autocomplete="off"
+        placeholder="What to do?"
+        value={{this.newField}}
+        onkeydown={{action this.handleNewTodoKeyDown}}
+    >
+    </header>
+    {{#if this.todos.length}}
+    <section class="main">
+        <ul class="todo-list">
+            {{#each this.filteredTodos key="id" as |todo|}}
+                <TodoItem @todo={{todo}} />
+            {{/each}}
+        </ul>
+    </section>
+    {{/if}}
+    <TodoFooter />
+</section>
