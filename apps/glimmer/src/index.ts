@@ -17,3 +17,15 @@ app.registerInitializer({
 app.renderComponent('Glimmer', containerElement, null);
 
 app.boot();
+
+setTimeout(()=>{
+  if (typeof API !== 'undefined') {
+    API.render = function(){ 
+      if (window.appComponent) {
+        window.appComponent.setState(API.store);
+      }
+    };
+    API.READY = true;
+    API.reset(6);
+  }
+}, 10);

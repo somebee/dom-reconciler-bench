@@ -72,13 +72,13 @@ return 0===e.size?u:v([...e])}}function V(...e){let[t,s,n]=e
 if(n)return function(e,t,s){let n=U(e)
 n.trackedProperties[t]=!0,n.trackedComputedProperties[t]=!0
 let i=s.get,r=s.set
-return{enumerable:!0,configurable:!1,get:function(){let e=j,s=j=new F,n=i.call(this)
-j=e
+return{enumerable:!0,configurable:!1,get:function(){let e=H,s=H=new F,n=i.call(this)
+H=e
 let r=s.combine()
-j&&j.add(r)
+H&&H.add(r)
 return U(this).updatableTagFor(t).inner.update(r),n},set:r?function(){W.inner.dirty(),U(this).updatableTagFor(t).inner.update(f.create()),r.apply(this,arguments)}:void 0}}(t,s,n);(function(e,t){let s=Symbol(t)
-U(e).trackedProperties[t]=!0,Object.defineProperty(e,t,{configurable:!0,get(){return H(this,t),this[s]},set(e){W.inner.dirty(),U(this).updatableTagFor(t).inner.update(f.create()),this[s]=e,G()}})})(t,s)}let j=null
-function H(e,t){j&&j.add(U(e).updatableTagFor(t))}class P{constructor(e){this.tags=s(),this.computedPropertyTags=s(),this.trackedProperties=e?Object.create(e.trackedProperties):s(),this.trackedComputedProperties=e?Object.create(e.trackedComputedProperties):s()}tagFor(e){let t=this.tags[e]
+U(e).trackedProperties[t]=!0,Object.defineProperty(e,t,{configurable:!0,get(){return P(this,t),this[s]},set(e){W.inner.dirty(),U(this).updatableTagFor(t).inner.update(f.create()),this[s]=e,G()}})})(t,s)}let H=null
+function P(e,t){H&&H.add(U(e).updatableTagFor(t))}class j{constructor(e){this.tags=s(),this.computedPropertyTags=s(),this.trackedProperties=e?Object.create(e.trackedProperties):s(),this.trackedComputedProperties=e?Object.create(e.trackedComputedProperties):s()}tagFor(e){let t=this.tags[e]
 return t||(this.trackedComputedProperties[e]?this.tags[e]=this.updatableTagFor(e):this.tags[e]=f.create())}updatableTagFor(e){let t
 return this.trackedComputedProperties[e]?(t=this.computedPropertyTags[e])||(this.computedPropertyTags[e]=_.create(u)):(t=this.tags[e])||(this.tags[e]=_.create(u))}}const z=new WeakMap
 function U(e){let t=z.get(e)
@@ -86,11 +86,11 @@ if(t)return t
 let s=function(e){let t=null,s=e
 for(;!t;){if(!(s=$(s)))return t
 t=z.get(s)}return t}(e)
-return t=new P(s),z.set(e,t),t}const $=Object.getPrototypeOf
+return t=new j(s),z.set(e,t),t}const $=Object.getPrototypeOf
 const W=f.create()
 let G=function(){}
 class Y extends Error{constructor(e,t,s){super(s),this.target=e,this.key=t}static for(e,t){return new Y(e,t,`The property '${t}' on ${e} was changed after being rendered. If you want to change a property used in a template after the component has rendered, mark the property as a tracked property with the @tracked decorator.`)}}function q(e,t,s=function(e,t){throw Y.for(e,t)}){if("object"==typeof e&&e){return U(e).tagFor(t)}return u}class K{constructor(e){this.debugName=null,this.__args__=null,Object.assign(this,e)}get element(){let{bounds:e}=this
-return function(e,t){if(!e)throw new Error(t||"assertion failure")}(e&&e.firstNode===e.lastNode,"The 'element' property can only be accessed on components that contain a single root element in their template. Try using 'bounds' instead to access the first and last nodes."),e.firstNode}get args(){return H(this,"args"),this.__args__}set args(e){this.__args__=e,U(this).updatableTagFor("args").inner.update(p)}static create(e){return new this(e)}didInsertElement(){}didUpdate(){}willDestroy(){}destroy(){this.willDestroy()}toString(){return`${this.debugName} component`}}const J={attributeHook:!0,createArgs:!0,createCaller:!1,createInstance:!0,dynamicLayout:!1,dynamicScope:!1,dynamicTag:!0,elementHook:!0,prepareArgs:!1,updateHook:!0}
+return function(e,t){if(!e)throw new Error(t||"assertion failure")}(e&&e.firstNode===e.lastNode,"The 'element' property can only be accessed on components that contain a single root element in their template. Try using 'bounds' instead to access the first and last nodes."),e.firstNode}get args(){return P(this,"args"),this.__args__}set args(e){this.__args__=e,U(this).updatableTagFor("args").inner.update(p)}static create(e){return new this(e)}didInsertElement(){}didUpdate(){}willDestroy(){}destroy(){this.willDestroy()}toString(){return`${this.debugName} component`}}const J={attributeHook:!0,createArgs:!0,createCaller:!1,createInstance:!0,dynamicLayout:!1,dynamicScope:!1,dynamicTag:!0,elementHook:!0,prepareArgs:!1,updateHook:!0}
 class X{constructor(e,t,s,n){this.name=e,this.manager=t,this.ComponentClass=s,this.handle=n,this.state={name:e,capabilities:J,ComponentClass:s,handle:n}}toJSON(){return{GlimmerDebug:`<component-definition name="${this.name}">`}}}class Q{constructor(e){this._bounds=e}get firstNode(){return this._bounds.firstNode()}get lastNode(){return this._bounds.lastNode()}}const Z=new class{constructor(){this.evaluateOpcode=function(e){let t=new Array(e)
 for(let s=0;s<e;s++)t[s]=null
 return t}(98).slice()}add(e,t,s="syscall"){this.evaluateOpcode[e]={syscall:"syscall"===s,evaluate:t}}debugBefore(e,t,s){return{sp:void 0,state:void 0}}debugAfter(e,t,s,n){let{sp:i,state:r}=n}evaluate(e,t,s){let n=this.evaluateOpcode[s]
@@ -259,17 +259,17 @@ class Fe{constructor(e){this.tag=e.tag,this.artifacts=e}value(){return!this.arti
 t.push(r),t.push(new Fe(r.artifacts))}),Z.add(64,(e,{op1:t})=>{e.enterList(t)}),Z.add(65,e=>{e.exitList()}),Z.add(67,(e,{op1:t})=>{let s=e.stack.peek().next()
 if(s){let t=e.iterate(s.memo,s.value)
 e.enterItem(s.key,t)}else e.goto(t)})
-class Ve{constructor(e,t,s){this.parentNode=e,this.first=t,this.last=s}parentElement(){return this.parentNode}firstNode(){return this.first}lastNode(){return this.last}}const je="http://www.w3.org/2000/svg"
-function He(e,t,s){if(!e)return t
+class Ve{constructor(e,t,s){this.parentNode=e,this.first=t,this.last=s}parentElement(){return this.parentNode}firstNode(){return this.first}lastNode(){return this.last}}const He="http://www.w3.org/2000/svg"
+function Pe(e,t,s){if(!e)return t
 if(!function(e,t){let s=e.createElementNS(t,"svg")
-try{s.insertAdjacentHTML("beforeend","<circle></circle>")}catch(n){}finally{return 1!==s.childNodes.length||s.firstChild.namespaceURI!==je}}(e,s))return t
+try{s.insertAdjacentHTML("beforeend","<circle></circle>")}catch(n){}finally{return 1!==s.childNodes.length||s.firstChild.namespaceURI!==He}}(e,s))return t
 let n=e.createElement("div")
 return class extends t{insertHTMLBefore(e,t,i){return null===i||""===i?super.insertHTMLBefore(e,t,i):e.namespaceURI!==s?super.insertHTMLBefore(e,t,i):function(e,t,s,n){let i="<svg>"+s+"</svg>"
 t.innerHTML=i
 let[r,a]=function(e,t,s){let n=e.firstChild,i=null,r=n
 for(;r;)i=r,r=r.nextSibling,t.insertBefore(i,s)
 return[n,i]}(t.firstChild,e,n)
-return new Ve(e,r,a)}(e,n,i,t)}}}function Pe(e,t){return e&&function(e){let t=e.createElement("div")
+return new Ve(e,r,a)}(e,n,i,t)}}}function je(e,t){return e&&function(e){let t=e.createElement("div")
 if(t.innerHTML="first",t.insertAdjacentHTML("beforeend","second"),2===t.childNodes.length)return!1
 return!0}(e)?class extends t{constructor(e){super(e),this.uselessComment=e.createComment("")}insertHTMLBefore(e,t,s){if(null===s)return super.insertHTMLBefore(e,t,s)
 let n=!1,i=t?t.previousSibling:e.lastChild
@@ -285,9 +285,9 @@ null===a?(r.insertAdjacentHTML("beforeend",n),i=r.lastChild):a instanceof HTMLEl
 let o=l?l.nextSibling:r.firstChild
 return new Ve(r,o,i)}(this.uselessElement,e,t,s)}createTextNode(e){return this.document.createTextNode(e)}createComment(e){return this.document.createComment(e)}}var Ye;(function(e){class t extends Ge{createElementNS(e,t){return this.document.createElementNS(e,t)}setAttribute(e,t,s,n=null){n?e.setAttributeNS(n,t,s):e.setAttribute(t,s)}}e.TreeConstruction=t
 let s=t
-s=Pe(We,s),s=He(We,s,ze),e.DOMTreeConstruction=s})(Ye||(Ye={}))
+s=je(We,s),s=Pe(We,s,ze),e.DOMTreeConstruction=s})(Ye||(Ye={}))
 let qe=class extends Ge{constructor(e){super(e),this.document=e,this.namespace=null}setAttribute(e,t,s){e.setAttribute(t,s)}removeAttribute(e,t){e.removeAttribute(t)}insertAfter(e,t,s){this.insertBefore(e,t,s.nextSibling)}}
-qe=Pe(We,qe),qe=He(We,qe,ze)
+qe=je(We,qe),qe=Pe(We,qe,ze)
 Ye.DOMTreeConstruction
 class Ke{constructor(e,t,s=t.length){this.tag=e,this.references=t,this.length=s}static empty(){return new Ke(u,n,0)}at(e){return this.references[e]}value(){return this.references.map(this.valueOf)}get(e){let{references:t,length:s}=this
 if("length"===e)return ne.create(s)
@@ -374,16 +374,16 @@ e.stack.push(s?Mt:Rt)}),Et.add(10,e=>{e.stack.pop(),e.stack.pop()
 let t=e.stack.pop(),s=t&&t.parameters.length
 e.stack.push(s?Mt:Rt)}),Et.add(11,(e,{op1:t})=>{let s=new Array(t)
 for(let n=t;n>0;n--){s[n-1]=e.stack.pop()}e.stack.push(new Ft(s))})
-const jt="CURRIED COMPONENT DEFINITION [id=6f00feb9-a0ef-4547-99ea-ac328f80acea]"
-function Ht(e){return!(!e||!e[jt])}class Pt{constructor(e,t){this.inner=e,this.args=t,this[jt]=!0}unwrap(e){e.realloc(this.offset)
+const Ht="CURRIED COMPONENT DEFINITION [id=6f00feb9-a0ef-4547-99ea-ac328f80acea]"
+function Pt(e){return!(!e||!e[Ht])}class jt{constructor(e,t){this.inner=e,this.args=t,this[Ht]=!0}unwrap(e){e.realloc(this.offset)
 let t=this
 for(;;){let{args:s,inner:n}=t
-if(s&&(e.positional.prepend(s.positional),e.named.merge(s.named)),!Ht(n))return n
+if(s&&(e.positional.prepend(s.positional),e.named.merge(s.named)),!Pt(n))return n
 t=n}}get offset(){let{inner:e,args:t}=this,s=t?t.positional.length:0
-return Ht(e)?s+e.offset:s}}function zt(e){return Ut(e)?"":String(e)}function Ut(e){return null==e||"function"!=typeof e.toString}function $t(e){return"object"==typeof e&&null!==e&&"function"==typeof e.toHTML}function Wt(e){return"object"==typeof e&&null!==e&&"number"==typeof e.nodeType}function Gt(e){return"string"==typeof e}class Yt extends At{constructor(e,t,s){super(),this.node=e,this.reference=t,this.lastValue=s,this.type="dynamic-text",this.tag=t.tag,this.lastRevision=this.tag.value()}evaluate(){let{reference:e,tag:t}=this
+return Pt(e)?s+e.offset:s}}function zt(e){return Ut(e)?"":String(e)}function Ut(e){return null==e||"function"!=typeof e.toString}function $t(e){return"object"==typeof e&&null!==e&&"function"==typeof e.toHTML}function Wt(e){return"object"==typeof e&&null!==e&&"number"==typeof e.nodeType}function Gt(e){return"string"==typeof e}class Yt extends At{constructor(e,t,s){super(),this.node=e,this.reference=t,this.lastValue=s,this.type="dynamic-text",this.tag=t.tag,this.lastRevision=this.tag.value()}evaluate(){let{reference:e,tag:t}=this
 t.validate(this.lastRevision)||(this.lastRevision=t.value(),this.update(e.value()))}update(e){let t,{lastValue:s}=this
-if(e!==s&&(t=Ut(e)?"":Gt(e)?e:String(e))!==s){this.node.nodeValue=this.lastValue=t}}}class qt extends It{static create(e){return new qt(e)}toBool(e){return Ht(e)}}class Kt{constructor(e){this.inner=e,this.tag=e.tag}value(){let e=this.inner.value()
-return function(e){return Gt(e)||Ut(e)||"boolean"==typeof e||"number"==typeof e}(e)?1:(t=e)&&t[jt]?0:$t(e)?3:function(e){return Wt(e)&&11===e.nodeType}(e)?4:Wt(e)?5:1
+if(e!==s&&(t=Ut(e)?"":Gt(e)?e:String(e))!==s){this.node.nodeValue=this.lastValue=t}}}class qt extends It{static create(e){return new qt(e)}toBool(e){return Pt(e)}}class Kt{constructor(e){this.inner=e,this.tag=e.tag}value(){let e=this.inner.value()
+return function(e){return Gt(e)||Ut(e)||"boolean"==typeof e||"number"==typeof e}(e)?1:(t=e)&&t[Ht]?0:$t(e)?3:function(e){return Wt(e)&&11===e.nodeType}(e)?4:Wt(e)?5:1
 var t}}Et.add(28,e=>{let t=e.stack.pop().value(),s=Ut(t)?"":String(t)
 e.elements().appendDynamicHTML(s)}),Et.add(29,e=>{let t=e.stack.pop().value().toHTML(),s=Ut(t)?"":t
 e.elements().appendDynamicHTML(s)}),Et.add(32,e=>{let t=e.stack.pop(),s=t.value(),n=Ut(s)?"":String(s),i=e.elements().appendDynamicText(n)
@@ -441,10 +441,10 @@ class ts extends At{constructor(e,t){super(),this.reference=e,this.attribute=t,t
 n.validate(this.lastRevision)||(this.lastRevision=n.value(),t.update(s.value(),e.env))}}function ss(e,t,s){return e.lookupComponentDefinition(t,s)}class ns{constructor(e,t,s,n){this.inner=e,this.resolver=t,this.meta=s,this.args=n,this.tag=e.tag,this.lastValue=null,this.lastDefinition=null}value(){let{inner:e,lastValue:t}=this,s=e.value()
 if(s===t)return this.lastDefinition
 let n=null
-if(Ht(s))n=s
+if(Pt(s))n=s
 else if("string"==typeof s&&s){let{resolver:e,meta:t}=this
 n=ss(e,s,t)}return n=this.curry(n),this.lastValue=s,this.lastDefinition=n,n}get(){return Lt}curry(e){let{args:t}=this
-return!t&&Ht(e)?e:e?new Pt(e,t):null}}class is{constructor(e){this.list=e,this.tag=b(e),this.list=e}value(){let e=[],{list:t}=this
+return!t&&Pt(e)?e:e?new jt(e,t):null}}class is{constructor(e){this.list=e,this.tag=b(e),this.list=e}value(){let e=[],{list:t}=this
 for(let s=0;s<t.length;s++){let n=zt(t[s].value())
 n&&e.push(n)}return 0===e.length?null:e.join(" ")}}function rs(e){return 0|(e.dynamicLayout?1:0)|(e.dynamicTag?2:0)|(e.prepareArgs?4:0)|(e.createArgs?8:0)|(e.attributeHook?16:0)|(e.elementHook?32:0)|(e.dynamicScope?64:0)|(e.createCaller?128:0)|(e.updateHook?256:0)|(e.createInstance?512:0)}function as(e,t){return!!(e&t)}Et.add(69,e=>{let t=e.stack,s=t.pop()
 t.push(qt.create(s))}),Et.add(70,e=>{let t=e.stack,s=t.peek()
@@ -452,15 +452,15 @@ t.push(new Kt(s))}),Et.add(71,(e,{op1:t})=>{let s=e.stack,n=s.pop(),i=s.pop(),r=
 e.loadValue(Tt.v0,new ns(n,a,r,i))}),Et.add(72,(e,{op1:t})=>{let s=e.constants.resolveHandle(t),{manager:n}=s,i=rs(n.getCapabilities(s.state)),r={definition:s,manager:n,capabilities:i,state:null,handle:null,table:null,lookup:null}
 e.stack.push(r)}),Et.add(75,(e,{op1:t})=>{let s,n=e.stack,i=n.pop().value(),r=e.constants.getSerializable(t)
 if(e.loadValue(Tt.t1,null),"string"==typeof i){let{constants:{resolver:t}}=e
-s=ss(t,i,r)}else{if(!Ht(i))throw pt()
+s=ss(t,i,r)}else{if(!Pt(i))throw pt()
 s=i}n.push(s)}),Et.add(73,e=>{let t,s,{stack:n}=e,i=n.pop()
-Ht(i)?s=t=null:t=rs((s=i.manager).getCapabilities(i.state)),n.push({definition:i,capabilities:t,manager:s,state:null,handle:null,table:null})}),Et.add(74,(e,{op1:t})=>{let s,n=e.stack,i=n.pop().value()
-if(!Ht(i))throw pt()
+Pt(i)?s=t=null:t=rs((s=i.manager).getCapabilities(i.state)),n.push({definition:i,capabilities:t,manager:s,state:null,handle:null,table:null})}),Et.add(74,(e,{op1:t})=>{let s,n=e.stack,i=n.pop().value()
+if(!Pt(i))throw pt()
 s=i,n.push(s)}),Et.add(76,(e,{op1:t,op2:s})=>{let n=e.stack,i=e.constants.getStringArray(t),r=s>>4,a=8&s,l=[]
 4&s&&l.push("main"),2&s&&l.push("else"),1&s&&l.push("attrs"),e.args.setup(n,i,l,r,!!a),n.push(e.args)}),Et.add(77,e=>{let{stack:t}=e
 t.push(e.args.empty(t))}),Et.add(80,e=>{let t=e.stack,s=t.pop().capture()
 t.push(s)}),Et.add(79,(e,{op1:t})=>{let s=e.stack,n=e.fetchValue(t),i=s.pop(),{definition:r}=n
-Ht(r)&&(r=function(e,t,s){let n=e.definition=t.unwrap(s),{manager:i,state:r}=n
+Pt(r)&&(r=function(e,t,s){let n=e.definition=t.unwrap(s),{manager:i,state:r}=n
 return e.manager=i,e.capabilities=rs(i.getCapabilities(r)),n}(n,r,i))
 let{manager:a,state:l}=r
 if(!0!==as(n.capabilities,4))return void s.push(i)
@@ -559,13 +559,13 @@ let Ns=class extends As{constructor(e){super(e),this.document=e,this.namespace=n
 Ns=Ss(xs,Ns)
 var Os=Ns=ws(xs,Ns,Cs)
 const Bs=Ts.DOMTreeConstruction,Ls=["javascript:","vbscript:"],Ds=["A","BODY","LINK","IMG","IFRAME","BASE","FORM"],Ms=["EMBED"],Rs=["href","src","background","action"],Is=["src"]
-function Fs(e,t){return-1!==e.indexOf(t)}function Vs(e,t){return(null===e||Fs(Ds,e))&&Fs(Rs,t)}function js(e,t){return null!==e&&(Fs(Ms,e)&&Fs(Is,t))}function Hs(e,t){return Vs(e,t)||js(e,t)}function Ps(e,t,s,n){let i=null
+function Fs(e,t){return-1!==e.indexOf(t)}function Vs(e,t){return(null===e||Fs(Ds,e))&&Fs(Rs,t)}function Hs(e,t){return null!==e&&(Fs(Ms,e)&&Fs(Is,t))}function Ps(e,t){return Vs(e,t)||Hs(e,t)}function js(e,t,s,n){let i=null
 if(null==n)return n
 if($t(n))return n.toHTML()
 i=t?t.tagName.toUpperCase():null
 let r=zt(n)
 if(Vs(i,s)){let t=e.protocolForURL(r)
-if(Fs(Ls,t))return`unsafe:${r}`}return js(i,s)?`unsafe:${r}`:r}function zs(e,t){let s,n
+if(Fs(Ls,t))return`unsafe:${r}`}return Hs(i,s)?`unsafe:${r}`:r}function zs(e,t){let s,n
 if(t in e)n=t,s="prop"
 else{let i=t.toLowerCase()
 i in e?(s="prop",n=i):(s="attr",n=t)}return"prop"!==s||"style"!==n.toLowerCase()&&!function(e,t){let s=Us[e.toUpperCase()]
@@ -573,18 +573,18 @@ return s&&s[t.toLowerCase()]||!1}(e.tagName,n)||(s="attr"),{normalized:n,type:s}
 function $s(e,t,s){let{tagName:n,namespaceURI:i}=e,r={element:e,name:t,namespace:s}
 if(i===Cs)return Ws(n,t,r)
 let{type:a,normalized:l}=zs(e,t)
-return"attr"===a?Ws(n,l,r):function(e,t,s){if(Hs(e,t))return new Ks(t,s)
+return"attr"===a?Ws(n,l,r):function(e,t,s){if(Ps(e,t))return new Ks(t,s)
 if(function(e,t){return("INPUT"===e||"TEXTAREA"===e)&&"value"===t}(e,t))return new Xs(t,s)
 if(function(e,t){return"OPTION"===e&&"selected"===t}(e,t))return new Qs(t,s)
-return new qs(t,s)}(n,l,r)}function Ws(e,t,s){return Hs(e,t)?new Js(s):new Ys(s)}class Gs{constructor(e){this.attribute=e}}class Ys extends Gs{set(e,t,s){let n=Zs(t)
+return new qs(t,s)}(n,l,r)}function Ws(e,t,s){return Ps(e,t)?new Js(s):new Ys(s)}class Gs{constructor(e){this.attribute=e}}class Ys extends Gs{set(e,t,s){let n=Zs(t)
 if(null!==n){let{name:t,namespace:s}=this.attribute
 e.__setAttribute(t,n,s)}}update(e,t){let s=Zs(e),{element:n,name:i}=this.attribute
 null===s?n.removeAttribute(i):n.setAttribute(i,s)}}class qs extends Gs{constructor(e,t){super(t),this.normalizedName=e}set(e,t,s){null!=t&&(this.value=t,e.__setProperty(this.normalizedName,t))}update(e,t){let{element:s}=this.attribute
 this.value!==e&&(s[this.normalizedName]=this.value=e,null==e&&this.removeAttribute())}removeAttribute(){let{element:e,namespace:t}=this.attribute
-t?e.removeAttributeNS(t,this.normalizedName):e.removeAttribute(this.normalizedName)}}class Ks extends qs{set(e,t,s){let{element:n,name:i}=this.attribute,r=Ps(s,n,i,t)
-super.set(e,r,s)}update(e,t){let{element:s,name:n}=this.attribute,i=Ps(t,s,n,e)
-super.update(i,t)}}class Js extends Ys{set(e,t,s){let{element:n,name:i}=this.attribute,r=Ps(s,n,i,t)
-super.set(e,r,s)}update(e,t){let{element:s,name:n}=this.attribute,i=Ps(t,s,n,e)
+t?e.removeAttributeNS(t,this.normalizedName):e.removeAttribute(this.normalizedName)}}class Ks extends qs{set(e,t,s){let{element:n,name:i}=this.attribute,r=js(s,n,i,t)
+super.set(e,r,s)}update(e,t){let{element:s,name:n}=this.attribute,i=js(t,s,n,e)
+super.update(i,t)}}class Js extends Ys{set(e,t,s){let{element:n,name:i}=this.attribute,r=js(s,n,i,t)
+super.set(e,r,s)}update(e,t){let{element:s,name:n}=this.attribute,i=js(t,s,n,e)
 super.update(i,t)}}class Xs extends qs{set(e,t){e.__setProperty("value",zt(t))}update(e){let t=this.attribute.element,s=t.value,n=zt(e)
 s!==n&&(t.value=n)}}class Qs extends qs{set(e,t){null!=t&&!1!==t&&e.__setProperty("selected",!0)}update(e){let t=this.attribute.element
 t.selected=!!e}}function Zs(e){return!1===e||null==e||void 0===e.toString?null:!0===e?"":"function"==typeof e?null:String(e)}class en{constructor(e,t,s,n){this.slots=e,this.callerScope=t,this.evalScope=s,this.partialMap=n}static root(e,t=0){let s=new Array(t+1)
@@ -753,21 +753,21 @@ return this.position++,{key:i,value:n,memo:r}}}class Fn{constructor(e,t,s){this.
 if(e>=t.length)return null
 let i=s[e],r=t[e],a=n(i,r)
 return this.position++,{key:a,value:i,memo:r}}}const Vn=new class{isEmpty(){return!0}next(){throw new Error("Cannot call next() on an empty iterator")}}
-class jn{constructor(e,t){this.tag=e.tag,this.ref=e,this.keyFor=t}iterate(){let{ref:e,keyFor:t}=this,s=e.value()
+class Hn{constructor(e,t){this.tag=e.tag,this.ref=e,this.keyFor=t}iterate(){let{ref:e,keyFor:t}=this,s=e.value()
 if(Array.isArray(s))return s.length>0?new In(s,t):Vn
 if(null==s)return Vn
 if(void 0!==s.forEach){let e=[]
 return s.forEach(function(t){e.push(t)}),e.length>0?new In(e,t):Vn}if("object"==typeof s){let e=Object.keys(s)
-return e.length>0?new Fn(e,e.map(e=>s[e]),t):Vn}throw new Error(`Don't know how to {{#each ${s}}}`)}valueReferenceFor(e){return new st(e.value)}updateValueReference(e,t){e.update(t.value)}memoReferenceFor(e){return new st(e.memo)}updateMemoReference(e,t){e.update(t.memo)}}class Hn extends sn{static create(e={}){return e.document=e.document||self.document,e.appendOperations=e.appendOperations||new Bs(e.document),new Hn(e)}constructor(e){super({appendOperations:e.appendOperations,updateOperations:new Os(e.document||document)}),ct(this,ut(e)),this.uselessAnchor=e.document.createElement("a")}protocolForURL(e){return this.uselessAnchor.href=e,this.uselessAnchor.protocol}iterableFor(e,t){let s
+return e.length>0?new Fn(e,e.map(e=>s[e]),t):Vn}throw new Error(`Don't know how to {{#each ${s}}}`)}valueReferenceFor(e){return new st(e.value)}updateValueReference(e,t){e.update(t.value)}memoReferenceFor(e){return new st(e.memo)}updateMemoReference(e,t){e.update(t.memo)}}class Pn extends sn{static create(e={}){return e.document=e.document||self.document,e.appendOperations=e.appendOperations||new Bs(e.document),new Pn(e)}constructor(e){super({appendOperations:e.appendOperations,updateOperations:new Os(e.document||document)}),ct(this,ut(e)),this.uselessAnchor=e.document.createElement("a")}protocolForURL(e){return this.uselessAnchor.href=e,this.uselessAnchor.protocol}iterableFor(e,t){let s
 if(!t)throw new Error("Must specify a key for #each")
 switch(t){case"@index":s=((e,t)=>String(t))
 break
 case"@primitive":s=(e=>String(e))
 break
-default:s=(e=>e[t])}return new jn(e,s)}getOwner(){return ut(this)}setOwner(e,t){ct(e,t)}}const Pn="object"==typeof document?document:null
-class zn{constructor(e){this._roots=[],this._rootsIndex=0,this._initializers=[],this._initialized=!1,this._rendering=!1,this._rendered=!1,this._scheduled=!1,this._notifiers=[],this.rootName=e.rootName,this.resolver=e.resolver,dt(e.loader,"Must provide a Loader for preparing templates and other metadata required for a Glimmer Application."),dt(e.renderer,"Must provide a Renderer to render the templates produced by the Loader."),dt(e.builder,"Must provide a Builder that is responsible to building DOM."),this.document=e.document||Pn,this.loader=e.loader,this.renderer=e.renderer,this.builder=e.builder}renderComponent(e,t,s=null){let{_roots:n,_self:i}=this
+default:s=(e=>e[t])}return new Hn(e,s)}getOwner(){return ut(this)}setOwner(e,t){ct(e,t)}}const jn="object"==typeof document?document:null
+class zn{constructor(e){this._roots=[],this._rootsIndex=0,this._initializers=[],this._initialized=!1,this._rendering=!1,this._rendered=!1,this._scheduled=!1,this._notifiers=[],this.rootName=e.rootName,this.resolver=e.resolver,dt(e.loader,"Must provide a Loader for preparing templates and other metadata required for a Glimmer Application."),dt(e.renderer,"Must provide a Renderer to render the templates produced by the Loader."),dt(e.builder,"Must provide a Builder that is responsible to building DOM."),this.document=e.document||jn,this.loader=e.loader,this.renderer=e.renderer,this.builder=e.builder}renderComponent(e,t,s=null){let{_roots:n,_self:i}=this
 n.push({id:this._rootsIndex++,component:e,parent:t,nextSibling:s}),i&&(i.update({roots:n}),this.scheduleRerender())}async boot(){this.initialize(),this.env=this.lookup(`environment:/${this.rootName}/main/main`),await this._render()}scheduleRerender(){!this._scheduled&&this._rendered&&(this._rendering=!0,this._scheduled=!0,setTimeout(async()=>{this._scheduled=!1,await this._rerender(),this._rendering=!1},0))}initialize(){this.initRegistry(),this.initContainer()}registerInitializer(e){this._initializers.push(e)}initRegistry(){let e=this._registry=new ot,t=new Ct(this._registry,this.resolver)
-e.register(`environment:/${this.rootName}/main/main`,Hn),e.registerOption("helper","instantiate",!1),e.registerOption("template","instantiate",!1),e.register(`document:/${this.rootName}/main/main`,this.document),e.registerOption("document","instantiate",!1),e.registerInjection("environment","document",`document:/${this.rootName}/main/main`),e.registerInjection("component-manager","env",`environment:/${this.rootName}/main/main`)
+e.register(`environment:/${this.rootName}/main/main`,Pn),e.registerOption("helper","instantiate",!1),e.registerOption("template","instantiate",!1),e.register(`document:/${this.rootName}/main/main`,this.document),e.registerOption("document","instantiate",!1),e.registerInjection("environment","document",`document:/${this.rootName}/main/main`),e.registerInjection("component-manager","env",`environment:/${this.rootName}/main/main`)
 let s=this._initializers
 for(let n=0;n<s.length;n++)s[n].initialize(t)
 this._initialized=!0}initContainer(){this._container=new lt(this._registry,this.resolver),this._container.defaultInjections=(e=>{let t={}
@@ -1019,16 +1019,16 @@ let u=function({id:e,meta:t,block:s}){let n,i=e||`client-${Bi++}`
 return{id:i,meta:t,create:(e,r)=>{let a=r?gt({},r,t):t
 return n||(n=JSON.parse(s)),new Li(e,{id:i,block:n,referrer:a})}}}(Mi).create(o)
 return Promise.resolve(function(e,t,s,n,i,r){let a=Mn.initial(e,t,s,n,i,r)
-return new Rn(a)}(h,t,i,n,s,u.asLayout().compile()))}}class ji{constructor({element:e,nextSibling:t=null}){this.cursor={element:e,nextSibling:t}}getBuilder(e){return function(e,t){return ln.forInitialRender(e,t)}(e,this.cursor)}}class Hi{render(e){let t
+return new Rn(a)}(h,t,i,n,s,u.asLayout().compile()))}}class Hi{constructor({element:e,nextSibling:t=null}){this.cursor={element:e,nextSibling:t}}getBuilder(e){return function(e,t){return ln.forInitialRender(e,t)}(e,this.cursor)}}class Pi{render(e){let t
 do{t=e.next()}while(!t.done)
 this.result=t.value}rerender(){if(!this.result)throw new Error("Cannot re-render before initial render has completed")
-this.result.rerender()}}function Pi(e){return void 0!==e.rootName&&void 0!==e.collection&&void 0!==e.name&&void 0!==e.type}function zi(e){let t=e.type,s=function(e){let t=[]
+this.result.rerender()}}function ji(e){return void 0!==e.rootName&&void 0!==e.collection&&void 0!==e.name&&void 0!==e.type}function zi(e){let t=e.type,s=function(e){let t=[]
 e.rootName&&t.push(e.rootName)
 e.collection&&t.push(e.collection)
 e.namespace&&t.push(e.namespace)
 e.name&&t.push(e.name)
 if(t.length>0){let s=t.join("/")
-return Pi(e)&&(s="/"+s),s}}(e)
+return ji(e)&&(s="/"+s),s}}(e)
 return s?t+":"+s:t}function Ui(e){let t={}
 if(e.indexOf(":")>-1){let s,n=e.split(":"),i=n[0],r=n[1]
 t.type=i,0===r.indexOf("/")?(s=r.substr(1).split("/"),r.substr(1).startsWith("@")?t.rootName=s.shift()+"/"+s.shift():t.rootName=s.shift(),t.collection=s.shift()):s=r.split("/"),s.length>0&&(t.name=s.pop(),s.length>0&&(t.namespace=s.join("/")))}else t.type=e
@@ -1036,7 +1036,7 @@ return t}function $i(e,t){if(!t)throw new Error("Assertion Failed: "+e)}class Wi
 return!!(s&&n&&0===n.indexOf("/")&&n.split("/").length>3)}(e))return e
 let s,n=Ui(e)
 if(t){let e=Ui(t)
-if(Pi(e)){$i("Specifier must not include a rootName, collection, or namespace when combined with an absolute referrer",void 0===n.rootName&&void 0===n.collection&&void 0===n.namespace),n.rootName=e.rootName,n.collection=e.collection
+if(ji(e)){$i("Specifier must not include a rootName, collection, or namespace when combined with an absolute referrer",void 0===n.rootName&&void 0===n.collection&&void 0===n.namespace),n.rootName=e.rootName,n.collection=e.collection
 let t=this._definitiveCollection(n.type)
 if(!n.name)return n.namespace=e.namespace,n.name=e.name,this._serializeAndVerify(n)
 if(n.namespace=e.namespace?e.namespace+"/"+e.name:e.name,function(e){let{namespace:t,collection:s}=e,n=t.lastIndexOf("/-")
@@ -1052,17 +1052,18 @@ if(this.registry.has(t))return t}}class Gi{constructor(e={}){this._entries=e}has
 if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,s,n)
 else for(var l=e.length-1;l>=0;l--)(i=e[l])&&(a=(r<3?i(a):r>3?i(t,s,a):i(t,s))||a)
 return r>3&&a&&Object.defineProperty(t,s,a),a}
-const qi="all",Ki="active",Ji="undefined"!=typeof API?API:{addTodo(){},removeTodo(){},clearCompleted(){},store:{}},Xi=(Ji.store,13),Qi=27
+const qi="all",Ki="active",Ji="undefined"!=typeof API?API:{addTodo(){},removeTodo(){},clearCompleted(){},store:{counter:0,todos:[]},todos:()=>!1,remaining:()=>!1,completed:()=>!1},Xi=13,Qi=27
 window.location.port
-class Zi extends K{constructor(){super(...arguments),this.counter=2,this.editedTodo=null,this.todos=[],this.newField="",this.filterIteration=1}get filteredTodos(){const e=this.nowShowing
-return e===qi?this.todos:this.todos.filter(t=>e===Ki?!t.completed:t.completed)}get remaining(){return this.todos.filter(e=>!e.completed).length}get nowShowing(){return this.filterIteration&&window.location.hash.replace("#/","")||qi}onEdit(e){this.editedTodo=e}onRemove(e){this.todos=this.todos.filter(t=>t!==e),Ji.removeTodo(e)}updateTodo(e,t){this.todos=this.todos.map(s=>s===e?t:s)}maybeFinishEdit(e,t){if(t.keyCode===Xi||"blur"===t.type){const s=Object.assign({},e,{title:t.target.value})
+class Zi extends K{constructor(){super(...arguments),this.counter=0,this.editedTodo=null,this.todos=API.store.todos||[],this.newField="",this.filterIteration=1}get filteredTodos(){const e=this.todos,t=this.nowShowing
+return t===qi?e:t===Ki?Ji.remaining():Ji.completed()}get remaining(){const e=Ji.remaining()
+return e?e.length:this.todos.filter(e=>!e.completed).length}get nowShowing(){return this.filterIteration&&window.location.hash.replace("#/","")||qi}didInsertElement(){window.appComponent=this}setState({counter:e,todos:t}){this.counter=e,this.todos=t.map(e=>Object.assign({},e))}onEdit(e){this.editedTodo=e}onRemove(e){this.todos=this.todos.filter(t=>t!==e),Ji.removeTodo(e)}updateTodo(e,t){this.todos=this.todos.map(s=>s===e?t:s)}maybeFinishEdit(e,t){if(t.keyCode===Xi||"blur"===t.type){const s=Object.assign({},e,{title:t.target.value})
 this.updateTodo(e,s),this.editedTodo=null}else t.keyCode===Qi&&(this.editedTodo=null)}onCheck(e,t){const s=Object.assign({},e,{completed:t.target.checked})
 this.updateTodo(e,s)}handleNewTodoKeyDown(e){if(e.keyCode!==Xi)return
 e.preventDefault()
 const t=e.target.value.trim()
-t&&(this.newField="",this.todos=this.todos.concat({completed:!1,id:Date.now(),title:t}),Ji.addTodo(t))}onClearCompleted(){this.todos=this.todos.filter(e=>!e.completed),Ji.clearCompleted()}onChangeFilter(){this.filterIteration=this.filterIteration+1}}Yi([V],Zi.prototype,"editedTodo",void 0),Yi([V],Zi.prototype,"todos",void 0),Yi([V],Zi.prototype,"newField",void 0),Yi([V],Zi.prototype,"filterIteration",void 0),Yi([V],Zi.prototype,"filteredTodos",null),Yi([V],Zi.prototype,"remaining",null),Yi([V],Zi.prototype,"nowShowing",null)
-var er={"component:/glimmer/components/Glimmer":Zi,"template:/glimmer/components/Glimmer":{id:"MYjqg2+O",block:'{"symbols":["todo"],"statements":[[6,"section"],[10,"class","todoapp"],[8],[0,"\\n    "],[6,"header"],[10,"class","header"],[8],[0,"\\n    "],[6,"h1"],[8],[1,[21,0,["counter"]],false],[9],[0,"\\n    "],[6,"input"],[10,"class","new-todo"],[10,"autofocus",""],[10,"autocomplete","off"],[10,"placeholder","What to do?"],[11,"value",[21,0,["newField"]],null],[11,"onkeydown",[26,"action",[[21,0,["handleNewTodoKeyDown"]]],null],null],[8],[9],[0,"\\n    "],[9],[0,"\\n"],[4,"if",[[21,0,["todos","length"]]],null,{"statements":[[0,"    "],[6,"section"],[10,"class","main"],[8],[0,"\\n        "],[6,"ul"],[10,"class","todo-list"],[8],[0,"\\n"],[4,"each",[[21,0,["filteredTodos"]]],[["key"],["id"]],{"statements":[[0,"                "],[5,"TodoItem",[],[["@todo","@isEdited","@onRemove","@onEditChange","@onEdit","@onCheck"],[[21,1,[]],[26,"eq",[[21,0,["editedTodo"]],[21,1,[]]],null],[26,"action",[[21,0,["onRemove"]],[21,1,[]]],null],[26,"action",[[21,0,["maybeFinishEdit"]],[21,1,[]]],null],[26,"action",[[21,0,["onEdit"]],[21,1,[]]],null],[26,"action",[[21,0,["onCheck"]],[21,1,[]]],null]]],{"statements":[],"parameters":[]}],[0,"\\n"]],"parameters":[1]},null],[0,"        "],[9],[0,"\\n    "],[9],[0,"\\n"]],"parameters":[]},null],[0,"    "],[5,"TodoFooter",[],[["@activeTab","@remaining","@hasCompleted","@onClearCompleted","@onChangeFilter"],[[21,0,["nowShowing"]],[21,0,["remaining"]],[26,"gt",[[21,0,["todos","length"]],[21,0,["remaining"]]],null],[26,"action",[[21,0,["onClearCompleted"]]],null],[26,"action",[[21,0,["onChangeFilter"]]],null]]],{"statements":[],"parameters":[]}],[0,"\\n"],[9]],"hasEval":false}',meta:{specifier:"template:/glimmer/components/Glimmer"}},"template:/glimmer/components/TodoFooter":{id:"SMQ/te82",block:'{"symbols":["@onClearCompleted","@remaining","@onChangeFilter","@activeTab","@hasCompleted"],"statements":[[6,"footer"],[10,"class","footer"],[8],[0,"\\n    "],[6,"span"],[10,"class","todo-count"],[8],[0,"\\n        "],[6,"strong"],[8],[1,[21,2,[]],false],[9],[0," "],[1,[26,"pluralize",[[21,2,[]]],null],false],[0," left\\n    "],[9],[0,"\\n    "],[6,"ul"],[10,"class","filters"],[11,"onclick",[21,3,[]],null],[8],[0,"\\n        "],[6,"li"],[8],[6,"a"],[10,"href","#/all"],[11,"class",[27,[[26,"if",[[26,"eq",[[21,4,[]],"all"],null],"selected"],null]]]],[8],[0,"All"],[9],[9],[0,"\\n        "],[6,"li"],[8],[6,"a"],[10,"href","#/active"],[11,"class",[27,[[26,"if",[[26,"eq",[[21,4,[]],"active"],null],"selected"],null]]]],[8],[0,"Active"],[9],[9],[0,"\\n        "],[6,"li"],[8],[6,"a"],[10,"href","#/completed"],[11,"class",[27,[[26,"if",[[26,"eq",[[21,4,[]],"completed"],null],"selected"],null]]]],[8],[0,"Completed"],[9],[9],[0,"\\n    "],[9],[0,"\\n"],[4,"if",[[21,5,[]]],null,{"statements":[[0,"    "],[6,"button"],[10,"class","clear-completed"],[11,"onclick",[26,"action",[[21,1,[]]],null],null],[8],[0,"\\n        Clear completed\\n    "],[9],[0,"\\n"]],"parameters":[]},null],[9]],"hasEval":false}',meta:{specifier:"template:/glimmer/components/TodoFooter"}},"template:/glimmer/components/TodoItem":{id:"s6EswmWW",block:'{"symbols":["@todo","@onEditChange","@isEdited","@onCheck","@onEdit","@onRemove"],"statements":[[6,"li"],[10,"class","todo"],[11,"class",[27,[[26,"if",[[21,1,["completed"]]," completed"],null],[26,"if",[[21,3,[]]," editing"],null]]]],[8],[0,"\\n    "],[6,"div"],[10,"class","view"],[8],[0,"\\n        "],[6,"input"],[10,"class","toggle"],[10,"type","checkbox"],[11,"checked",[21,1,["completed"]],null],[11,"onchange",[26,"action",[[21,4,[]]],null],null],[8],[9],[0,"\\n        "],[6,"label"],[11,"ondblclick",[26,"action",[[21,5,[]]],null],null],[8],[1,[21,1,["title"]],false],[9],[0,"\\n        "],[6,"button"],[10,"class","destroy"],[11,"onclick",[26,"action",[[21,6,[]]],null],null],[8],[9],[0,"\\n    "],[9],[0,"\\n"],[4,"if",[[21,3,[]]],null,{"statements":[[0,"    "],[6,"input"],[10,"class","edit"],[10,"type","text"],[11,"value",[21,1,["title"]],null],[10,"autofocus",""],[11,"onblur",[26,"action",[[21,2,[]]],null],null],[11,"onkeyup",[26,"action",[[21,2,[]]],null],null],[8],[9],[0,"\\n"]],"parameters":[]},null],[9]],"hasEval":false}',meta:{specifier:"template:/glimmer/components/TodoItem"}},"helper:/glimmer/components/eq":function([e,t]){return e===t},"helper:/glimmer/components/gt":function([e,t]){return e>t},"helper:/glimmer/components/pluralize":function([e]){return 1===e?"item":"items"}},tr={app:{name:"glimmer",rootName:"glimmer"},types:{application:{definitiveCollection:"main"},component:{definitiveCollection:"components"},"component-test":{unresolvable:!0},helper:{definitiveCollection:"components"},"helper-test":{unresolvable:!0},renderer:{definitiveCollection:"main"},template:{definitiveCollection:"components"}},collections:{main:{types:["application","renderer"]},components:{group:"ui",types:["component","component-test","template","helper","helper-test"],defaultType:"component",privateCollections:["utils"]},styles:{group:"ui",unresolvable:!0},utils:{unresolvable:!0}}}
+t&&(this.newField="",this.todos=this.todos.concat({completed:!1,id:Date.now(),title:t}),Ji.addTodo(t))}onClearCompleted(){Ji.clearCompleted()}onChangeFilter(){this.filterIteration=this.filterIteration+1}}Yi([V],Zi.prototype,"counter",void 0),Yi([V],Zi.prototype,"editedTodo",void 0),Yi([V],Zi.prototype,"todos",void 0),Yi([V],Zi.prototype,"newField",void 0),Yi([V],Zi.prototype,"filterIteration",void 0),Yi([V],Zi.prototype,"filteredTodos",null),Yi([V],Zi.prototype,"remaining",null),Yi([V],Zi.prototype,"nowShowing",null)
+var er={"component:/glimmer/components/Glimmer":Zi,"template:/glimmer/components/Glimmer":{id:"H1Fdx3Sl",block:'{"symbols":["todo"],"statements":[[6,"section"],[10,"class","todoapp"],[8],[0,"\\n    "],[6,"header"],[10,"class","header"],[8],[0,"\\n    "],[6,"h1"],[8],[1,[21,0,["counter"]],false],[9],[0,"\\n    "],[6,"input"],[10,"class","new-todo"],[10,"autofocus",""],[10,"autocomplete","off"],[10,"placeholder","What to do?"],[11,"value",[21,0,["newField"]],null],[11,"onkeydown",[26,"action",[[21,0,["handleNewTodoKeyDown"]]],null],null],[8],[9],[0,"\\n    "],[9],[0,"\\n"],[4,"if",[[21,0,["todos","length"]]],null,{"statements":[[0,"    "],[6,"section"],[10,"class","main"],[8],[0,"\\n        "],[6,"ul"],[10,"class","todo-list"],[8],[0,"\\n"],[4,"each",[[21,0,["filteredTodos"]]],[["key"],["@index"]],{"statements":[[0,"                "],[5,"TodoItem",[],[["@todo","@isEdited","@onRemove","@onEditChange","@onEdit","@onCheck"],[[21,1,[]],[26,"eq",[[21,0,["editedTodo"]],[21,1,[]]],null],[26,"action",[[21,0,["onRemove"]],[21,1,[]]],null],[26,"action",[[21,0,["maybeFinishEdit"]],[21,1,[]]],null],[26,"action",[[21,0,["onEdit"]],[21,1,[]]],null],[26,"action",[[21,0,["onCheck"]],[21,1,[]]],null]]],{"statements":[],"parameters":[]}],[0,"\\n"]],"parameters":[1]},null],[0,"        "],[9],[0,"\\n    "],[9],[0,"\\n"]],"parameters":[]},null],[0,"    "],[5,"TodoFooter",[],[["@activeTab","@remaining","@hasCompleted","@onClearCompleted","@onChangeFilter"],[[21,0,["nowShowing"]],[21,0,["remaining"]],[26,"gt",[[21,0,["todos","length"]],[21,0,["remaining"]]],null],[26,"action",[[21,0,["onClearCompleted"]]],null],[26,"action",[[21,0,["onChangeFilter"]]],null]]],{"statements":[],"parameters":[]}],[0,"\\n"],[9]],"hasEval":false}',meta:{specifier:"template:/glimmer/components/Glimmer"}},"template:/glimmer/components/TodoFooter":{id:"SMQ/te82",block:'{"symbols":["@onClearCompleted","@remaining","@onChangeFilter","@activeTab","@hasCompleted"],"statements":[[6,"footer"],[10,"class","footer"],[8],[0,"\\n    "],[6,"span"],[10,"class","todo-count"],[8],[0,"\\n        "],[6,"strong"],[8],[1,[21,2,[]],false],[9],[0," "],[1,[26,"pluralize",[[21,2,[]]],null],false],[0," left\\n    "],[9],[0,"\\n    "],[6,"ul"],[10,"class","filters"],[11,"onclick",[21,3,[]],null],[8],[0,"\\n        "],[6,"li"],[8],[6,"a"],[10,"href","#/all"],[11,"class",[27,[[26,"if",[[26,"eq",[[21,4,[]],"all"],null],"selected"],null]]]],[8],[0,"All"],[9],[9],[0,"\\n        "],[6,"li"],[8],[6,"a"],[10,"href","#/active"],[11,"class",[27,[[26,"if",[[26,"eq",[[21,4,[]],"active"],null],"selected"],null]]]],[8],[0,"Active"],[9],[9],[0,"\\n        "],[6,"li"],[8],[6,"a"],[10,"href","#/completed"],[11,"class",[27,[[26,"if",[[26,"eq",[[21,4,[]],"completed"],null],"selected"],null]]]],[8],[0,"Completed"],[9],[9],[0,"\\n    "],[9],[0,"\\n"],[4,"if",[[21,5,[]]],null,{"statements":[[0,"    "],[6,"button"],[10,"class","clear-completed"],[11,"onclick",[26,"action",[[21,1,[]]],null],null],[8],[0,"\\n        Clear completed\\n    "],[9],[0,"\\n"]],"parameters":[]},null],[9]],"hasEval":false}',meta:{specifier:"template:/glimmer/components/TodoFooter"}},"template:/glimmer/components/TodoItem":{id:"s6EswmWW",block:'{"symbols":["@todo","@onEditChange","@isEdited","@onCheck","@onEdit","@onRemove"],"statements":[[6,"li"],[10,"class","todo"],[11,"class",[27,[[26,"if",[[21,1,["completed"]]," completed"],null],[26,"if",[[21,3,[]]," editing"],null]]]],[8],[0,"\\n    "],[6,"div"],[10,"class","view"],[8],[0,"\\n        "],[6,"input"],[10,"class","toggle"],[10,"type","checkbox"],[11,"checked",[21,1,["completed"]],null],[11,"onchange",[26,"action",[[21,4,[]]],null],null],[8],[9],[0,"\\n        "],[6,"label"],[11,"ondblclick",[26,"action",[[21,5,[]]],null],null],[8],[1,[21,1,["title"]],false],[9],[0,"\\n        "],[6,"button"],[10,"class","destroy"],[11,"onclick",[26,"action",[[21,6,[]]],null],null],[8],[9],[0,"\\n    "],[9],[0,"\\n"],[4,"if",[[21,3,[]]],null,{"statements":[[0,"    "],[6,"input"],[10,"class","edit"],[10,"type","text"],[11,"value",[21,1,["title"]],null],[10,"autofocus",""],[11,"onblur",[26,"action",[[21,2,[]]],null],null],[11,"onkeyup",[26,"action",[[21,2,[]]],null],null],[8],[9],[0,"\\n"]],"parameters":[]},null],[9]],"hasEval":false}',meta:{specifier:"template:/glimmer/components/TodoItem"}},"helper:/glimmer/components/eq":function([e,t]){return e===t},"helper:/glimmer/components/gt":function([e,t]){return e>t},"helper:/glimmer/components/pluralize":function([e]){return 1===e?"item":"items"}},tr={app:{name:"glimmer",rootName:"glimmer"},types:{application:{definitiveCollection:"main"},component:{definitiveCollection:"components"},"component-test":{unresolvable:!0},helper:{definitiveCollection:"components"},"helper-test":{unresolvable:!0},renderer:{definitiveCollection:"main"},template:{definitiveCollection:"components"}},collections:{main:{types:["application","renderer"]},components:{group:"ui",types:["component","component-test","template","helper","helper-test"],defaultType:"component",privateCollections:["utils"]},styles:{group:"ui",unresolvable:!0},utils:{unresolvable:!0}}}
 const sr=new class extends zn{constructor(){let e=new Gi(er),t=new Wi(tr,e)
 const s=document.body
-super({builder:new ji({element:s,nextSibling:null}),loader:new Vi(t),renderer:new Hi,resolver:t,rootName:tr.app.rootName})}},nr=document.getElementById("app")
-G=(()=>{sr.scheduleRerender()}),sr.registerInitializer({initialize(e){e.register(`component-manager:/${sr.rootName}/component-managers/main`,rt)}}),sr.renderComponent("Glimmer",nr,null),sr.boot()})
+super({builder:new Hi({element:s,nextSibling:null}),loader:new Vi(t),renderer:new Pi,resolver:t,rootName:tr.app.rootName})}},nr=document.getElementById("app")
+G=(()=>{sr.scheduleRerender()}),sr.registerInitializer({initialize(e){e.register(`component-manager:/${sr.rootName}/component-managers/main`,rt)}}),sr.renderComponent("Glimmer",nr,null),sr.boot(),setTimeout(()=>{"undefined"!=typeof API&&(API.render=function(){window.appComponent&&window.appComponent.setState(API.store)},API.READY=!0,API.reset(6))},10)})

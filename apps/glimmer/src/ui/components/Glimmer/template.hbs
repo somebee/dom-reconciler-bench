@@ -11,7 +11,7 @@
     {{#if this.todos.length}}
     <section class="main">
         <ul class="todo-list">
-            {{#each this.filteredTodos key="id" as |todo|}}
+            {{#each this.filteredTodos key="@index" as |todo|}}
                 <TodoItem 
                     @todo={{todo}}
                     @isEdited={{eq this.editedTodo todo}}

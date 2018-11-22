@@ -7,10 +7,20 @@ const api = typeof API !== 'undefined' ? API : {
     addTodo() {},
     removeTodo() {},
     clearCompleted() {},
-    store: {}
+    store: {
+      counter: 0,
+      todos: []
+    },
+    todos() {
+      return false;
+    },
+    remaining() {
+      return false;
+    },
+    completed() {
+      return false;
+    }
 };
-
-const store = api.store;
 
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
@@ -18,13 +28,14 @@ const ESCAPE_KEY = 27;
 const IS_DEV = window.location.port === '4200';
 
 export default class Glimmer extends Component {
-  public counter = 2;
+  @tracked
+  public counter = 0;
 
   @tracked
   public editedTodo = null;
 
   @tracked
-  public todos = [];
+  public todos = API.store.todos || [];
 
   @tracked
   public newField = '';
@@ -34,19 +45,29 @@ export default class Glimmer extends Component {
 
   @tracked
   public get filteredTodos() {
+    const todos = this.todos;
     const filterType = this.nowShowing;
+    // if (!IS_DEV) {
     if (filterType === ALL_TODOS) {
-      return this.todos;
+      return todos;
     } else {
-      return this.todos.filter((todo) => {
-        return filterType === ACTIVE_TODOS ? !todo.completed : todo.completed;
-      });
+      return filterType === ACTIVE_TODOS ? api.remaining() : api.completed();
     }
+    // }
+
+    // if (filterType === ALL_TODOS) {
+    //   return this.todos;
+    // } else {
+    //   return this.todos.filter((todo) => {
+    //     return filterType === ACTIVE_TODOS ? !todo.completed : todo.completed;
+    //   });
+    // }
   }
 
   @tracked
   public get remaining() {
-    return this.todos.filter((todo) => !todo.completed).length;
+    const remaining = api.remaining();
+    return remaining ? remaining.length : this.todos.filter((todo) => !todo.completed).length;
   }
 
   @tracked
@@ -54,6 +75,17 @@ export default class Glimmer extends Component {
     return (
       (this.filterIteration && window.location.hash.replace('#/', '')) || ALL_TODOS
     );
+  }
+
+  didInsertElement() {
+    window.appComponent = this;
+  }
+
+  public setState({counter, todos}) {
+    this.counter = counter;
+    this.todos = todos.map((todo)=>{
+      return {...todo};
+    });
   }
 
   public onEdit(todo) {
@@ -111,7 +143,7 @@ export default class Glimmer extends Component {
   }
 
   public onClearCompleted() {
-    this.todos = this.todos.filter((todo) => !todo.completed);
+    // this.todos = this.todos.filter((todo) => !todo.completed);
     api.clearCompleted();
   }
 
