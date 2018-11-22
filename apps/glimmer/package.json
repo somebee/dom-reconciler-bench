@@ -10,6 +10,7 @@
     "build": "ember build -prod",
     "start": "ember server",
     "test": "ember test",
+    "b": "ember build --environment=production --output-path=compiled",
     "lint:ts": "tslint -c tslint.json 'src/**/*.ts' -t codeFrame"
   },
   "devDependencies": {
