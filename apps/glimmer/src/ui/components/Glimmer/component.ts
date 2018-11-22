@@ -143,8 +143,7 @@ export default class Glimmer extends Component {
   }
 
   public onClearCompleted() {
-    // this.todos = this.todos.filter((todo) => !todo.completed);
-    api.clearCompleted();
+    this.todos = this.todos.filter((todo) => !todo.completed);
   }
 
   public onChangeFilter() {
