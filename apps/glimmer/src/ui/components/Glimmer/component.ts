@@ -3,7 +3,13 @@ import Component, { tracked } from '@glimmer/component';
 const ALL_TODOS = 'all';
 const ACTIVE_TODOS = 'active';
 
-const api = typeof API !== 'undefined' ? API : { store: {}};
+const api = typeof API !== 'undefined' ? API : { 
+    addTodo() {},
+    removeTodo() {},
+    clearCompleted() {},
+    store: {}
+};
+
 const store = api.store;
 
 const ENTER_KEY = 13;
@@ -56,6 +62,7 @@ export default class Glimmer extends Component {
 
   public onRemove(todo) {
     this.todos = this.todos.filter((item) => item !== todo);
+    api.removeTodo(todo);
   }
 
   public updateTodo(oldTodo, newTodo) {
@@ -99,11 +106,13 @@ export default class Glimmer extends Component {
         id: Date.now(),
         title: val
       });
+      api.addTodo(val);
     }
   }
 
   public onClearCompleted() {
     this.todos = this.todos.filter((todo) => !todo.completed);
+    api.clearCompleted();
   }
 
   public onChangeFilter() {
