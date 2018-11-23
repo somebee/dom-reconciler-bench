@@ -71,6 +71,15 @@ export default class Glimmer extends Component {
     return remaining ? remaining.length : todos.filter((todo) => !todo.completed).length;
   }
 
+  didUpdate() {
+    setTimeout(() => {
+      let input: HTMLElement = this.element.querySelector('.edit');
+      if (input) {
+        input.focus();
+      }
+    }, 0);
+  }
+
   @tracked
   get nowShowing() {
     return (

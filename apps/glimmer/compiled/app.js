@@ -1056,7 +1056,8 @@ const qi="all",Ki="active",Ji="undefined"!=typeof API?API:{addTodo(){},removeTod
 window.location.port
 class Zi extends K{constructor(){super(...arguments),this.counter=0,this.editedTodo=null,this.todos=API.store.todos||[],this.newField="",this.filterIteration=1}get filteredTodos(){const e=this.todos,t=this.nowShowing
 return t===qi?e:t===Ki?Ji.remaining():Ji.completed()}get remaining(){const e=this.todos,t=Ji.remaining()
-return t?t.length:e.filter(e=>!e.completed).length}get nowShowing(){return this.filterIteration&&window.location.hash.replace("#/","")||qi}didInsertElement(){window.appComponent=this}setState({counter:e,todos:t}){this.counter=e,this.todos=t.map(e=>Object.assign({},e))}onEdit(e){this.editedTodo=e}onRemove(e){this.todos=this.todos.filter(t=>t!==e),Ji.removeTodo(e)}updateTodo(e,t){this.todos=this.todos.map(s=>s===e?t:s)}maybeFinishEdit(e,t){if(t.keyCode===Xi||"blur"===t.type){const s=Object.assign({},e,{title:t.target.value})
+return t?t.length:e.filter(e=>!e.completed).length}didUpdate(){setTimeout(()=>{let e=this.element.querySelector(".edit")
+e&&e.focus()},0)}get nowShowing(){return this.filterIteration&&window.location.hash.replace("#/","")||qi}didInsertElement(){window.appComponent=this}setState({counter:e,todos:t}){this.counter=e,this.todos=t.map(e=>Object.assign({},e))}onEdit(e){this.editedTodo=e}onRemove(e){this.todos=this.todos.filter(t=>t!==e),Ji.removeTodo(e)}updateTodo(e,t){this.todos=this.todos.map(s=>s===e?t:s)}maybeFinishEdit(e,t){if(t.keyCode===Xi||"blur"===t.type){const s=Object.assign({},e,{title:t.target.value})
 this.updateTodo(e,s),this.editedTodo=null}else t.keyCode===Qi&&(this.editedTodo=null)}onCheck(e,t){const s=Object.assign({},e,{completed:t.target.checked})
 this.updateTodo(e,s)}handleNewTodoKeyDown(e){if(e.keyCode!==Xi)return
 e.preventDefault()
