@@ -6,12 +6,10 @@
         <label ondblclick={{action @onEdit}}>{{ @todo.title }}</label>
         <button class="destroy" onclick={{action @onRemove}}></button>
     </div>
-    {{#if @isEdited}}
-    <input class="edit" type="text"
+    <input class="edit" style="{{if @isEdited 'display:none'}}" type="text"
         value={{@todo.title}}
         autofocus
         onblur={{action @onEditChange}}
         onkeyup={{action @onEditChange}}
     >
-    {{/if}}
 </li>

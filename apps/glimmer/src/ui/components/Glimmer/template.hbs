@@ -8,10 +8,10 @@
         onkeydown={{action this.handleNewTodoKeyDown}}
     >
     </header>
-    {{#if this.filteredTodos.length}}
+    {{~#if this.filteredTodos.length~}}
     <section class="main">
         <ul class="todo-list">
-            {{#each this.filteredTodos key="@index" as |todo|}}
+            {{~#each this.filteredTodos key="@index" as |todo|~}}
                 <TodoItem 
                     @todo={{todo}}
                     @isEdited={{eq this.editedTodo todo}}
@@ -19,10 +19,10 @@
                     @onEditChange={{action this.maybeFinishEdit todo}}
                     @onEdit={{action this.onEdit todo}}
                     @onCheck={{action this.onCheck todo}} />
-            {{/each}}
+            {{~/each~}}
         </ul>
     </section>
-    {{/if}}
+    {{~/if~}}
     <TodoFooter 
         @activeTab={{this.nowShowing}} 
         @remaining={{this.remaining}} 

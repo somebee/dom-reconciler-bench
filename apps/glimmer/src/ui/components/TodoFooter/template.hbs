@@ -7,9 +7,9 @@
         <li><a href="#/active" class="{{if (eq @activeTab 'active') 'selected'}}">Active</a></li>
         <li><a href="#/completed" class="{{if (eq @activeTab 'completed') 'selected'}}">Completed</a></li>
     </ul>
-    {{#if @hasCompleted}}
+    {{~#if @hasCompleted~}}
     <button class="clear-completed" onclick={{action @onClearCompleted}}>
         Clear completed
     </button>
-    {{/if}}
+    {{~/if~}}
 </footer>
