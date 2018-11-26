@@ -1,9 +1,9 @@
 extern Benchmark
 
 var apps = [
-	{name: 'imba@1.3.3', path: "imba/index.html", color: '#709CB2', libSize: '57kb'}
-	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
-	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '87kb'}
+	{name: 'imba@1.3.3', path: "imba/index.html", color: '#709CB2', libSize: '16kb'}
+	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '36kb'}
+	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '32kb'}
 	# {name: 'glimmer@0.13.0', path: "glimmer/compiled/index.html", color: '#face8d', libSize: '34.32kb'}
 ]
 
@@ -153,5 +153,5 @@ Imba.mount APP = <App[state].root ->
 							<span.x.s> (data:fastest:hz / app:bm:hz).toFixed(2) + 'x'
 							<i> "slower"
 				<div.small.size>
-					<i> 'library'
+					<i> 'size (gzipped)'
 					<span.value> app:libSize
