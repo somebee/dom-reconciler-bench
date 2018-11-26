@@ -73,8 +73,6 @@ export default class Glimmer extends Component {
 
   public newField = '';
 
-  public filterIteration = 1;
-
   public get filteredTodos() {
     const todos = this.todos;
     const filterType = this.nowShowing;
@@ -91,8 +89,16 @@ export default class Glimmer extends Component {
     return remaining ? remaining.length : todos.filter((todo) => !todo.completed).length;
   }
 
+  public onChangeFilter(e) {
+    if (e.target.hash) {
+      window.location.hash = e.target.hash;
+      api.forceUpdate();
+    }
+  }
+
   didUpdate() {
-    setTimeout(() => {
+    clearTimeout(this.focusAfterRender);
+    this.focusAfterRender = setTimeout(() => {
       let input: HTMLElement = this.element.querySelector('.edit');
       if (input) {
         input.focus();
@@ -101,9 +107,7 @@ export default class Glimmer extends Component {
   }
 
   get nowShowing() {
-    return (
-      (this.filterIteration && window.location.hash.replace('#/', '')) || ALL_TODOS
-    );
+    return window.location.hash.replace('#/', '') || ALL_TODOS;
   }
 
   didInsertElement() {
@@ -119,41 +123,34 @@ export default class Glimmer extends Component {
     markAsDirty(this, 'nowShowing');
     markAsDirty(this, 'remaining');
     markAsDirty(this, 'filteredTodos');
+    markAsDirty(this, 'editedTodo');
     rerender(this);
   }
 
   public onEdit(todo) {
     this.editedTodo = todo;
+    api.forceUpdate();
   }
 
   public onRemove(todo) {
-    this.todos = this.todos.filter((item) => item !== todo);
     api.removeTodo(todo);
-  }
-
-  public updateTodo(oldTodo, newTodo) {
-    this.todos = this.todos.map((item) => {
-      if (item === oldTodo) {
-        return newTodo;
-      } else {
-        return item;
-      }
-    });
+    api.forceUpdate();
   }
 
   public maybeFinishEdit(todo, event) {
     if (event.keyCode === ENTER_KEY || event.type === 'blur') {
-      const newTodo = { ...todo, ...{ title: event.target.value } };
-      this.updateTodo(todo, newTodo);
       this.editedTodo = null;
+      api.renameTodo(todo, event.target.value);
+      api.forceUpdate();
     } else if (event.keyCode === ESCAPE_KEY) {
       this.editedTodo = null;
+      api.forceUpdate();
     }
   }
 
   public onCheck(todo, event) {
-    const newTodo = { ...todo, ...{ completed: event.target.checked } };
-    this.updateTodo(todo, newTodo);
+    api.toggleTodo(todo);
+    api.forceUpdate();
   }
 
   public handleNewTodoKeyDown(event) {
@@ -167,20 +164,13 @@ export default class Glimmer extends Component {
 
     if (val) {
       this.newField = '';
-      this.todos = this.todos.concat({
-        completed: false,
-        id: Date.now(),
-        title: val
-      });
       api.addTodo(val);
+      api.forceUpdate();
     }
   }
 
   public onClearCompleted() {
-    this.todos = this.todos.filter((todo) => !todo.completed);
-  }
-
-  public onChangeFilter() {
-    this.filterIteration = this.filterIteration + 1;
+    api.clearCompleted();
+    api.forceUpdate();
   }
 }
