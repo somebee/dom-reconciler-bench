@@ -3,9 +3,8 @@ extern Benchmark
 var apps = [
 	{name: 'imba@1.3.3', path: "imba/index.html", color: '#709CB2', libSize: '57kb'}
 	{name: 'react@16.prod', path: "react/index.html", color: 'rgb(15, 203, 255)', libSize: '101kb'}
-	# {name: 'imba@dev', path: "imba-dev/index.html", color: '#709CB2', libSize: '54kb'}
 	{name: 'vue@2.5.13', path: "vue/index.html", color: '#4fc08d', libSize: '87kb'}
-	# {name: 'react@16.dev', path: "react/index.dev.html", color: 'rgb(15, 203, 255)'}
+	# {name: 'glimmer@0.13.0', path: "glimmer/compiled/index.html", color: '#face8d', libSize: '34.32kb'}
 ]
 
 for app in apps
@@ -80,17 +79,23 @@ tag App
 	def run
 		state:fastest = null
 		var bm = state:bench = Benchmark.Suite.new("benchmark")
+		var bmapps = []
 
 		for app,i in apps
 			app:api.reset(state:count,state)
-			bm.add(app:name, app:api:step)
-			app:bm = bm[i]
+			unless app:api.checkImplementation
+				console.warn app:name,"not reconciling synchronously"
+			else
+				bm.add(app:name, app:api:step)
+				bmapps.push(app)
+				app:bm = bm[i]
+				
 
 		var nr = 0
-		state:current = apps[nr]
+		state:current = bmapps[nr]
 
 		bm.on 'cycle' do |e|
-			state:current = apps[++nr]
+			state:current = bmapps[++nr]
 			Imba.commit
 
 		bm.on 'complete' do
@@ -123,16 +128,6 @@ Imba.mount APP = <App[state].root ->
 	<header#header>
 		<input[state:count] type="number">
 		<span.flex> "todos"
-		# <select model.number='ins'>
-		# 	<option value=0> 'none'
-		# 	<option value=1> 'random'
-		# 	<option value=2> 'push'
-		# 	<option value=3> 'unshift'
-		
-		# <select model.number='rem'>
-		# 	<option value=1> 'random'
-		# 	<option value=2> 'pop'
-		# 	<option value=3> 'shift'
 		<button :tap.reset> "reset"
 		<Stepper> "step"
 		<button.primary :tap.run disabled=(state:bench)> "Run benchmark"
@@ -141,7 +136,7 @@ Imba.mount APP = <App[state].root ->
 	<section.apps> for app in apps
 		<div[app].app css:color=app:color>
 			<header> String(app:bm or app:name) # ? String(app:bm) : @status
-			<AppFrame[app] src="apps/{app:path}" css:minHeight='340px'>
+			<AppFrame[app] src="apps/{app:path}" css:minHeight='340px' name=app:name>
 			<footer>
 				if app:api and app:api:mutations
 					<div.muts>
