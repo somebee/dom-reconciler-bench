@@ -8,7 +8,7 @@
         onkeydown={{action this.handleNewTodoKeyDown}}
     >
     </header>
-    {{#if this.todos.length}}
+    {{#if this.filteredTodos.length}}
     <section class="main">
         <ul class="todo-list">
             {{#each this.filteredTodos key="@index" as |todo|}}

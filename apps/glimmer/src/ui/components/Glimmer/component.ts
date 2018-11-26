@@ -1,24 +1,59 @@
-import Component, { tracked } from '@glimmer/component';
+import Component, { tagForProperty } from '@glimmer/component';
 
 const ALL_TODOS = 'all';
 const ACTIVE_TODOS = 'active';
 
+function rerender(ctx) {
+  const owner = ctx.__owner__;
+  owner._rendering = true;
+  owner._rerender();
+  owner._rendering = false;
+  owner._scheduled = false;
+}
+
+function markAsDirty(ctx, prop) {
+  tagForProperty(ctx,  prop).inner.dirty();
+}
+
+function invalidateTask(obj) {
+  ['completed','title','id'].map((propName)=>{
+    markAsDirty(obj, propName);
+  });
+  return obj;
+}
+
+declare global {
+  interface IAPI {
+    remaining(): any[];
+    completed(): any[];
+    addTodo(title: string): void;
+    removeTodo(todo: any): void;
+    store: {
+      todos: any[],
+    }
+  }
+  export interface Window {
+    appComponent: Glimmer
+  }
+  const API: IAPI
+}
+
 const api = typeof API !== 'undefined' ? API : { 
-    addTodo() {},
-    removeTodo() {},
+    addTodo(title) {},
+    removeTodo(todo) {},
     clearCompleted() {},
     store: {
       counter: 0,
       todos: []
     },
     todos() {
-      return false;
+      return [];
     },
     remaining() {
-      return false;
+      return [];
     },
     completed() {
-      return false;
+      return [];
     }
 };
 
@@ -27,44 +62,29 @@ const ESCAPE_KEY = 27;
 
 const IS_DEV = window.location.port === '4200';
 
+
+
 export default class Glimmer extends Component {
-  @tracked
   public counter = 0;
 
-  @tracked
   public editedTodo = null;
 
-  @tracked
   public todos = API.store.todos || [];
 
-  @tracked
   public newField = '';
 
-  @tracked
   public filterIteration = 1;
 
-  @tracked
   public get filteredTodos() {
     const todos = this.todos;
     const filterType = this.nowShowing;
-    // if (!IS_DEV) {
     if (filterType === ALL_TODOS) {
       return todos;
     } else {
       return filterType === ACTIVE_TODOS ? api.remaining() : api.completed();
     }
-    // }
-
-    // if (filterType === ALL_TODOS) {
-    //   return this.todos;
-    // } else {
-    //   return this.todos.filter((todo) => {
-    //     return filterType === ACTIVE_TODOS ? !todo.completed : todo.completed;
-    //   });
-    // }
   }
 
-  @tracked
   public get remaining() {
     const todos = this.todos;
     const remaining = api.remaining();
@@ -80,7 +100,6 @@ export default class Glimmer extends Component {
     }, 0);
   }
 
-  @tracked
   get nowShowing() {
     return (
       (this.filterIteration && window.location.hash.replace('#/', '')) || ALL_TODOS
@@ -91,11 +110,16 @@ export default class Glimmer extends Component {
     window.appComponent = this;
   }
 
-  public setState({counter, todos}) {
-    this.counter = counter;
-    this.todos = todos.map((todo)=>{
-      return {...todo};
-    });
+  public setState(newState) {
+    //const newState = JSON.parse(JSON.stringify(state));
+    this.counter = newState.counter;
+    this.todos = newState.todos.map(invalidateTask);
+    markAsDirty(this, 'todos');
+    markAsDirty(this, 'counter');
+    markAsDirty(this, 'nowShowing');
+    markAsDirty(this, 'remaining');
+    markAsDirty(this, 'filteredTodos');
+    rerender(this);
   }
 
   public onEdit(todo) {
