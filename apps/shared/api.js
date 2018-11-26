@@ -168,6 +168,22 @@ API = {
 		this.observer = null;
 	},
 
+	checkImplementation: function(){
+		var todos = this.store.todos;
+		var prevTitle = todos[0].title;
+		var newTitle = "This is an item " + Math.random();
+		todos[0].title = newTitle;
+		this.forceReconcile();
+		var after = document.body.innerHTML;
+		todos[0].title = prevTitle;
+		this.forceReconcile();
+		if(after.indexOf(newTitle) == -1){
+			console.warn("Implementation is not synchronous!");
+			return false;
+		}
+		return true;
+	},
+
 	// predictable random number from seed
 	random: function(max,min) {
 		this.seed = (this.seed * 9301 + 49297) % 233280;
