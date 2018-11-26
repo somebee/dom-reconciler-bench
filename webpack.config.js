@@ -2,7 +2,7 @@ var path = require('path');
 
 const imba = {
 	entry: "./apps/imba/app.imba",
-	output: { filename: "./apps/imba/app.js" },
+	output: { path: __dirname, filename: "./apps/imba/app.js" },
 	resolve: { extensions: [".imba",".js", ".json"] },
 	module: { rules: [{ test: /\.imba$/, loader: 'imba/loader' }] }
 }
@@ -10,6 +10,7 @@ const imba = {
 const react = {
   entry: './apps/react/app.jsx',
   output: {
+    path: __dirname,
     filename: './apps/react/app.js'
   },
   resolve: { extensions: [".jsx",".js", ".json"] },
@@ -23,7 +24,7 @@ const react = {
 
 const client = {
 	entry: "./client.imba",
-	output: { filename: "./client.js" },
+	output: { path: __dirname, filename: "./client.js" },
 	resolve: { extensions: [".imba",".js", ".json"] },
 	module: { rules: [{ test: /\.imba$/, loader: 'imba/loader' }] }
 }
