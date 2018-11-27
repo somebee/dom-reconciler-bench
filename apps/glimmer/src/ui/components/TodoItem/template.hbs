@@ -1,0 +1,15 @@
+<li
+    class="todo"
+    class="{{if @todo.completed ' completed'}}{{if @isEdited ' editing'}}">
+    <div class="view">
+        <input class="toggle" type="checkbox" checked={{@todo.completed}} onchange={{action @onCheck}}>
+        <label ondblclick={{action @onEdit}}>{{ @todo.title }}</label>
+        <button class="destroy" onclick={{action @onRemove}}></button>
+    </div>
+    <input class="edit" style="{{if @isEdited '' 'display:none'}}" type="text"
+        value={{@todo.title}}
+        autofocus
+        onblur={{action @onEditChange}}
+        onkeyup={{action @onEditChange}}
+    >
+</li>

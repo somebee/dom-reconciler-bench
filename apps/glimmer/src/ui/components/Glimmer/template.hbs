@@ -1,0 +1,32 @@
+<section class="todoapp">
+    <header class="header">
+    <h1>{{this.counter}}</h1>
+    <input class="new-todo"
+        autofocus autocomplete="off"
+        placeholder="What to do?"
+        value={{this.newField}}
+        onkeydown={{action this.handleNewTodoKeyDown}}
+    >
+    </header>
+    {{~#if this.filteredTodos.length~}}
+    <section class="main">
+        <ul class="todo-list">
+            {{~#each this.filteredTodos key="@index" as |todo|~}}
+                <TodoItem 
+                    @todo={{todo}}
+                    @isEdited={{eq this.editedTodo todo}}
+                    @onRemove={{action this.onRemove todo}}
+                    @onEditChange={{action this.maybeFinishEdit todo}}
+                    @onEdit={{action this.onEdit todo}}
+                    @onCheck={{action this.onCheck todo}} />
+            {{~/each~}}
+        </ul>
+    </section>
+    {{~/if~}}
+    <TodoFooter 
+        @activeTab={{this.nowShowing}} 
+        @remaining={{this.remaining}} 
+        @hasCompleted={{gt this.todos.length this.remaining}}
+        @onClearCompleted={{action this.onClearCompleted}}
+        @onChangeFilter={{action this.onChangeFilter}} />
+</section>

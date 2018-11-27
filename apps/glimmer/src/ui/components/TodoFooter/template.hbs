@@ -1,0 +1,15 @@
+<footer class="footer">
+    <span class="todo-count">
+        <strong>{{ @remaining }}</strong> {{pluralize @remaining}} left
+    </span>
+    <ul class="filters" onclick={{@onChangeFilter}}>
+        <li><a href="#/all" class="{{if (eq @activeTab 'all') 'selected'}}">All</a></li>
+        <li><a href="#/active" class="{{if (eq @activeTab 'active') 'selected'}}">Active</a></li>
+        <li><a href="#/completed" class="{{if (eq @activeTab 'completed') 'selected'}}">Completed</a></li>
+    </ul>
+    {{~#if @hasCompleted~}}
+    <button class="clear-completed" onclick={{action @onClearCompleted}}>
+        Clear completed
+    </button>
+    {{~/if~}}
+</footer>
