@@ -254,7 +254,6 @@ class TodoApp extends React.Component {
 		return (
 			<div>
 				<header className="header">
-					<h1>{store.counter}</h1>
 					<input
 						className={"new-todo"}
 						placeholder={"What to do?"}
@@ -275,5 +274,4 @@ var component = ReactDOM.render(
 );
 
 API.render = function(){ component.forceUpdate(); }
-API.READY = true;
-API.reset(6);
+API.ready(function(){ component.forceUpdate(); });

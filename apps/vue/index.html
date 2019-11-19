@@ -3,22 +3,21 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Vue • Todos</title>
-		<link rel="stylesheet" href="../shared/app.css">
-		<script src="../shared/api.js"></script>
+		<link rel="stylesheet" href="../../shared/app.css">
+		<script src="../../shared/api.js"></script>
 	</head>
 	<body>
 		<section class="todoapp">
 		  <header class="header">
-		    <h1>{{counter}}</h1>
 		    <input class="new-todo"
 		      autofocus autocomplete="off"
 		      placeholder="What to do?"
 		      v-model="newTodo"
 		      @keyup.enter="addNewTodo">
 		  </header>
-		  <section class="main" v-show="todos.length" v-cloak>
+		  <section class="main" v-show="st.todos.length" v-cloak>
 		    <ul class="todo-list">
-		      <li v-for="todo in filteredTodos"
+		      <li v-for="todo in st.todos"
 		        class="todo"
 		        :key="todo.id"
 		        :class="{ completed: todo.completed, editing: todo == editedTodo }">
@@ -36,7 +35,7 @@
 		      </li>
 		    </ul>
 		  </section>
-		  <footer class="footer" v-show="todos.length" v-cloak>
+		  <footer class="footer" v-show="st.todos.length" v-cloak>
 		    <span class="todo-count">
 		      <strong>{{ remaining }}</strong> {{ remaining | pluralize }} left
 		    </span>

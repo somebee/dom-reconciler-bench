@@ -1,16 +1,9 @@
 
 var api = API
-
-var store = api:store =
-	counter: 0
-	todos: []
-	allDone: no
-	newTodo: ""
+var store = api:state
 		
 tag Todo < li
-	
 	def render
-		# var todo = @data
 		<self .completed=(@data:completed)>
 			<div.view>
 				<label :dblclick='edit'> @data:title
@@ -73,7 +66,6 @@ tag App
 
 		<self>
 			<header.header>
-				<h1> "{@data:counter}"
 				<input[@data:newTodo].new-todo
 					type='text'
 					placeholder='What to do?'
@@ -102,7 +94,7 @@ def api.render
 	app.render
 
 Imba.mount(app)
-api.reset(6)
+api.ready()
 
 	
 

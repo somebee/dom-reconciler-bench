@@ -1,0 +1,44 @@
+{
+  "name": "vue",
+  "size": 89329,
+  "gz": 32489,
+  "files": [
+    {
+      "src": "vue/index.js",
+      "size": 2819,
+      "gz": 1081
+    },
+    {
+      "src": "vue/vue.min.js",
+      "size": 86510,
+      "gz": 31408
+    }
+  ],
+  "memoryBeforeRun": 2870992,
+  "memoryAfterRun": 4249072,
+  "benchmark": {
+    "mutations": 0,
+    "state": "done",
+    "hz": 9276.497695852535,
+    "mean": 0.00010779930452061599,
+    "moe": 0.000005921496435785039,
+    "rme": 5.493074804255891,
+    "variance": 3.012067787608008e-10
+  },
+  "metrics": {
+    "Timestamp": 101795.865935,
+    "Documents": 1,
+    "Frames": 1,
+    "JSEventListeners": 459,
+    "Nodes": 812,
+    "LayoutCount": 35,
+    "RecalcStyleCount": 40,
+    "LayoutDuration": 0.113151,
+    "RecalcStyleDuration": 0.054587,
+    "ScriptDuration": 3.739782,
+    "TaskDuration": 4.027412,
+    "JSHeapUsedSize": 4249072,
+    "JSHeapTotalSize": 40505344
+  },
+  "hz": 9276.497695852535
+}

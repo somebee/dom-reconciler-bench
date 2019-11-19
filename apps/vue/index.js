@@ -30,7 +30,9 @@ var app = new Vue({
 
   created: function() {
     // we dont want to track the counter
-    this.counter = 0;
+    // this.counter = 0;
+    console.log('vue created',api.state);
+    this.st = api.state;
   },
 
   // computed properties
@@ -121,7 +123,8 @@ app.$mount('.todoapp')
 // Make watcher synchronous so that it actually renders after each change
 // The benchmark only changes a single item in each iteration
 app._watcher.sync = true;
-api.store = app;
+// api.store = app;
 api.forceReconcile = function(){ app.$forceUpdate(); }
-api.reset(6);
+api.ready();
+app.newTodo = 'a';
 

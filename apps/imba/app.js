@@ -36,12 +36,32 @@
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -59,12 +79,209 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
+var Imba = __webpack_require__(1), _2 = Imba.createTagMap, _1 = Imba.createElement;
+
+var api = API;
+var store = api.state;
+
+var Todo = Imba.defineTag('Todo', 'li', function(tag){
+	tag.prototype.render = function (){
+		var $ = this.$;
+		return this.$open(0).flagIf('completed',(this._data.completed)).setChildren($.$ = $.$ || [
+			_1('div',$,0,this).flag('view').setContent([
+				_1('label',$,1,0).on$(0,['dblclick','edit'],this),
+				_1('input',$,2,0).flag('toggle').setType('checkbox').on$(0,['tap','prevent','toggle'],this),
+				_1('button',$,3,0).flag('destroy').on$(0,['tap','drop'],this)
+			],2),
+			this._input = this._input||_1('input',this).flag('input').flag('edit').setType('text').on$(0,['keydown','enter','submit'],this).on$(1,['keydown','esc','cancel'],this)
+		],2).synced((
+			$[1].setContent(this._data.title,3),
+			$[2].setChecked(this._data.completed).end(),
+			this._input.end()
+		,true));
+	};
+	
+	tag.prototype.edit = function (){
+		var self = this;
+		self.flag('editing');
+		self._input.setValue(self.data().title);
+		return setTimeout(function() { return self._input.focus(); },10);
+	};
+	
+	tag.prototype.drop = function (){
+		return API.removeTodo(this.data());
+	};
+	
+	tag.prototype.toggle = function (){
+		return API.toggleTodo(this.data());
+	};
+	
+	tag.prototype.submit = function (){
+		var title;
+		this.unflag('editing');
+		if (title = this._input.value().trim()) {
+			return API.renameTodo(this.data(),title);
+		} else {
+			return this.drop();
+		};
+	};
+	
+	tag.prototype.onfocusout = function (e){
+		if (this.hasFlag('editing')) { return this.submit() };
+	};
+	
+	tag.prototype.cancel = function (){
+		this.unflag('editing');
+		return this._input.blur();
+	};
+});
+
+var App = Imba.defineTag('App', function(tag){
+	tag.prototype.addItem = function (){
+		if (this.data().newTodo) {
+			API.addTodo(this.data().newTodo);
+			return this.data().newTodo = "";
+		};
+	};
+	
+	tag.prototype.clearCompleted = function (){
+		return API.clearCompleted();
+	};
+	
+	tag.prototype.mount = function (){
+		var self = this;
+		return window.addEventListener('hashchange',function() {
+			return self._route = window.location.hash;
+		});
+	};
+	
+	tag.prototype.render = function (){
+		var $ = this.$;
+		var all = API.todos();
+		var items = all;
+		var done = API.completed();
+		var active = API.remaining();
+		
+		// for todo in all
+		// 	todo:completed ? done.push(todo) : active.push(todo)
+		
+		if (this._route == '#/completed') {
+			items = done;
+		} else if (this._route == '#/active') {
+			items = active;
+		};
+		
+		return this.$open(0).setChildren($.$ = $.$ || [
+			_1('header',$,0,this).flag('header').setContent(
+				$[1] || _1('input',$,1,0).flag('new-todo').setType('text').setPlaceholder('What to do?').setAutofocus(true).on$(0,['keyup','enter','addItem'],this)
+			,2),
+			
+			_1('section',$,2,this).flag('main').setContent(
+				$[3] || _1('ul',$,3,2).flag('todo-list')
+			,2),
+			_1('footer',$,5,this).flag('footer').setContent([
+				_1('span',$,6,5).flag('todo-count').setContent([
+					_1('strong',$,7,6),
+					_1('span',$,8,6)
+				],2),
+				_1('ul',$,9,5).flag('filters').setContent([
+					_1('li',$,10,9).setContent($[11] || _1('a',$,11,10).setHref('#/').setText("All"),2),
+					_1('li',$,12,9).setContent($[13] || _1('a',$,13,12).setHref('#/active').setText("Active"),2),
+					_1('li',$,14,9).setContent($[15] || _1('a',$,15,14).setHref('#/completed').setText("Completed"),2)
+				],2),
+				_1('button',$,16,5).flag('clear-completed').on$(0,['tap','clearCompleted'],this).setText('Clear completed')
+			],2)
+		],2).synced((
+			$[1].bindData(this._data,'newTodo').end(),
+			$[3].setContent(
+				(function($0) {
+					var $1, id_, $$ = $0.$iter();
+					for (let i = 0, ary = iter$(items), len = ary.length, todo; i < len; i++) {
+						todo = ary[i];
+						$$.push(($0[(id_ = todo.id)] || _1(Todo,$0,id_)).setData(todo).end());
+					};return $$;
+				})($[4] || _2($,4,$[3]))
+			,5),
+			$[5].flagIf('hidden',(!all.length)).end((
+				$[7].setContent(active.length,3),
+				$[8].setText(" item" + ((active.length != 1) ? 's' : '') + " left"),
+				$[11].flagIf('selected',(items == all)).end(),
+				$[13].flagIf('selected',(items == active)).end(),
+				$[15].flagIf('selected',(items == done)).end(),
+				$[16].flagIf('hidden',(!done.length))
+			,true))
+		,true));
+	};
+});
+
+
+// create an instance of the app (with id app)
+var app = (_1(App).setId('app').flag('todoapp')).setData(store).end();
+
+api.render = function (){
+	return app.render();
+};
+
+Imba.mount(app);
+api.ready();
+
+
+
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(2);
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Imba = __webpack_require__(3);
+var activate = false;
+if (typeof window !== 'undefined') {
+	if (window.Imba) {
+		console.warn(("Imba v" + (window.Imba.VERSION) + " is already loaded."));
+		Imba = window.Imba;
+	} else {
+		window.Imba = Imba;
+		activate = true;
+		if (window.define && window.define.amd) {
+			window.define("imba",[],function() { return Imba; });
+		};
+	};
+};
+
+module.exports = Imba;
+
+if (true) {
+	__webpack_require__(4);
+	__webpack_require__(5);
+};
+
+if ( true && activate) {
+	Imba.EventManager.activate();
+};
+
+if (false) {};
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 /*
@@ -72,7 +289,7 @@ Imba is the namespace for all runtime related utilities
 @namespace
 */
 
-var Imba = {VERSION: '1.3.3'};
+var Imba = {VERSION: '1.3.2'};
 
 /*
 
@@ -328,288 +545,11 @@ module.exports = Imba;
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Imba = __webpack_require__(0);
-
-Imba.Pointer = function Pointer(){
-	this._button = -1;
-	this._event = {x: 0,y: 0,type: 'uninitialized'};
-	return this;
-};
-
-Imba.Pointer.prototype.button = function (){
-	return this._button;
-};
-
-Imba.Pointer.prototype.touch = function (){
-	return this._touch;
-};
-
-Imba.Pointer.prototype.update = function (e){
-	this._event = e;
-	this._dirty = true;
-	return this;
-};
-
-// this is just for regular mouse now
-Imba.Pointer.prototype.process = function (){
-	var e1 = this._event;
-	
-	if (this._dirty) {
-		this._prevEvent = e1;
-		this._dirty = false;
-		
-		// button should only change on mousedown etc
-		if (e1.type == 'mousedown') {
-			this._button = e1.button;
-			
-			if ((this._touch && this._button != 0)) {
-				return;
-			};
-			
-			// cancel the previous touch
-			if (this._touch) { this._touch.cancel() };
-			this._touch = new Imba.Touch(e1,this);
-			this._touch.mousedown(e1,e1);
-		} else if (e1.type == 'mousemove') {
-			if (this._touch) { this._touch.mousemove(e1,e1) };
-		} else if (e1.type == 'mouseup') {
-			this._button = -1;
-			
-			if (this._touch && this._touch.button() == e1.button) {
-				this._touch.mouseup(e1,e1);
-				this._touch = null;
-			};
-			// trigger pointerup
-		};
-	} else if (this._touch) {
-		this._touch.idle();
-	};
-	return this;
-};
-
-Imba.Pointer.prototype.x = function (){
-	return this._event.x;
-};
-Imba.Pointer.prototype.y = function (){
-	return this._event.y;
-};
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(3), _2 = Imba.createTagMap, _1 = Imba.createElement;
-
-var api = API;
-
-var store = api.store = {
-	counter: 0,
-	todos: [],
-	allDone: false,
-	newTodo: ""
-};
-
-var Todo = Imba.defineTag('Todo', 'li', function(tag){
-	
-	tag.prototype.render = function (){
-		// var todo = @data
-		var $ = this.$;
-		return this.$open(0).flagIf('completed',(this._data.completed)).setChildren($.$ = $.$ || [
-			_1('div',$,0,this).flag('view').setContent([
-				_1('label',$,1,0).on$(0,['dblclick','edit'],this),
-				_1('input',$,2,0).flag('toggle').setType('checkbox').on$(0,['tap','prevent','toggle'],this),
-				_1('button',$,3,0).flag('destroy').on$(0,['tap','drop'],this)
-			],2),
-			this._input = this._input||_1('input',this).flag('input').flag('edit').setType('text').on$(0,['keydown','enter','submit'],this).on$(1,['keydown','esc','cancel'],this)
-		],2).synced((
-			$[1].setContent(this._data.title,3),
-			$[2].setChecked(this._data.completed).end(),
-			this._input.end()
-		,true));
-	};
-	
-	tag.prototype.edit = function (){
-		var self = this;
-		self.flag('editing');
-		self._input.setValue(self.data().title);
-		return setTimeout(function() { return self._input.focus(); },10);
-	};
-	
-	tag.prototype.drop = function (){
-		return API.removeTodo(this.data());
-	};
-	
-	tag.prototype.toggle = function (){
-		return API.toggleTodo(this.data());
-	};
-	
-	tag.prototype.submit = function (){
-		var title;
-		this.unflag('editing');
-		if (title = this._input.value().trim()) {
-			return API.renameTodo(this.data(),title);
-		} else {
-			return this.drop();
-		};
-	};
-	
-	tag.prototype.onfocusout = function (e){
-		if (this.hasFlag('editing')) { return this.submit() };
-	};
-	
-	tag.prototype.cancel = function (){
-		this.unflag('editing');
-		return this._input.blur();
-	};
-});
-
-var App = Imba.defineTag('App', function(tag){
-	tag.prototype.addItem = function (){
-		if (this.data().newTodo) {
-			API.addTodo(this.data().newTodo);
-			return this.data().newTodo = "";
-		};
-	};
-	
-	tag.prototype.clearCompleted = function (){
-		return API.clearCompleted();
-	};
-	
-	tag.prototype.mount = function (){
-		var self = this;
-		return window.addEventListener('hashchange',function() {
-			return self._route = window.location.hash;
-		});
-	};
-	
-	tag.prototype.render = function (){
-		var $ = this.$;
-		var all = API.todos();
-		var items = all;
-		var done = API.completed();
-		var active = API.remaining();
-		
-		// for todo in all
-		// 	todo:completed ? done.push(todo) : active.push(todo)
-		
-		if (this._route == '#/completed') {
-			items = done;
-		} else if (this._route == '#/active') {
-			items = active;
-		};
-		
-		return this.$open(0).setChildren($.$ = $.$ || [
-			_1('header',$,0,this).flag('header').setContent([
-				_1('h1',$,1,0),
-				_1('input',$,2,0).flag('new-todo').setType('text').setPlaceholder('What to do?').setAutofocus(true).on$(0,['keyup','enter','addItem'],this)
-			],2),
-			
-			_1('section',$,3,this).flag('main').setContent(
-				$[4] || _1('ul',$,4,3).flag('todo-list')
-			,2),
-			_1('footer',$,6,this).flag('footer').setContent([
-				_1('span',$,7,6).flag('todo-count').setContent([
-					_1('strong',$,8,7),
-					_1('span',$,9,7)
-				],2),
-				_1('ul',$,10,6).flag('filters').setContent([
-					_1('li',$,11,10).setContent($[12] || _1('a',$,12,11).setHref('#/').setText("All"),2),
-					_1('li',$,13,10).setContent($[14] || _1('a',$,14,13).setHref('#/active').setText("Active"),2),
-					_1('li',$,15,10).setContent($[16] || _1('a',$,16,15).setHref('#/completed').setText("Completed"),2)
-				],2),
-				_1('button',$,17,6).flag('clear-completed').on$(0,['tap','clearCompleted'],this).setText('Clear completed')
-			],2)
-		],2).synced((
-			$[1].setText("" + (this._data.counter)),
-			$[2].bindData(this._data,'newTodo').end(),
-			$[4].setContent(
-				(function tagLoop($0) {
-					var $1, id_, $$ = $0.$iter();
-					for (let i = 0, ary = iter$(items), len = ary.length, todo; i < len; i++) {
-						todo = ary[i];
-						$$.push(($0[(id_ = todo.id)] || _1(Todo,$0,id_)).setData(todo).end());
-					};return $$;
-				})($[5] || _2($,5,$[4]))
-			,5),
-			$[6].flagIf('hidden',(!all.length)).end((
-				$[8].setContent(active.length,3),
-				$[9].setText(" item" + ((active.length != 1) ? 's' : '') + " left"),
-				$[12].flagIf('selected',(items == all)).end(),
-				$[14].flagIf('selected',(items == active)).end(),
-				$[16].flagIf('selected',(items == done)).end(),
-				$[17].flagIf('hidden',(!done.length))
-			,true))
-		,true));
-	};
-});
-
-
-// create an instance of the app (with id app)
-var app = (_1(App).setId('app').flag('todoapp')).setData(store).end();
-
-api.render = function (){
-	return app.render();
-};
-
-Imba.mount(app);
-api.reset(6);
-
-
-
-
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(4);
-
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Imba = __webpack_require__(0);
-var activate = false;
-if (typeof window !== 'undefined') {
-	if (window.Imba) {
-		console.warn(("Imba v" + (window.Imba.VERSION) + " is already loaded."));
-		Imba = window.Imba;
-	} else {
-		window.Imba = Imba;
-		activate = true;
-		if (window.define && window.define.amd) {
-			window.define("imba",[],function() { return Imba; });
-		};
-	};
-};
-
-module.exports = Imba;
-
-if (true) {
-	__webpack_require__(5);
-	__webpack_require__(6);
-};
-
-if (true && activate) {
-	Imba.EventManager.activate();
-};
-
-if (false) {};
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
 var requestAnimationFrame; // very simple raf polyfill
 var cancelAnimationFrame;
@@ -1009,19 +949,19 @@ Imba.Scheduler.prototype.onevent = function (event){
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
+__webpack_require__(6);
 __webpack_require__(7);
-__webpack_require__(8);
 
 Imba.TagManager = new Imba.TagManagerClass();
 
 __webpack_require__(9);
 __webpack_require__(10);
-__webpack_require__(1);
+__webpack_require__(8);
 __webpack_require__(11);
 __webpack_require__(12);
 
@@ -1033,18 +973,17 @@ if (false) {};
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
 Imba.TagManagerClass = function TagManagerClass(){
 	this._inserts = 0;
 	this._removes = 0;
 	this._mounted = [];
-	this._mountables = 0;
-	this._unmountables = 0;
+	this._hasMountables = false;
 	this;
 };
 
@@ -1055,10 +994,7 @@ Imba.TagManagerClass.prototype.mounted = function (){
 Imba.TagManagerClass.prototype.insert = function (node,parent){
 	this._inserts++;
 	if (node && node.mount) {
-		if (!(node.FLAGS & Imba.TAG_MOUNTABLE)) {
-			node.FLAGS |= Imba.TAG_MOUNTABLE;
-			this._mountables++;
-		};
+		this._hasMountables = true;
 	};
 	return;
 };
@@ -1067,13 +1003,13 @@ Imba.TagManagerClass.prototype.remove = function (node,parent){
 	return this._removes++;
 };
 
-
 Imba.TagManagerClass.prototype.changes = function (){
 	return this._inserts + this._removes;
 };
 
 Imba.TagManagerClass.prototype.mount = function (node){
-	return;
+	if (false) {};
+	return this._hasMountables = true;
 };
 
 Imba.TagManagerClass.prototype.refresh = function (force){
@@ -1081,7 +1017,7 @@ Imba.TagManagerClass.prototype.refresh = function (force){
 	if (false) {};
 	if (!force && this.changes() == 0) { return };
 	// console.time('resolveMounts')
-	if ((this._inserts && this._mountables > this._mounted.length) || force) {
+	if ((this._inserts && this._hasMountables) || force) {
 		this.tryMount();
 	};
 	
@@ -1115,18 +1051,9 @@ Imba.TagManagerClass.prototype.tryMount = function (){
 };
 
 Imba.TagManagerClass.prototype.mountNode = function (node){
-	if (this._mounted.indexOf(node) == -1) {
-		this._mounted.push(node);
-		node.FLAGS |= Imba.TAG_MOUNTED;
-		if (node.mount) { node.mount() };
-		// Mark all parents as mountable for faster unmount
-		let el = node.dom().parentNode;
-		while (el && el._tag && !el._tag.mount && !(el._tag.FLAGS & Imba.TAG_MOUNTABLE)){
-			el._tag.FLAGS |= Imba.TAG_MOUNTABLE;
-			el = el.parentNode;
-		};
-	};
-	
+	this._mounted.push(node);
+	node.FLAGS |= Imba.TAG_MOUNTED;
+	if (node.mount) { node.mount() };
 	return;
 };
 
@@ -1156,12 +1083,12 @@ Imba.TagManagerClass.prototype.tryUnmount = function (){
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
-__webpack_require__(1);
+var Imba = __webpack_require__(3);
+__webpack_require__(8);
 
 var native$ = [
 	'keydown','keyup','keypress',
@@ -1190,7 +1117,7 @@ Imba.EventManager = function EventManager(node,pars){
 	var self = this;
 	if(!pars||pars.constructor !== Object) pars = {};
 	var events = pars.events !== undefined ? pars.events : [];
-	self._shimFocusEvents = true && window.netscape && node.onfocusin === undefined;
+	self._shimFocusEvents =  true && window.netscape && node.onfocusin === undefined;
 	self.setRoot(node);
 	self.setListeners([]);
 	self.setDelegators({});
@@ -1411,11 +1338,82 @@ Imba.EventManager.prototype.ondisable = function (){
 
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Imba = __webpack_require__(3);
+
+Imba.Pointer = function Pointer(){
+	this._button = -1;
+	this._event = {x: 0,y: 0,type: 'uninitialized'};
+	return this;
+};
+
+Imba.Pointer.prototype.button = function (){
+	return this._button;
+};
+
+Imba.Pointer.prototype.touch = function (){
+	return this._touch;
+};
+
+Imba.Pointer.prototype.update = function (e){
+	this._event = e;
+	this._dirty = true;
+	return this;
+};
+
+// this is just for regular mouse now
+Imba.Pointer.prototype.process = function (){
+	var e1 = this._event;
+	
+	if (this._dirty) {
+		this._prevEvent = e1;
+		this._dirty = false;
+		
+		// button should only change on mousedown etc
+		if (e1.type == 'mousedown') {
+			this._button = e1.button;
+			
+			if ((this._touch && this._button != 0)) {
+				return;
+			};
+			
+			// cancel the previous touch
+			if (this._touch) { this._touch.cancel() };
+			this._touch = new Imba.Touch(e1,this);
+			this._touch.mousedown(e1,e1);
+		} else if (e1.type == 'mousemove') {
+			if (this._touch) { this._touch.mousemove(e1,e1) };
+		} else if (e1.type == 'mouseup') {
+			this._button = -1;
+			
+			if (this._touch && this._touch.button() == e1.button) {
+				this._touch.mouseup(e1,e1);
+				this._touch = null;
+			};
+			// trigger pointerup
+		};
+	} else if (this._touch) {
+		this._touch.idle();
+	};
+	return this;
+};
+
+Imba.Pointer.prototype.x = function (){
+	return this._event.x;
+};
+Imba.Pointer.prototype.y = function (){
+	return this._event.y;
+};
+
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
 Imba.CSSKeyMap = {};
 
@@ -1425,7 +1423,6 @@ Imba.TAG_MOUNTING = 4;
 Imba.TAG_MOUNTED = 8;
 Imba.TAG_SCHEDULED = 16;
 Imba.TAG_AWAKENED = 32;
-Imba.TAG_MOUNTABLE = 64;
 
 /*
 Get the current document
@@ -1827,8 +1824,8 @@ Imba.Tag.prototype.removeChild = function (child){
 	var par = this.dom();
 	var el = child._slot_ || child;
 	if (el && el.parentNode == par) {
-		Imba.TagManager.remove(el._tag || el,this);
 		par.removeChild(el);
+		Imba.TagManager.remove(el._tag || el,this);
 	};
 	return this;
 };
@@ -1839,11 +1836,10 @@ Imba.Tag.prototype.removeChild = function (child){
 
 Imba.Tag.prototype.removeAllChildren = function (){
 	if (this._dom.firstChild) {
-		var el;
-		while (el = this._dom.firstChild){
-			true && Imba.TagManager.remove(el._tag || el,this);
-			this._dom.removeChild(el);
+		while (this._dom.firstChild){
+			this._dom.removeChild(this._dom.firstChild);
 		};
+		Imba.TagManager.remove(null,this);
 	};
 	this._tree_ = this._text_ = null;
 	return this;
@@ -1891,7 +1887,7 @@ Imba.Tag.prototype.detachFromParent = function (){
 		this._slot_._tag || (this._slot_._tag = this);
 		
 		if (this._dom.parentNode) {
-			Imba.TagManager.remove(this,this._dom.parentNode);
+			Imba.TagManager.remove(this);
 			this._dom.parentNode.replaceChild(this._slot_,this._dom);
 		};
 	};
@@ -2357,7 +2353,7 @@ Imba.Tag.prototype.style = function (){
 
 Imba.Tag.prototype.trigger = function (name,data){
 	if(data === undefined) data = {};
-	return true && Imba.Events.trigger(name,this,{data: data});
+	return  true && Imba.Events.trigger(name,this,{data: data});
 };
 
 /*
@@ -2868,7 +2864,7 @@ Imba.Tag;
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
 Imba.defineTag('fragment', 'element', function(tag){
 	tag.createNode = function (){
@@ -2940,17 +2936,6 @@ Imba.extendTag('input', function(tag){
 		return this;
 	};
 	
-	tag.prototype.checked = function (){
-		return this._dom.checked;
-	};
-	
-	tag.prototype.setChecked = function (value){
-		if (!!value != this._dom.checked) {
-			this._dom.checked = !!value;
-		};
-		return this;
-	};
-	
 	tag.prototype.setValue = function (value){
 		if (this._localValue == undefined) {
 			this.dom().value = this._value = value;
@@ -2961,12 +2946,12 @@ Imba.extendTag('input', function(tag){
 	tag.prototype.oninput = function (e){
 		let val = this._dom.value;
 		this._localValue = val;
-		if (this._data && !(this.lazy())) { return this._data.setFormValue(this.value(),this) };
+		return (this._data && !(this.lazy())) ? this._data.setFormValue(this.value(),this) : e.silence();
 	};
 	
 	tag.prototype.onchange = function (e){
 		this._modelValue = this._localValue = undefined;
-		if (!(this.data())) { return };
+		if (!(this.data())) { return e.silence() };
 		
 		if (this.type() == 'radio' || this.type() == 'checkbox') {
 			let checked = this._dom.checked;
@@ -3041,12 +3026,12 @@ Imba.extendTag('textarea', function(tag){
 	tag.prototype.oninput = function (e){
 		let val = this._dom.value;
 		this._localValue = val;
-		if (this._data && !(this.lazy())) { return this._data.setFormValue(this.value(),this) };
+		return (this._data && !(this.lazy())) ? this._data.setFormValue(this.value(),this) : e.silence();
 	};
 	
 	tag.prototype.onchange = function (e){
 		this._localValue = undefined;
-		if (this._data) { return this._data.setFormValue(this.value(),this) };
+		return this._data ? this._data.setFormValue(this.value(),this) : e.silence();
 	};
 	
 	tag.prototype.onblur = function (e){
@@ -3136,7 +3121,7 @@ Imba.extendTag('select', function(tag){
 	};
 	
 	tag.prototype.onchange = function (e){
-		if (this._data) { return this._data.setFormValue(this.value(),this) };
+		return this._data ? this._data.setFormValue(this.value(),this) : e.silence();
 	};
 	
 	tag.prototype.end = function (){
@@ -3157,7 +3142,7 @@ Imba.extendTag('select', function(tag){
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
 // Imba.Touch
 // Began	A finger touched the screen.
@@ -3726,7 +3711,7 @@ Imba.TouchGesture.prototype.ontouchend = function (e){
 /***/ (function(module, exports, __webpack_require__) {
 
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
 var keyCodes = {
 	esc: 27,
@@ -4171,7 +4156,7 @@ Imba.Event.prototype.which = function (){
 function iter$(a){ return a ? (a.toArray ? a.toArray() : a) : []; };
 // externs;
 
-var Imba = __webpack_require__(0);
+var Imba = __webpack_require__(3);
 
 function removeNested(root,node,caret){
 	// if node/nodes isa String
@@ -4576,7 +4561,7 @@ Imba.extendTag('element', function(tag){
 		// 	return self.text = new
 		var old = this._tree_;
 		
-		if (new$ === old && (!(new$) || new$.taglen == undefined)) {
+		if (new$ === old && new$ && new$.taglen == undefined) {
 			return this;
 		};
 		
@@ -4593,10 +4578,6 @@ Imba.extendTag('element', function(tag){
 		} else if (typ == 3) {
 			let ntyp = typeof new$;
 			
-			if (ntyp != 'object') {
-				return this.setText(new$);
-			};
-			
 			if (new$ && new$._dom) {
 				this.removeAllChildren();
 				this.appendChild(new$);
@@ -4610,7 +4591,8 @@ Imba.extendTag('element', function(tag){
 					appendNested(this,new$);
 				};
 			} else {
-				return this.setText(new$);
+				this.setText(new$);
+				return this;
 			};
 		} else if (typ == 4) {
 			reconcileIndexedArray(this,new$,old,null);

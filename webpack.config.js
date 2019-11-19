@@ -26,7 +26,12 @@ const client = {
 	entry: "./client.imba",
 	output: { path: __dirname, filename: "./client.js" },
 	resolve: { extensions: [".imba",".js", ".json"] },
-	module: { rules: [{ test: /\.imba$/, loader: 'imba/loader' }] }
+	module: {
+    rules: [
+      { test: /\.imba$/, loader: 'imba/loader' },
+      { test: /\.html$/, loader: 'raw-loader' }
+    ]
+  }
 }
 
 module.exports = [imba,react,client];

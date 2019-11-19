@@ -1,0 +1,59 @@
+{
+  "name": "react",
+  "size": 136775,
+  "gz": 43766,
+  "files": [
+    {
+      "src": "react/external/classnames.js",
+      "size": 1107,
+      "gz": 549
+    },
+    {
+      "src": "react/react.production.min.js",
+      "size": 6617,
+      "gz": 2819
+    },
+    {
+      "src": "react/external/director.js",
+      "size": 20336,
+      "gz": 5924
+    },
+    {
+      "src": "react/app.js",
+      "size": 14217,
+      "gz": 3826
+    },
+    {
+      "src": "react/react-dom.production.min.js",
+      "size": 94498,
+      "gz": 30648
+    }
+  ],
+  "memoryBeforeRun": 3395416,
+  "memoryAfterRun": 5007136,
+  "benchmark": {
+    "mutations": 0,
+    "state": "done",
+    "hz": 2139.015163636113,
+    "mean": 0.0004675048671932271,
+    "moe": 0.000012492669210496375,
+    "rme": 2.6722008875541734,
+    "variance": 1.4625167180611797e-9
+  },
+  "metrics": {
+    "Timestamp": 101791.528263,
+    "Documents": 1,
+    "Frames": 1,
+    "JSEventListeners": 163,
+    "Nodes": 660,
+    "LayoutCount": 49,
+    "RecalcStyleCount": 52,
+    "LayoutDuration": 0.14193,
+    "RecalcStyleDuration": 0.035723,
+    "ScriptDuration": 3.75222,
+    "TaskDuration": 4.079545,
+    "JSHeapUsedSize": 5007136,
+    "JSHeapTotalSize": 57806848
+  },
+  "hz": 2139.015163636113
+}

@@ -1,0 +1,39 @@
+{
+  "name": "imba",
+  "size": 116002,
+  "gz": 29413,
+  "files": [
+    {
+      "src": "imba/app.js",
+      "size": 116002,
+      "gz": 29413
+    }
+  ],
+  "memoryBeforeRun": 2626624,
+  "memoryAfterRun": 4196352,
+  "benchmark": {
+    "mutations": 0,
+    "state": "done",
+    "hz": 105143.5185185185,
+    "mean": 0.00000951080973977368,
+    "moe": 2.0113278273053427e-7,
+    "rme": 2.1147808465709086,
+    "variance": 4.1069383987614647e-13
+  },
+  "metrics": {
+    "Timestamp": 101782.719636,
+    "Documents": 1,
+    "Frames": 1,
+    "JSEventListeners": 16,
+    "Nodes": 1114,
+    "LayoutCount": 49,
+    "RecalcStyleCount": 51,
+    "LayoutDuration": 0.122269,
+    "RecalcStyleDuration": 0.061318,
+    "ScriptDuration": 3.903717,
+    "TaskDuration": 4.241463,
+    "JSHeapUsedSize": 4196352,
+    "JSHeapTotalSize": 16650240
+  },
+  "hz": 105143.5185185185
+}
